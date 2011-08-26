@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <!--
+
+      Custom UI sequence.
+      To figure out how to sequence these things, I browsed the templates
+      available at http://www.wixwiki.com/index.php?title=WixUI_Custom, and
+      cut-n-pasted the parts I wanted.
+
+      - select the installation dir
+      - select the features to install
+      - select a website to install to
+
+      eg:
+      http://wix.cvs.sourceforge.net/*checkout*/wix/wix/src/ext/UIExtension/wixlib/WixUI_InstallDir.wxs
+
+    -->
+
+  <Fragment>
+
+    <WixVariable Id="WixUILicenseRtf" Value="..\License.Combined.rtf" />
+    <WixVariable Id="WixUIBannerBmp"  Value="TopBanner.bmp" />
+    <WixVariable Id="WixUIDialogBmp"  Value="SideBanner.bmp" />
+
+    <UI Id="DnzInstallUI">
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="10" />
+      <TextStyle Id="WixUI_Font_Big"    FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="14" />
+      <TextStyle Id="WixUI_Font_Title"  FaceName="Tahoma" Size="12" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="WixUI_Mode" Value="Custom" />
+
+      <DialogRef Id="BrowseDlg" />
+      <DialogRef Id="DiskCostDlg" />
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+      <DialogRef Id="InvalidDirDlg" />
+
+
+      <!-- To make things simple (NOT), Publish elements result in rows being
+           created in the ControlEvent table.   (Wix is an idiot.)
+        -->
+
+      <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4">
+        <![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]>
+      </Publish>
+
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+
+      <!-- Wix is an idiot.
+           All I want to do is add a checkbox to the CustomizeDlg. I
+           tried for more than an hour to figure out how to do that, and
+           failed!  It really should not take this long.
+
+           Wix is an idiot.
+
+           I'm doing it via PostProcessMsi.js - a Jscript module. It's
+           simple.  It took 8 minutes to do and debug.  Sheesh.
+
+      -->
+
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
+
+      <Publish Dialog="LicenseAgreementDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">LicenseAccepted = "1"</Publish>
+
+      <!-- This is only for InstallDirDlg -->
+      <Publish Dialog="InstallDirDlg" Control="ChangeFolder"
+               Event="NewDialog" Value="BrowseDlg"></Publish>
+
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">Installed</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">NOT Installed</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="1"></Publish>
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="InstallDirDlg">1</Publish>
+
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="InstallDirDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+      <Publish Dialog  = "ExitDialog"
+               Control = "Finish"
+               Event   = "DoAction"
+               Value   = "CA.LaunchApp"
+               Order   = "2">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+
+      <Property Id="ARPNOMODIFY" Value="1" />
+
+    </UI>
+
+    <UIRef Id="WixUI_Common" />
+
+  </Fragment>
+</Wix>
+
+

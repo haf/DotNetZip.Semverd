@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Fragment>
+    <Binary Id="B.JavaScript1" SourceFile="CA.ZipAssociation.js" />
+
+    <!-- CA to launch the app -->
+    <CustomAction Id         ="CA.LaunchApp"
+                  Directory  ="APPLICATIONFOLDER"
+                  ExeCommand ="[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe"
+                  Execute    ="immediate"
+                  Return     ="asyncNoWait" />
+
+    <CustomAction Id          ="CA.RestoreZipAssociation"
+                  BinaryKey   ="B.JavaScript1"
+                  JScriptCall ="RestoreZipAssocInRegistry_CA"
+                  Execute     ="immediate"
+                  Return      ="check" />
+
+    <!-- cannot run the same custom action twice, so I define an additional one here.
+         Wix is an idiot. -->
+    <CustomAction Id          ="CA.RestoreZipAssociation2"
+                  BinaryKey   ="B.JavaScript1"
+                  JScriptCall ="RestoreZipAssocInRegistry_CA"
+                  Execute     ="immediate"
+                  Return      ="check" />
+
+    <CustomAction Id          ="CA.PreserveZipAssociation"
+                  BinaryKey   ="B.JavaScript1"
+                  JScriptCall ="PreserveZipAssocInRegistry_CA"
+                  Execute     ="immediate"
+                  Return      ="check" />
+
+    <CustomAction Id       ="CA.HidePostInstallCheckboxToLaunchExe"
+                  Property ="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT"
+                  Value    =""
+                  Return   ="check"/>
+
+  </Fragment>
+
+</Wix>
+

@@ -1,0 +1,234 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Getting Started</title>
+<style type="text/css">
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+</style>
+</head>
+
+<!-- @SortOrder 8 -->
+
+<body>
+<h1>Getting Started with DotNetZip</h1>
+
+<p>This page describes how to get started using DotNetZip.</p>
+
+<h2>Which download to choose?</h2>
+
+<p>DotNetZip is free to use.  You just need to download it and start using it.  Different <a
+href="http://dotnetzip.codeplex.com/Release/ProjectReleases.aspx">downloads
+of DotNetZip are available</a>.  Which one you choose depends on what
+you want to do.  </p>
+
+<table border='1'>
+<tr>
+  <td style='color:white;Background:Navy;'><strong>If your goal is...</strong></td>
+  <td style='color:white;Background:Navy;'><strong>Download this...</strong></td>
+  <td style='color:white;Background:Navy;'><strong>which contains...</strong></td>
+</tr>
+
+
+<tr>
+  <td>To read the documentation for the library and tools</td>
+  <td>DotNetZipLib-*.chm</td>
+  <td>a compiled helpfile containing all the documentation.</td>
+</tr>
+
+
+<tr>
+  <td>To build .NET, COM, or PowerShell apps that use the Zip
+      library.
+  </td>
+
+  <td>DotNetZipLib-DevKit-vx.x.zip</td>
+
+  <td>the signed DLLs for Zip and Zlib, for both the desktop and Compact
+      Framework; the XML Documentation file for intellisense; the
+      compiled help file (CHM); an MSI file that installs help into Visual Studio;
+      and the License.
+  </td>
+</tr>
+
+
+<tr>
+  <td>To modify or view the source code for the Zip & Zlib Libraries,
+      the setup (msi) project, or the examples.  </td>
+
+  <td>DotNetzip-src-vx.x.x.x.zip</td>
+
+  <td>the VS2008 solution, containing a number of VS projects and the
+      source code for the library and various examples that use the
+      library.  </td>
+</tr>
+
+
+<tr>
+  <td>To distribute .NET applications that use the Zip library, or if
+      you want to run a .NET application that depends on this library.
+  </td>
+
+  <td>DotNetZipLib-Runtime-vx.x.zip</td>
+
+  <td>the signed DLLs for Zip and Zlib, for both the desktop and Compact
+      Framework; and the License.  This is a strict subset of the DevKit
+      download.
+  </td>
+</tr>
+
+
+<tr>
+  <td>To distribute .NET applications that use the Zip library, or if
+      you want to run a .NET application that depends on this library.
+  </td>
+
+  <td>DotNetZipLib-Runtime-vx.x.msi</td>
+
+  <td>an .MSI version of the Runtime release, containing signed DLLs for
+      Zip and Zlib, for both the desktop and Compact Framework; and the
+      License.  </td>
+
+</tr>
+
+<tr>
+  <td>To create, read, or modify ZIP files from within a Windows GUI interface,
+      or from the command line, or from within batch files.
+  </td>
+
+  <td>DotNetZipUtils-v1.8.zip</td>
+
+  <td>a set of exe tools (command-line and GUI) that rely on the
+      DotNetZip library, to create and manage zip files.  </td>
+</tr>
+
+
+<tr>
+  <td>To create, read, or modify ZIP files from within a Windows GUI interface,
+      or from the command line, or from within batch files.
+  </td>
+
+  <td>DotNetZipUtils-v1.8.msi</td>
+
+  <td>an .MSI version of the Utils download.  This installs a set of exe
+      tools (command-line and GUI) that rely on the DotNetZip library,
+      to create and manage zip files.  There&apos;s also an
+      uninstaller. </td> </tr>
+
+</table>
+
+
+
+
+<h2>Which DLL to use?</h2>
+
+<p>When you are building an application that manipulates ZIP files, you
+will want to use one of the binary releases of DotNetZip.  These
+releases include multiple distinct DLLs or assemblies.  Which one should
+you use?  </p>
+
+<p>The likely answer is: <em>Ionic.Zip.dll</em></p>
+
+<p>That&apos;s the mainstream library, the full library, and it includes all the
+capability of DotNetZip.  The other DLLs are reduced in various ways, to suite particular requirements.
+</p>
+
+<p>For example,  you may want a
+smaller library, or you want to exclude the Self-Extracting capability, or
+you only want the ZLIB capability.  In these cases, you may want to choose a
+different assembly.
+</p>
+
+<p>Here&apos;s a summary of the options.</p>
+
+<table border='1'>
+<tr>
+<td style='color:white;Background:Navy;'><strong>Usage scenario</strong></td>
+<td style='color:white;Background:Navy;'><strong>DLL</strong></td>
+</tr>
+
+<tr>
+  <td> Basic reading or writing of Zip files</td>
+  <td> Ionic.Zip.dll</td>
+</tr>
+
+<tr>
+  <td>raw block or stream compression using ZLIB, DEFLATE, or
+    GZip </td>
+  <td>Ionic.Zlib.dll</td>
+</tr>
+
+<tr>
+  <td>compression using the BZip2 algorithm</td>
+  <td>Ionic.BZip2.dll</td>
+</tr>
+
+<tr>
+  <td>Some combination of ZLIB/DEFLATE/GZIP compression, BZip2
+  compression, and reading or writing Zip
+  files </td>
+  <td>Ionic.Zip.dll</td>
+</tr>
+
+
+<tr>
+  <td>reading or writing Zip files on .NET Compact Framework </td>
+  <td>Ionic.Zip.CF.dll</td>
+</tr>
+
+
+<tr>
+  <td>ZLIB/DEFLATE/GZIP compression on .NET Compact Framework </td>
+  <td>Ionic.Zlib.CF.dll</td>
+</tr>
+
+<tr>
+  <td>compression using the BZip2 algorithm on .NET Compact Framework </td>
+  <td>Ionic.BZip2.CF.dll</td>
+</tr>
+
+
+<tr>
+  <td>Some combination of ZLIB/DEFLATE/GZIP compression, BZip2
+  compression, and reading or writing Zip
+  files on .NET CF</td>
+  <td>Ionic.Zip.CF.dll</td>
+</tr>
+
+<tr>
+  <td>reading or writing Zip files, but never creating a self-extracting
+  archive </td>
+  <td>Ionic.Zip.Reduced.dll</td>
+</tr>
+</table>
+
+<p>There are also Silverlight versions of the Zlib, BZip2, and Zip
+  libraries. </p>
+
+<p>
+  Never reference both Ionic.Zlib.dll and Ionic.Zip.dll in the same
+  application, or both Ionic.BZip2.dll and Ionic.Zip.dll.  If your
+  application does both Zlib and Zip things, or both BZip2 and Zip
+  things, or all three, you need only add a reference to Ionic.Zip.dll.
+  Ionic.Zip.dll includes all the capability in Ionic.Zlib.dll and
+  Ionic.BZip2.dll.  You always need to reference only a single Ionic
+  DLL, regardless whether you use Zlib or BZip2 or Zip or some
+  combination.
+</p>
+
+<p>
+  If you use COM, then you want to reference the main DLL,
+  Ionic.Zip.dll.  If you install the DotNetZip Runtime library via the
+  .MSI installer, the correct DLL will automatically be installed and
+  registered for use with COM.  If you don&apos;t use the .MSI
+  installer, you will have to perform these steps yourself.  Consult the
+  documentation on using DotNetZip with COM for more information.
+</p>
+
+</body>
+</html>

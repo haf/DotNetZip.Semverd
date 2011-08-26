@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>Powershell</title>
+<style>
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+</style>
+</head>
+
+<!-- @SortOrder 60 -->
+
+<body>
+<h1>You can use DotNetZip from Powershell</h1>
+
+<p>The programming model is the same as for VB or C#, with a few syntactic changes for Powershell.
+This page will show some examples.
+</p>
+
+
+<hr/>
+
+<h3>Create a zip file</h3>
+
+<p> This example just creates a simple zipfile
+</p>
+
+
+<pre lang="Powershell" numberLines="true" outlining="true"
+  title="Create a Zip archive">
+
+# Load the assembly - replace this with your own path
+[System.Reflection.Assembly]::LoadFrom("c:\\dinoch\\bin\\Ionic.Zip.dll");
+
+$directoryToZip = "c:\\temp";
+$zipfile =  new-object Ionic.Zip.ZipFile;
+$e= $zipfile.AddEntry("Readme.txt", "This is a zipfile created from within powershell.")
+$e= $zipfile.AddDirectory($directoryToZip, "home")
+$zipfile.Save("ZipFiles.ps1.out.zip");
+$zipfile.Dispose();
+</pre>
+
+
+<h3>Create a zip file using AES encryption</h3>
+
+<p> This example creates a zipfile, using AES 256-bit
+encryption to encrypt the entries.
+</p>
+
+<pre lang="Powershell" numberLines="true" outlining="true"
+  title="Create an encrypted zip">
+
+# Load the assembly - replace this with your own path
+[System.Reflection.Assembly]::LoadFrom("c:\\dinoch\\bin\\Ionic.Zip.dll")
+
+$directoryToZip = "c:\\dinoch\\dev\\powershell"
+$zipfile =  new-object Ionic.Zip.ZipFile
+$zipfile.Encryption = [Ionic.Zip.EncryptionAlgorithm]::WinZipAes256
+$zipfile.Password = "Albatros$"
+$e= $zipfile.AddEntry("Readme.txt", "This is a zipfile created from within powershell.")
+$e= $zipfile.AddSelectedFiles("name != *.zip", $directoryToZip, "home")
+$zipfile.Save("ZipFiles.ps1.out.zip")
+$zipfile.Dispose()
+
+</pre>
+
+
+
+<h3>Create a number of zip files, each containing a single file</h3>
+
+<p> This example iterates through a set of files, and creates a
+zipfile containing a single file, for each one.
+</p>
+
+<pre lang="Powershell" numberLines="true" outlining="true"
+  title="Create a set of Zipfiles">
+
+# Load the assembly - replace this with your own path
+[System.Reflection.Assembly]::LoadFrom("c:\\dinoch\\bin\\Ionic.Zip.dll");
+
+foreach ($file in gci $LogPath -filter $FileType -recurse |
+        where{$_.LastWriteTime -lt [DateTime]::Now.AddDays($DaysOld)})
+{
+    $FileName = $File.FullName
+    $ZipName = $File.FullName + ".zip"
+    $zip = new-object Ionic.Zip.ZipFile
+    $zip.AddFile($FileName, "");
+    $zip.Save($ZipName)
+    $zip.Dispose()
+}
+</pre>
+
+</body>
+</html>

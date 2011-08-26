@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HelpIntegration", "HelpIntegration\HelpIntegration.vdproj", "{10FE6C88-8E0F-4A48-923A-65A58DDAB426}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HelpIntegrationMergeModule", "HelpIntegrationMergeModule\HelpIntegrationMergeModule.vdproj", "{39B858A8-21BE-40E3-B0C6-D265189C34F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10FE6C88-8E0F-4A48-923A-65A58DDAB426}.Debug|Default.ActiveCfg = Debug
+		{10FE6C88-8E0F-4A48-923A-65A58DDAB426}.Debug|Default.Build.0 = Debug
+		{10FE6C88-8E0F-4A48-923A-65A58DDAB426}.Release|Default.ActiveCfg = Release
+		{10FE6C88-8E0F-4A48-923A-65A58DDAB426}.Release|Default.Build.0 = Release
+		{39B858A8-21BE-40E3-B0C6-D265189C34F4}.Debug|Default.ActiveCfg = Debug
+		{39B858A8-21BE-40E3-B0C6-D265189C34F4}.Debug|Default.Build.0 = Debug
+		{39B858A8-21BE-40E3-B0C6-D265189C34F4}.Release|Default.ActiveCfg = Release
+		{39B858A8-21BE-40E3-B0C6-D265189C34F4}.Release|Default.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

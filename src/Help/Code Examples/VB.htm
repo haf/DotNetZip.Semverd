@@ -1,0 +1,319 @@
+<html>
+<head>
+<title>VB.NET</title>
+<style>
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+</style>
+</head>
+
+<!-- @SortOrder 30 -->
+
+<body>
+<h1>DotNetZip - VB.NET Examples</h1>
+
+<p>Here are a bunch of examples in VB.NET showing how to use the library.
+</p>
+
+<p>There are also a few complete, working example applications shipped in the source code distribution. </p>
+
+<hr/>
+<p>Add items to a zip file: </p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Create a Zip">
+ Try
+     Using zip As ZipFile = New ZipFile
+         zip.AddFile("c:\photos\personal\7440-N49th.png", "")
+         zip.AddFile("c:\Desktop\2005_Annual_Report.pdf", "")
+         zip.AddFile("ReadMe.txt")
+         zip.Save("MyZipFile.zip")
+     End Using
+ Catch ex1 As Exception
+     Console.Error.WriteLine("exception: {0}", ex1.ToString)
+ End Try
+</pre>
+
+
+<hr/>
+<p>Extract items from a zip file: </p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Extract entries from a Zip">
+ Try
+     Using zip As ZipFile = ZipFile.Read(ZipFileToExtract)
+        Dim e As ZipEntry
+        For Each e In zip
+            e.Extract
+        Next
+     End Using
+ Catch ex1 As Exception
+     Console.Error.WriteLine("exception: {0}", ex1.ToString)
+ End Try
+</pre>
+
+
+<hr/>
+<p>Extract all entries, and set the StatusMessageTextWriter so that verbose messages are generated:</p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="ExtractAll, and use the status TextWriter">
+Using zip As  ZipFile = ZipFile.Read(FilePath)
+  zip.StatusMessageTextWriter= System.Console.Out
+  'Status Messages will be sent to the console during extraction
+  zip.ExtractAll()
+End Using
+</pre>
+
+
+
+<hr/>
+<p>Add a few files to a zip file, specifying different passwords for different items: </p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Create a Zip, entries get passwords">
+Try
+  Using zip As New ZipFile
+    'the first entry is not protected by a password
+    zip.AddFile("c:\datafiles\ReadMe.txt", "")
+    zip.Password = "123456!"
+    zip.AddFile("c:\photos\personal\7440-N49th.png", "images")
+    zip.Password= "!Secret1";
+    zip.AddFile("c:\Desktop\2005_Annual_Report.pdf", "files\documents")
+    zip.Save("Secret.zip")
+  End Using
+Catch ex1 As System.Exception
+  System.Console.Error.WriteLine("exception: {0}", ex1)
+End Try
+</pre>
+
+<hr/>
+<p>Add a few files to a zip file, using WinZip-compatible AES encryption on the entries: </p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Create a Zip, using AES encryption for the entries">
+Try
+  Using zip As New ZipFile
+    zip.Password = "The.Silvertones.Box.Set!"
+    zip.Encryption = EncryptionAlgorithm.WinZipAes256
+    zip.AddFile("c:\datafiles\RawData-2008-12-20.csv", "")
+    zip.AddFile("c:\photos\personal\7440-N49th.png", "images")
+    zip.AddFile("c:\Desktop\2005_Annual_Report.pdf", "files\documents")
+    zip.Save("AES-Encrypted-Secret.zip")
+  End Using
+Catch ex1 As System.Exception
+  System.Console.Error.WriteLine("exception: {0}", ex1)
+End Try
+</pre>
+
+
+<hr/>
+<p>Extract entries using a password:</p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Extract entries using a password">
+Using zip As new ZipFile(FilePath)
+    Dim e As ZipEntry
+    For Each e In zip
+        If (e.UsesEncryption)
+          e.ExtractWithPassword("Secret!")
+        Else
+          e.Extract
+        End If
+    Next
+End Using
+</pre>
+
+
+<hr/>
+<p>This example creates a zip using ZIP64 extensions. ZIP64 allows you to exceed 4gb in a zip, or 65535 entries in a zip. </p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Create a Zip that uses ZIP64 extensions">
+ Try
+     Using zip As ZipFile = New ZipFile
+         zip.UseZip64WhenSaving = Zip64Option.AsNecessary
+         zip.AddFile("c:\datafiles\RawData-2009-02-12.csv", "")
+         zip.AddFile("ReadMe.txt")
+         zip.Save(String.Format("backup-{0}.zip", DateTime.Now.ToString("yyyyMMMdd")))
+     End Using
+ Catch ex1 As Exception
+     Console.Error.WriteLine("exception: {0}", ex1.ToString)
+ End Try
+</pre>
+
+
+
+
+<hr/>
+
+<p>Create a zip file, add a file, and also add an entry from a
+string.  When the zip is unzipped, the content from the string will be
+inserted into the file "Readme.txt". </p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Create 3">
+Dim Content As String = "This string will be the content of the Readme.txt file in the zip archive."
+Using zip1 As ZipFile = New ZipFile
+    zip1.AddEntry("Readme.txt", "This is the readme content...")
+    zip1.AddFile("MyDocuments\Resume.doc", "files")
+    zip1.Comment = ("This zip file was created at " & DateTime.Now.ToString("G"))
+    zip1.Save("Content.zip")
+End Using
+</pre>
+
+<hr/>
+
+<p>Create a zip file, and add an entry taking content from a stream, like a MemoryStream or a FileStream.
+</p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Create 4">
+Dim Content As String = "This string will be the content of the Readme.txt file in the zip archive."
+Using zip1 As ZipFile = New ZipFile
+    zip1.AddEntry("Readme.txt", stream)
+    zip1.AddFile("MyDocuments\Resume.doc", "files")
+    zip1.Comment = ("This zip file was created at " & DateTime.Now.ToString("G"))
+    zip1.Save("Content.zip")
+End Using
+</pre>
+
+
+
+<hr/>
+<p>Read in a zip file, remove a few entries, save the file:</p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Modify a Zip">
+Dim sw As New System.IO.StringWriter
+Using zip As ZipFile = ZipFile.Read("PackedDocuments.zip", sw)
+    Dim Threshold As New DateTime(2007, 7, 4)
+    ' We cannot remove the entry from the list, within the context of
+    ' an enumeration of said list.
+    ' So we add the doomed entry to a list to be removed later.
+    ' pass 1: mark the entries for removal
+    Dim MarkedEntries As New System.Collections.Generic.List(Of ZipEntry)
+    Dim e As ZipEntry
+    For Each e In zip
+        If (e.LastModified < Threshold) Then
+            MarkedEntries.Add(e)
+        End If
+    Next
+    ' pass 2: actually remove the entry.
+    Dim zombie As ZipEntry
+    For Each zombie In MarkedEntries
+        zip.RemoveEntry(zombie)
+    Next
+    zip.Comment = "This archive has been updated."
+    zip.Save
+End Using
+</pre>
+
+
+
+<hr/>
+<p>Add a bunch of items, whether files or directories:</p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Create a Zip, adding items">
+Dim itempaths As String() = _
+  New String() { "c:\temp\Readme.txt", _
+                 "MyProposal.docx", _
+                 "SupportingFiles", _
+                 "images\Image1.jpg" }
+Try
+    Using zip As New ZipFile(ZipToCreate, Console.Out)
+        Dim i As Integer
+        For i = 1 To itempaths.Length - 1
+            ' will add Files or Dirs, recursing and flattening subdirectories.
+            zip.AddItem(itempaths(i), "flat")
+        Next i
+        zip.Save
+    End Using
+Catch ex1 As Exception
+    Console.Error.WriteLine("exception: {0}", ex1.ToString())
+End Try
+</pre>
+
+
+<hr/>
+<p>Create a self-extracting archive:</p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Create a self-extractor">
+Dim DirectoryPath As String = "c:\Documents\Project7"
+Using zip As New ZipFile()
+    zip.AddDirectory(DirectoryPath, System.IO.Path.GetFileName(DirectoryPath))
+    zip.Comment = "This will be embedded into a self-extracting console-based exe"
+    zip.SaveSelfExtractor("archive.exe", SelfExtractorFlavor.ConsoleApplication)
+End Using
+</pre>
+
+
+
+<hr/>
+<p>Update some entries in a Zip file:</p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Update some entries in a Zip">
+Using zip1 As New ZipFile
+    ' the UpdateFile method works even if the entry does not yet exist.
+    ' Really it should be called "AddOrUpdateFile"
+    zip1.UpdateFile("MyDocuments\Readme.txt", "")
+    zip1.UpdateFile("CustomerList.csv", "")
+    zip1.Comment = "This zip archive has been created."
+    zip1.Save("Content.zip")
+End Using
+
+Using zip2 As ZipFile = ZipFile.Read("Content.zip")
+    zip2.UpdateFile("Updates\Readme.txt", "")
+    zip2.Comment = "This zip archive has been updated: the Readme has been changed."
+    zip2.Save
+End Using
+</pre>
+
+
+
+<hr/>
+
+<p>Produce a zip file that contains embedded zip files. </p>
+
+<pre lang="VB" numberLines="true" outlining="true"
+  title="Zip containing a Zip">
+
+Public Sub Run()
+    Using s1 As Stream = ZipIntoMemory("c:\temp\dir1")
+        Using s2 As Stream = ZipIntoMemory("c:\temp\dir2")
+            Using zip1 as New ZipFile
+                zip1.AddEntry("test1.zip", s1)
+                zip1.AddEntry("test2.zip", s2)
+                ' save to a file.  Could also save to a stream here
+                zip1.Save("Tescher.zip")
+            End Using
+        End Using
+    End Using
+End Sub
+
+Public Function ZipIntoMemory(ByVal path As String) As Stream
+    Dim ms As New MemoryStream
+    Using zip1 as New ZipFile
+        zip1.AddDirectory(path, "Result")
+        zip1.Save(ms)
+    End Using
+    ' move the stream position to the beginning
+    ms.Seek(0,SeekOrigin.Begin)
+    Return ms
+End Function
+
+</pre>
+
+
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+<html>
+<head>
+<title>The Graphical Tool</title>
+<style>
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+.code       {font-family: Consolas, Courier; font-size: 10pt }
+</style>
+
+
+</head>
+<!-- @SortOrder 5 -->
+
+<body>
+
+<h1>The DotNetZip Graphical Tool</h1>
+
+<p>The Tools/Utilities downloads for DotNetZip include a graphical tool
+for creating and extracting zip files.  </p>
+
+<p>If you use the MSI installer, you will have the chance to associate
+.zip files to this tool.  If you associate .zip files to this tool,
+double-clicking on a zip file from within Windows Explorer will open the
+zip file in the tool.  If you don't associate .zip files to this tool,
+you can open the tool using the Start menu.  </p>
+
+
+<img src="ZipTool1.png"/>
+
+<p>The tool uses a tabbed-pane interface.  One tab is used for reading
+or extracting zip files, another is used for creating zip files.
+</p>
+
+
+<!-- ============================================================== -->
+
+<h2>Creating a Zip Archive</h2>
+
+<p>Create a zip file in two steps: first, select which files to add into
+the zip, then add creating the zip with those files.</p>
+
+
+<img src="ZipTool2.png"/>
+
+<p>An overview of the UI elements:</p>
+<ol>
+
+<li>the directory to add.  Specify where in the filesystem to find the
+files to be added into the zip file. </li>
+
+<li>check this box to traverse Windows NTFS Junctions; leave it unchecked to not traverse junctions</li>
+
+<li>the directory to be used within the zip archive for the files that get added.
+</li>
+
+<li>The selection criteria for the files to be added to the zip.</li>
+
+<li>Click this button to add the files that match the selection criteria, to the listbox below (label #18)
+To select additional files, you can then repeat steps 1-5 as many times as is necessary.
+<br/>
+<br/>
+When you've selected the files you want to include in the archive,
+</li>
+
+<li>Specify the name of the zip file to create.</li>
+
+<li>Specify whether to save a regular zip file, or a self-extracting archive.</li>
+
+<li>Specify the compression level to use. Higher compression levels requires more compression time.</li>
+
+<li>The text encoding to use for the filenames. </li>
+
+<li>Whether to use ZIP64 extensions</li>
+
+<li>whether to encrypt the file data, and if so, whether to use AES encryption.</li>
+
+<li>the password to use.  The adjacent checkbox allows you to show or
+obscure the password characters. This box is enabled only if encryption is in use.</li>
+
+<li>Use these checkboxes to specify whether to include extended timestamps in the generated zip file, in Windows or Unix formats. </li>
+
+<li>Whether to create a split archive, and if so, the size of the segment.</li>
+
+<li>The comment attached to the zip file</li>
+
+<li>The default extraction directory. This feature is enabled only for self-extracting archives.</li>
+
+<li>The command to run after extraction. This feature is enabled only for self-extracting archives.</li>
+
+<li>The list of files to be added to the zip archive.  Each file has a checkbox associated to it. </li>
+
+<li>Click this button to remove any checked files from the list.</li>
+
+<li>Finally, click this button to actually create the zip archive.</li>
+
+</ol>
+
+
+<h2>Extracting files from a Zip Archive</h2>
+
+<p>Extract files from a zip archive by opening the DotNetZip-WinformsTool.exe, and selecting the <b>Read/Extract</b> tab in the UI.
+</p>
+
+
+
+<!-- ============================================================== -->
+
+<img src="ZipTool3.png"/>
+
+
+<p>An overview of the UI elements:</p>
+<ol>
+
+<li>the zip file to read or extract.
+</li>
+
+<li>click here to open and read the specified zip file. The list of
+entries in the zip will be displayed in the listbox below (label #7).
+</li>
+
+<li>The directory to extract entries into</li>
+
+<li>The selection criteria for entries to extract.</li>
+
+<li>Check this to overwrite existing files during extraction.</li>
+
+<li>Check this box to open Windows Explorer after extraction.</li>
+
+<li>The list of entries in the zip file. </li>
+
+<li>Click this button to extract the specified entries in the zip file.
+</li>
+</ol>
+
+
+
+<!-- ============================================================== -->
+
+<h2>Syntax for the Selection Criteria</h2>
+
+<p> Using the a selector string, you can specify a set of criteria for
+the files to be added to the zip file.  Specify the criteria in
+statements of 3 elements: a noun, an operator, and a value.  Consider
+the string "name != *.doc" .  The noun is "name".  The operator is "!=",
+implying "Not Equal".  The value is "*.doc".  That criterion, in
+English, says "all files with a name that does not end in the .doc
+extension."  </p>
+
+<p> Supported nouns include <b>name</b> for the filename; <b>atime</b>,
+<b>mtime</b>, and <b>ctime</b> for last access time, last modfied time,
+and created time of the file, respectively; <b>attributes</b> for the
+file attributes; and <b>size</b> for the file length (uncompressed).
+The <b>attributes</b> and <b>name</b> nouns both support = and != as
+operators.  The <b>size</b>, <b>atime</b>, <b>mtime</b>, and
+<b>ctime</b> nouns support = and !=, and &gt;, &gt;=, &lt;, &lt;= as
+well. The times are taken to be expressed in <em>local time</em>.  </p>
+
+<p> Specify values for the file attributes as a string with one or more
+of the characters H,R,S,A in any order, implying Hidden, ReadOnly,
+System, and Archive, respectively.  To specify a time, use
+YYYY-MM-DD-HH:mm:ss as the format.  If you omit the HH:mm:ss portion, it
+is assumed to be 00:00:00 (midnight). The value for a size criterion is
+expressed in integer quantities of bytes, kilobytes (use k or kb after
+the number), megabytes (m or mb), or gigabytes (g or gb).  The value for
+a name is a pattern to match against the filename, potentially including
+wildcards.  The pattern follows CMD.exe glob rules: * implies one or
+more of any character (not including dot), while ? implies one character
+(not including dot).  If the name pattern contains any slashes, it is
+matched to the entire filename, including the path; otherwise, it is
+matched against only the filename without the path.  This means a
+pattern of "*\*.*" matches all files one directory level deep, while a
+pattern of "*.*" matches all files in all directories.  </p>
+
+
+<p> To specify a name pattern that includes spaces, use single quotes
+around the pattern.  A pattern of "'* *.*'" will match all files that
+have spaces in the filename.  The full criteria string for that would be
+"name = '* *.*'" .  </p>
+
+
+
+<!-- ============================================================== -->
+
+<h3>Examples of Selection Criteria</h3>
+
+<table border='1'>
+<tr>
+  <td style='color:white;Background:Navy;'><strong>Use this Command...</strong></td>
+  <td style='color:white;Background:Navy;'><strong>to do this...</strong></td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">name = *.jpg</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+  <td>any .jpg file
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">mtime &gt; 07/01/2009</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>any file with a <em>last modified time</em> after midnight on 1 July
+  2009. There is also ctime and atime for <em>created time</em> and <em>accessed
+  time</em>.
+  </td>
+</tr>
+
+<tr>
+  <td  colspan='2' class="code">ctime &gt; 07/01/2009-07:53:00</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>any file with a <em>created time</em> after 7:53am on 1 July 2009.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">size &gt; 320mb</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>
+any file with a size over 320mb.  You can use <b>kb</b> or <b>gb</b>, too.  Or
+omit the characters for a size in bytes. And you can use &lt;, &gt;, or = as
+operations.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">attr != H</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>
+any file that does not have the Hidden attribute set. Other attributes
+include S=system, R=Readonly, A=Archive.  Of course you can test that
+the attribute is ON as well, using = instead of !=.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">attr != H and size &gt; 320mb</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>
+include the files that satisfy both conditions.  You can also use OR as a conjuction. Use parens to group complex expressions.
+
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">name = *.jpg or name = *.gif</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>
+include the files that satisfy one or the other condition.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">(name = *.jpg) or (name = *.gif)</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>
+same as above.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">(mtime &gt;= 07/01/2009) and (mtime &lt; 07/02/2009)</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>
+any file modified on July 1st.  From midnight to midnight.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">(name = *.jpg) AND (mtime &gt;= 07/01/2009) and (mtime &lt; 07/02/2009)</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>
+any .jpg file modified on July 1st.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">(name = *.jpg) and (size &gt;= 100kb) and (mtime &gt;= 07/01/2009) and (mtime &lt; 07/02/2009)</td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
+
+  <td>
+any .jpg file, 100kb or more in size, modified on July 1st.
+  </td>
+</tr>
+
+</table>
+
+
+<!-- ============================================================== -->
+
+</body>
+</html>

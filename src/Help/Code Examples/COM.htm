@@ -1,0 +1,726 @@
+
+<html>
+<head>
+<title>COM - ASP, PHP, VB6, JavaScript, VBScript</title>
+<style>
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+</style>
+</head>
+
+<!-- @SortOrder 70 -->
+
+<body>
+<h1>DotNetZip can be used from COM Environments</h1>
+
+<p>You can use DotNetZip from COM environments, via an
+IDispatch (late bound) interface. This means you can call into the DotNetZip
+library (the Ionic.Zip.dll assembly) from programming environments like PHP,
+Perl, Javascript, and VBScript (including old-school ASP pages), among others.
+</p>
+
+<p>If you download and install the DotNetZip Runtime MSI package, it
+will set up DotNetZip for use with COM.  </p>
+
+<p>If for some reason you prefer to not use the MSI package, then you will need to perform some manual steps to enable DotNetZip for COM usage. </p>
+
+<ol>
+<li>open a CMD.exe prompt.</li>
+<li>Install into the GAC: <span style="font-family: Courier;">gacutil -i Ionic.Zip.dll</span></li>
+<li>Register for COM use: <span style="font-family: Courier;">regasm Ionic.Zip.dll</span></li>
+</ol>
+
+<p><i>Notes:</i> You will need to be local administrator in order to
+perform these steps. You need to perform those steps just once, on each
+computer where COM applications will run that use DotNetZip. The gacutil
+and regasm tools are included in the .NET Framework SDK. </p>
+
+
+<h2>Using the COM interface to DotNetZip</h2>
+
+<p>Via the COM exposure, applications written in COM-capable environments like
+old-school ASP using VBScript or Javascript, VBScript or Javascript running in Windows
+Script Host, PHP, Perl, and others, can create instances of the ZipFile class, add
+entries, and save archives, as any .NET application could.  Most of DotNetZip's advanced
+features are available to these COM environments, including ZIP64 support,
+self-extracting archives, password-protected zip files, AES Encryption, spanned Zip
+files, and Unicode support. Beyond creating zips, COM environments can also read zips,
+modify them, or extract files from zip files.</p>
+
+<p> Some of the advanced features of DotNetZip are not available through
+COM, including eventing, and streaming. </p>
+
+<h3>IDispatch</h3>
+
+<p> The key classes in DotNetZip that are exposed to COM are: ZipFile,
+ZipEntry, and the various ZipExceptions.  These are all exposed via
+IDispatch interfaces - late binding only.  (For those familiar with
+.NET, DotNetZip is decorated with <span style="font-family:
+Courier;">ClassInterfaceType.AutoDispatch</span>.)  There is no explicit
+typelib exposed by DotNetZip.  </p>
+
+<p>COM supports calling instance methods and properties on .NET classes; COM does not
+support calling static methods on .NET objects via interop.  To allow the various static
+methods on the ZipFile class, such as <span style="font-family:
+Courier;">ZipFile.CheckZip()</span> and <span style="font-family:
+Courier;">ZipFile.IsZipFile()</span>, to be called from COM, DotNetZip includes a
+ComHelper class. Instead of calling <span style="font-family:
+Courier;">ZipFile.IsZipFile()</span>, which is inaccessible to COM clients because it is
+a static method, COM clients should call <span style="font-family:
+Courier;">Ionic.Zip.ComHelper.IsZipFile()</span>.  Use ComHelper as you would, any other
+class. The methods on the class are documented as with all the other classes in
+DotNetZip.  If you are not programming DotNetZip from COM, you don't need the ComHelper
+class. </p>
+
+
+<h3>Overloaded Methods</h3>
+
+<p> COM does not directly support calling overloaded methods.  In a .NET
+assembbly exposed to COM via interop, only the simplest method in a
+method group is directly available to COM callers.  For example,
+consider <span style="font-family: Courier;">ZipFile.AddFile</span>.  There are two overloads.  Only the overload
+that accepts a single string will be accessible via the name "AddFile"
+to COM clients. </p>
+
+<p> In most cases the thing you need to accomplish is achievable anyway.
+In the <span style="font-family: Courier;">AddFile()</span> case, setting the FileName on the entry after calling
+<span style="font-family: Courier;">AddFile()</span> will do the trick.  </p>
+
+<p>Also, the overloaded methods <em>are available</em>, via "mangled"
+names: each successive overload gets a numeric suffix.  Consider the
+<span style="font-family: Courier;">ZipFile.ExtractSelectedEntries</span> method group; there are 5 overloads. The first,
+simplest, is available via the name <span style="font-family: Courier;">ExtractSelectedEntries</span>.  Then,
+additional overloads are available via <span style="font-family: Courier;">ExtractSelectedEntries_2</span>,
+<span style="font-family: Courier;">ExtractSelectedEntries_3</span>, and so on. The same is true for other
+overloaded methods on the ZipFile and ZipEntry classes.
+</p>
+
+
+<h4>For the ZipFile class:</h4>
+<table border='1'>
+<tr>
+<td style='color:white;Background:Navy;'><strong>Method Overload</strong></td>
+<td style='color:white;Background:Navy;'><strong>IDispatch name</strong></td>
+</tr>
+
+<tr>
+<td>AddItem(string)</td>
+<td>AddItem</td>
+</tr>
+<tr>
+<td>AddItem(string, string)</td>
+<td>AddItem_2</td>
+</tr>
+
+<tr>
+<td>AddFile(string)</td>
+<td>AddFile</td>
+</tr>
+<tr>
+<td>AddFile(string, string)</td>
+<td>AddFile_2</td>
+</tr>
+
+<tr>
+<td>UpdateFile(string)</td>
+<td>UpdateFile</td>
+</tr>
+<tr>
+<td>UpdateFile(string, string)</td>
+<td>UpdateFile_2</td>
+</tr>
+
+<tr>
+<td>UpdateDirectory(string)</td>
+<td>UpdateDirectory</td>
+</tr>
+<tr>
+<td>UpdateDirectory(string, string)</td>
+<td>UpdateDirectory_2</td>
+</tr>
+
+
+<tr>
+<td>UpdateItem(string)</td>
+<td>UpdateItem</td>
+</tr>
+<tr>
+<td>UpdateItem(string, string)</td>
+<td>UpdateItem_2</td>
+</tr>
+
+
+
+<tr>
+<td>AddEntry(string,string)</td>
+<td>AddEntry</td>
+</tr>
+<tr>
+<td>AddEntry(string,string,Encoding)</td>
+<td>AddEntry_2</td>
+</tr>
+<tr>
+<td>AddEntry(string,Stream)</td>
+<td>AddEntry_3</td>
+</tr>
+<tr>
+<td>AddEntry(string,byte[])</td>
+<td>AddEntry_4</td>
+</tr>
+
+<tr>
+<td>UpdateEntry(string,string)</td>
+<td>UpdateEntry</td>
+</tr>
+<tr>
+<td>UpdateEntry(string,string,Encoding)</td>
+<td>UpdateEntry_2</td>
+</tr>
+<tr>
+<td>UpdateEntry(string,Stream)</td>
+<td>UpdateEntry_3</td>
+</tr>
+<tr>
+<td>UpdateEntry(string,byte[])</td>
+<td>UpdateEntry_4</td>
+</tr>
+
+
+<tr>
+<td>AddDirectory(string)</td>
+<td>AddDirectory</td>
+</tr>
+<tr>
+<td>AddDirectory(string,string)</td>
+<td>AddDirectory_2</td>
+</tr>
+
+<tr>
+<td>RemoveEntry(ZipEntry)</td>
+<td>RemoveEntry</td>
+</tr>
+<tr>
+<td>RemoveEntry(string)</td>
+<td>RemoveEntry_2</td>
+</tr>
+
+<tr>
+<td>ExtractAll(string)</td>
+<td>ExtractAll</td>
+</tr>
+<tr>
+<td>ExtractAll(string, bool)</td>
+<td>ExtractAll_2</td>
+</tr>
+<tr>
+<td>ExtractAll(string, ExtractExistingFileAction)</td>
+<td>ExtractAll_3</td>
+</tr>
+
+
+<tr>
+<td>Save()</td>
+<td>Save</td>
+</tr>
+<tr>
+<td>Save(string)</td>
+<td>Save_2</td>
+</tr>
+<tr>
+<td>Save(Stream)</td>
+<td>Save_3</td>
+</tr>
+
+<tr>
+<td>AddSelectedFiles(string)</td>
+<td>AddSelectedFiles</td>
+</tr>
+<tr>
+<td>AddSelectedFiles(string, bool)</td>
+<td>AddSelectedFiles_2</td>
+</tr>
+<tr>
+<td>AddSelectedFiles(string, string)</td>
+<td>AddSelectedFiles_3</td>
+</tr>
+<tr>
+<td>AddSelectedFiles(string, string, bool)</td>
+<td>AddSelectedFiles_4</td>
+</tr>
+<tr>
+<td>AddSelectedFiles(string, string, string)</td>
+<td>AddSelectedFiles_5</td>
+</tr>
+<tr>
+<td>AddSelectedFiles(string, string, string, bool)</td>
+<td>AddSelectedFiles_6</td>
+</tr>
+
+<tr>
+<td>RemoveSelectedEntries(string)</td>
+<td>RemoveSelectedEntries</td>
+</tr>
+<tr>
+<td>AddSelectedFiles(string, string)</td>
+<td>RemoveSelectedEntries_2</td>
+</tr>
+
+<tr>
+<td>ExtractSelectedEntries(string)</td>
+<td>ExtractSelectedEntries</td>
+</tr>
+<tr>
+<td>ExtractSelectedEntries(string, ExtractExistingFileAction)</td>
+<td>ExtractSelectedEntries_2</td>
+</tr>
+<tr>
+<td>ExtractSelectedEntries(string, string)</td>
+<td>ExtractSelectedEntries_3</td>
+</tr>
+<tr>
+<td>ExtractSelectedEntries(string, string, string)</td>
+<td>ExtractSelectedEntries_4</td>
+</tr>
+<tr>
+<td>ExtractSelectedEntries(string, string, string, ExtractExistingFileAction)</td>
+<td>ExtractSelectedEntries_5</td>
+</tr>
+
+<tr>
+<td>SaveSelfExtractor(string, SelfExtractorFlavor)</td>
+<td>SaveSelfExtractor</td>
+</tr>
+<tr>
+<td>SaveSelfExtractor(string, SelfExtractorFlavor, string)</td>
+<td>SaveSelfExtractor_2</td>
+</tr>
+<tr>
+<td>SaveSelfExtractor(string, SelfExtractorFlavor, string, string)</td>
+<td>SaveSelfExtractor_3</td>
+</tr>
+
+
+</table>
+
+
+
+
+<h4>For the ZipEntry class:</h4>
+<table border='1'>
+<tr>
+<td style='color:white;Background:Navy;'><strong>Method Overload</strong></td>
+<td style='color:white;Background:Navy;'><strong>IDispatch name</strong></td>
+</tr>
+
+<tr>
+<td>Extract()</td>
+<td>Extract</td>
+</tr>
+
+
+<tr>
+<td>Extract(ExtractExistingFileAction)</td>
+<td>Extract_2</td>
+</tr>
+
+<tr>
+<td>Extract(Stream)</td>
+<td>Extract_3</td>
+</tr>
+
+<tr>
+<td>Extract(string)</td>
+<td>Extract_4</td>
+</tr>
+
+<tr>
+<td>Extract(string, ExtractExistingFileAction)</td>
+<td>Extract_5</td>
+</tr>
+
+<tr>
+<td>ExtractWithPassword(string)</td>
+<td>ExtractWithPassword</td>
+</tr>
+
+<tr>
+<td>ExtractWithPassword(string,string)</td>
+<td>ExtractWithPassword_2</td>
+</tr>
+
+<tr>
+<td>ExtractWithPassword(ExtractExistingFileAction,string)</td>
+<td>ExtractWithPassword_3</td>
+</tr>
+
+<tr>
+<td>ExtractWithPassword(string, ExtractExistingFileAction, string)</td>
+<td>ExtractWithPassword_4</td>
+</tr>
+
+<tr>
+<td>ExtractWithPassword(Stream, string)</td>
+<td>ExtractWithPassword_5</td>
+</tr>
+
+</table>
+
+
+<p>The bad news is that the mappings between names and actual methods
+will change over releases of DotNetZip.  This means depending on these
+names is a bit fragile, but it will work.</p>
+
+
+
+<h3>Destroy the ZipFile object</h3>
+
+<p>After you call .Dispose() on the ZipFile object, you should destroy
+it completely.  In VBSCript, this is done by setting the object
+reference to Nothing.
+</p>
+
+<h3>The usage model for the ZipFile object</h3>
+
+<p> After you initialize a ZipFile object, you can't reuse the same
+object instance for another zip file.  If for example, you have a set of
+6 zip files, and you want to read and extract them in a loop, then
+you'll need to instantiate a new ZipFile object to read each one.  You
+should call Dispose() on each one when you're finished, and then set it
+to null/Nothing.  </p>
+
+
+<h3>For enumerations</h3>
+
+<p>DotNetZip exposes various enumerations to specify behavior in the
+interface - for example, the Ionic.Zlib.CompressionLevel enum, and the
+Ionic.Zip.ExtractExistingFileAction enum.  Enums are not available to
+IDispatch clients.  COM applications that need to use enum values can
+simply use the integer equivalent for those enums.  In most cases those
+integer values are specified in the documentation for the enum.  For
+example, for Ionic.Zip.ExtractExistingFileAction, the value of Throw is
+0, while OverwriteSilently is 1.  </p>
+
+<p>
+Some examples follow.
+</p>
+
+<hr>
+
+<h2>Using DotNetZip in PHP</h2>
+
+<p>
+This is a PHP script that dynamically creates a ZIP file on the server,
+then downloads it to the requesting client.  The Zip archive will use
+256-bit AES encryption.
+</p>
+
+<pre lang="PHP" numberLines="true" outlining="true"
+  title="Create a Zip">
+  $fname = "zip-generated-from-php-" . date('Y-m-d-His') . ".zip";
+  $zipOutput = "c:\\temp\\" . $fname;
+  $zip = new COM("Ionic.Zip.ZipFile");
+  $zip->Name = $zipOutput;
+  $dirToZip= "c:\\temp\\psh";
+  $zip->Encryption = 3;
+  $zip->Password = "AES-Encryption-Is-Secure";
+  $zip->AddDirectory($dirToZip);
+  $zip->Save();
+  $zip->Dispose();
+
+  if (file_exists($zipOutput))
+  {
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Content-Type: application/x-zip');
+    header('Content-Disposition: attachment; filename=' . $fname);
+    header('Content-Length: ' . filesize($zipOutput));
+    readfile($zipOutput);
+    unlink($zipOutput);
+  }
+</pre>
+
+
+
+
+<h2>Using DotNetZip in Javascript</h2>
+
+<p> This example dynamically creates a zipfile, using AES 256-bit encryption.
+</p>
+
+
+<pre lang="Javascript" numberLines="true" outlining="true"
+  title="Create a Zip">
+var filename = "C:\\temp\\ZipFile-created-from-javascript-" + generateTimestamp() + ".zip";
+
+try
+{
+    WScript.echo("Instantiating a ZipFile object...");
+    var zip = new ActiveXObject("Ionic.Zip.ZipFile");
+
+    WScript.echo("setting the encryption...");
+    // 3 = AES256, 2 = AES128, 1 = PKZIP, 0 = none
+    zip.Encryption = 3;
+
+    WScript.echo("setting the password...");
+    zip.Password = "This is the Password.";
+
+    WScript.echo("adding a selection of files...");
+    zip.AddSelectedFiles("*.js");
+    zip.AddSelectedFiles("*.vbs");
+
+    WScript.echo("setting the save name...");
+    zip.Name = filename;
+
+    WScript.echo("Saving...");
+    zip.Save();
+
+    WScript.echo("Disposing...");
+    zip.Dispose();
+
+    WScript.echo("Done.");
+}
+catch (e2)
+{
+    WScript.echo(e2.number + ": " + e2.name);
+    WScript.echo(e2.message);
+}
+</pre>
+
+<p> This example lists the entries in a zipfile.
+</p>
+
+<pre lang="Javascript" numberLines="true" outlining="true"
+  title="Listing entries in a Zip archive">
+
+var filename = "C:\\temp\\CompressedData.zip";
+
+try
+{
+    WScript.echo("Instantiating a ZipFile object...");
+    var zip = new ActiveXObject("Ionic.Zip.ZipFile");
+
+    WScript.echo("Initialize (Read)...(" + filename + ")");
+    zip.Initialize(filename);
+
+    WScript.echo("listing entries...");
+    var e = new Enumerator(zip);
+    for (; !e.atEnd(); e.moveNext())
+    {
+        var entry= e.item();
+        WScript.Echo ("  " + entry.FileName);
+    }
+
+    WScript.echo("Disposing...")
+    zip.Dispose();
+
+    WScript.echo("Done.");
+}
+catch (e2)
+{
+    WScript.echo(e2.number + ": " + e2.name);
+    WScript.echo(e2.message);
+}
+</pre>
+
+
+
+<p> This example checks a ZipFile using the ComHelper class.
+</p>
+
+<pre lang="Javascript" numberLines="true" outlining="true"
+  title="Checking a file to see if it is a Zip archive">
+
+function checkZip(filename)
+{
+    var obj = new ActiveXObject("Ionic.Zip.ComHelper");
+    return obj.IsZipFile(filename);
+}
+
+function checkZipWithExtract(filename)
+{
+    var obj = new ActiveXObject("Ionic.Zip.ComHelper");
+    return obj.IsZipFileWithExtract(filename);
+}
+
+function main()
+{
+    var result;
+    var args = WScript.Arguments;
+
+    if (args.Length == 1)
+    {
+        result = checkZip(args(0));
+    }
+    else if (args.Length == 2 && args(0) == "-x")
+    {
+        result = checkZipWithExtract(args(1));
+    }
+    else
+    {
+        WScript.Echo("TestCheckZip.js - check a zipfile using Javascript.");
+        WScript.Echo("  usage: TestCheckZip.js [-x]  <pathToZip>");
+        WScript.Quit(1);
+    }
+
+    WScript.Echo((result==0)?"That zip is not OK":"That zip is OK");
+    WScript.Quit(0);
+}
+
+main();
+</pre>
+
+
+
+<h2>Using DotNetZip in VBScript</h2>
+
+<p> This example creates a zipfile, using AES 256-bit encryption.
+</p>
+
+
+<pre lang="VBScript" numberLines="true" outlining="true"
+  title="Create a Zip">
+
+  dim filename
+  filename = "C:\temp\ZipFile-created-from-VBScript.zip"
+
+  WScript.echo("Instantiating a ZipFile object...")
+  dim zip
+  set zip = CreateObject("Ionic.Zip.ZipFile")
+
+  WScript.echo("Setting the encryption...")
+  ' 3=AES256, 2=AES128, 1=PKZIP, 0=none
+  zip.Encryption = 3
+
+  WScript.echo("setting the password...")
+  zip.Password = "This is the Password."
+
+  WScript.echo("adding a selection of files...")
+  zip.AddSelectedFiles "*.js"
+  zip.AddSelectedFiles "*.vbs"
+
+  WScript.echo("setting the save name...")
+  zip.Name = filename
+
+  WScript.echo("Saving...")
+  zip.Save
+
+  WScript.echo("Disposing...")
+  zip.Dispose
+
+  zip = Nothing
+
+  WScript.echo("Done.")
+
+</pre>
+
+
+
+<p> This example extracts all entries from  a zipfile.
+</p>
+
+<pre lang="VBScript" numberLines="true" outlining="true"
+  title="Extract all entries from a Zip">
+
+  WScript.echo("Instantiating a ZipFile object...")
+  dim zip
+  set zip = CreateObject("Ionic.Zip.ZipFile")
+
+  WScript.echo("Initialize (Read)...")
+  zip.Initialize("CompressedData.zip")
+
+  WScript.echo("setting the password for extraction...")
+  zip.Password = "This is the Password."
+
+  WScript.echo("extracting all files...")
+  zip.ExtractAll "DotNetZip-extract"
+
+  WScript.echo("Disposing...")
+  zip.Dispose
+
+  WScript.echo("Done.")
+
+</pre>
+
+
+
+<p> This example lists the entries in a zipfile, and extracts some of them.
+</p>
+
+<pre lang="VBScript" numberLines="true" outlining="true"
+  title="List and Maybe extract entries from a Zip">
+
+    WScript.echo("")
+    Dim zip
+    WScript.echo("Instantiating a ZipFile object...")
+    Set zip = CreateObject("Ionic.Zip.ZipFile")
+
+    WScript.echo("Initialize (Read)...")
+    zip.Initialize filename
+
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    If Not fso.FolderExists("unpack") Then
+        fso.CreateFolder("unpack")
+    End If
+
+    ' Any call to ZipEntry.Extract() will put files into the
+    ' current working directory.  So set it here:
+    Set objShell = CreateObject("Wscript.Shell")
+    objShell.CurrentDirectory = "unpack"
+
+    WScript.echo("listing...")
+    For Each entry in zip
+       WScript.echo("  " & entry.FileName)
+       ext = Right(entry.FileName,4)
+       If (ext = ".vbs") Then
+          ' set password for extraction if necessary
+          entry.Password = "This is the Password."
+          entry.Extract
+       End If
+    Next
+
+    WScript.echo("Disposing...")
+    zip.Dispose
+
+    WScript.echo("Done.")
+
+</pre>
+
+
+<p> This example extracts selected entries from a zip archive, via the
+ExtractSelectedEntries overload.  It uses the mangled name to access the
+method, as described above.  </p>
+
+<pre lang="VBScript" numberLines="true" outlining="true"
+  title="Extract selected entries from a Zip">
+
+    Sub extractZip()
+        If Not (extractLocation = "") Then
+          Dim OverwriteSilently
+          OverwriteSilently = 1
+
+          Dim zip
+          Set zip = CreateObject("Ionic.Zip.ZipFile")
+
+          zip.Initialize filename
+
+          If password <> "" Then
+            zip.Password = password
+          End If
+
+          zip.ExtractSelectedEntries_5 "name = *.xml", Null, extractLocation, OverwriteSilently
+
+          zip.Dispose
+          zip = Nothing
+        End If
+
+    End Sub
+
+</pre>
+
+</body>
+</html>

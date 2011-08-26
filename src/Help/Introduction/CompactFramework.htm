@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>.NET Compact Framework Applications</title>
+<style>
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+</style>
+</head>
+
+<!-- @SortOrder 50 -->
+
+<body>
+<h1>DotNetZip works with the .NET Compact Framework</h1>
+
+<p>
+There is a special version of DotNetZip, specifically built for the
+.NET Compact Framework v2.0 or v3.5.
+</p>
+
+<p>The programming model is exactly the same as for the regular
+DotNetZip library. There are a few features not supported in the CF version of DotNetZip:</p>
+
+<ol>
+
+<li><strong>Self-extracting
+archives.</strong>  The <span style="font-family:
+Courier;">ZipFile.SaveSelfExtractor()</span> method is not available in
+the CF version of DotNetZip. There's no strong technical reason for this
+limnitation; I just didn't think it would be of mainstream interest, and
+in order to keep the size of the library down, I omitted that part from
+the CF version.  It amounts to about a 120k savings.
+</li>
+
+<li><strong>WinZip AES encryption.</strong> The CF version does not
+support encryption using WinZipAes128 or WinZipAes256.  This is because
+the crypto classes from the .NET Framework are not available on .NET CF.
+I would have to write my own SHA1HMAC() and so on, which I haven't got
+'round to doing, especially because no one is clamoring for it.  </li>
+
+<li><strong>ParallelDeflateStream</strong>. Most mobile devices do not
+use multicore processors, so a parallel deflater would offer no
+benefit. Even aside from that, parallel deflation shows its strength
+when cmopressing larger files, and when larger memory resources are
+available. Both of these are unlikely in .NET CF applications.  </li>
+
+</ol>
+
+<hr>
+
+<h2>Using DotNetZip in a Smart Device project</h2>
+
+<p> To build a smart device application that uses DotNetZip, you will
+need to use Visual Studio 2008 or later.  </p>
+
+<ol>
+
+<li>Open Visual Studio 2008.
+</li>
+
+<li>Create a smart device project.  Specify that it will use the .NET
+Compact Framework v2.0 or v3.5.
+</li>
+
+<li>Add a Reference to the CF Library for DotNetZip.
+The filename is Ionic.Zip.CF.dll </li>
+
+<li>Build your application as normal. </li>
+
+</ol>
+
+
+<h2>About the Project Design</h2>
+
+<p>If you are a developer who wants to modify or extend the DotNetZip library itself,
+the following may be of interest.
+</p>
+
+<p> The CF-Library project in the DotNetZip source distribution includes
+all of the source files as <i>Links</i> to the original files in the
+Library project.  This means, the source files are not duplicated. Any
+changes need to be made only once.  The CF-Library project is simply a
+"build project" in that regard. There is no additional source code
+specifically for the .NET Compact Framework.  </p>
+
+<p>NETCF is defined as a conditional compile symbol for the CF-Library
+project.  This symbol is used in the source to exclude code that will
+not run on the .NET Compact Framework, for example, the calls to
+SetLastModifiedTime() method on the System.IO.File class.  </p>
+
+
+</body>
+</html>

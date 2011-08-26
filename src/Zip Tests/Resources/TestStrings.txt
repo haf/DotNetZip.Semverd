@@ -1,0 +1,7 @@
+This file contains test strings to be stuffed into entries in zip files.  Each line will be placed into a separate file.  
+Note: The file must end in a newline.
+﻿过去一周，业界可谓是大事连连，2009 JavaOne大会和谷歌开发者日大会相继举行，微软正式推出新搜索引擎品牌Bing，受到业界极大关注。当然最火热的还是智能手机领域，本周又有三家重头公司宣布对手机市场进行开拓和布局。
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer vulputate, nibh non rhoncus euismod, erat odio pellentesque lacus, sit amet convallis mi augue et odio. Phasellus cursus urna facilisis quam. Suspendisse nec metus et sapien scelerisque euismod. Nullam molestie sem quis nisl. Fusce pellentesque, ante sed semper egestas, sem nulla vestibulum nulla, quis sollicitudin leo lorem elementum wisi. Aliquam vestibulum nonummy orci. Sed in dolor sed enim ullamcorper accumsan. Duis vel nibh. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Sed faucibus, enim sit amet venenatis laoreet, nisl elit posuere est, ut sollicitudin tortor velit ut ipsum. Aliquam erat volutpat. Phasellus tincidunt vehicula eros. Curabitur vitae erat.
+¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ
+Cyrillic - А Б В Г Д Є Ж Ѕ З И І К Л М Н О П Р
+Greek - Ελληνικό αλφάβητο

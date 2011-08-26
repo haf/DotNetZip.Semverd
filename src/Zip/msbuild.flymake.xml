@@ -1,0 +1,64 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         DefaultTargets="CompileAll"
+         ToolsVersion="3.5"
+         >
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+   <PropertyGroup>
+      <Optimize>false</Optimize>
+      <DebugSymbols>true</DebugSymbols>
+      <!-- <OutputPath>.\bin\</OutputPath>  -->
+      <OutputPath>.\</OutputPath>
+      <OutDir>.\</OutDir>
+      <IntermediateOutputPath>.\obj\</IntermediateOutputPath>
+   </PropertyGroup>
+
+  <!-- specify reference assemblies for all builds in this project -->
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <!-- <Reference Include="System.Data" />                       -->
+
+    <!-- <Reference Include="System.Data.Linq" />                   -->
+
+    <Reference Include="..\Zlib\bin\Debug\Ionic.Zlib.dll" />   <!-- ZLIB -->
+
+  </ItemGroup>
+
+  <!-- This ItemGroup includes every .cs source file in the directory,           -->
+  <!-- except for the one indicated by OriginalSourceFile.  In flymake, that     -->
+  <!-- property indicates the currently edited file. So the result is that the   -->
+  <!-- ItemGroup CSFile will include all files, including the _flymake.cs clone, -->
+  <!-- but not including the original file.  Which is what we want.              -->
+  <ItemGroup>
+    <CSFile Include="*.cs" Exclude="$(OriginalSourceFile)" />
+  </ItemGroup>
+
+  <!-- Stuff the OriginalSourceFile property into an ItemGroup.                  -->
+  <!-- We do this so we can get at the metadata, which I Think is available only -->
+  <!-- through an item within an ItemGroup.  We want the root filename, which    -->
+  <!-- we use to name the output netmodule.                                      -->
+  <ItemGroup>
+    <ExcludedCSFile Include="$(OriginalSourceFile)" />
+  </ItemGroup>
+
+  <Target Name="CheckSyntax"
+          DependsOnTargets="ResolveAssemblyReferences"
+          >
+
+      <Message Text="Sources = @(CSFile)" />
+
+    <!-- Run the Visual C# compilation on the specified set of .cs files. -->
+    <CSC 
+       Sources="@(CSFile)"
+       References="@(ReferencePath)"
+       TargetType="module"
+       Toolpath="$(MSBuildToolsPath)"
+       OutputAssembly="%(ExcludedCSFile.Filename)_flymake.netmodule"
+       Nologo="true"
+       />
+  </Target>
+
+</Project>

@@ -1,0 +1,32 @@
+<ignore xmlns='http://www.codeplex.com/schema/IgnoreListSchema-1.0.xsd'>
+  <add recursive='true'>bin</add>
+  <add recursive='true'>obj</add>
+  <add recursive='true'>TestResults</add>
+  <add recursive='true'>notused</add>
+  <add recursive='true'>_UpgradeReport_Files</add>
+  <add recursive='true'>Backup</add>
+  <add>UpgradeLog.XML</add>
+  <add>CodePlex-Readme.txt</add>
+  <add>License.rtf</add>
+  <add>FixProps.ps1</add>
+  <add>makeSrcZip.bat</add>
+  <add>MakeReleaseZips.bat</add>
+  <add>clean.ps1</add>
+  <add>AppNote.txt</add>
+  <add>Todo.txt</add>
+  <add>MakeZipUtils.ps1</add>
+  <add>SetVersion.ps1</add>
+  <add>Help</add>
+  <add recursive='true'>LastBuild.log</add>
+  <add recursive='true'>_Resharper*</add>
+  <add recursive='true'>Debug</add>
+  <add recursive='true'>Release</add>
+  <add recursive='true'>*.resharper</add>
+  <add recursive='true'>*.cache</add>
+  <add recursive='true'>*.suo</add>
+  <add recursive='true'>*.user</add>
+  <add recursive='true'>#*.*#</add>
+  <add recursive='true'>*.*~</add>
+  <add recursive='true'>*.zip</add>
+  <!-- add>*.xml</add  -->
+</ignore>

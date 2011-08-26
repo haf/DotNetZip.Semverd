@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>3.0</ProductVersion>
+    <ProjectGuid>{cc0b949c-4f52-4dc1-9925-64daa1cdd79f}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>DotNetZip-Runtime</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <Name>DotNetZip Runtime Setup</Name>
+  </PropertyGroup>
+  <!--
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+-->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LinkerTreatWarningsAsErrors>False</LinkerTreatWarningsAsErrors>
+    <LinkerVerboseOutput>True</LinkerVerboseOutput>
+    <SuppressIces>ICE69;</SuppressIces>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.wxs" />
+    <Compile Include="UI.wxs" />
+    <Compile Include="ComRegistration.wxs" />
+  </ItemGroup>
+  <!-- http://wix.sourceforge.net/manual-wix3/authoring_first_msbuild_project.htm -->
+  <ItemGroup>
+    <EmbeddedResource Include="CustomText.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <Name>WixUIExtension</Name>
+      <HintPath>$(ProgramFileS)\Windows Installer XML v3.5\bin\WixUIExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <Name>WixUtilExtension</Name>
+      <HintPath>$(ProgramFileS)\Windows Installer XML v3.5\bin\WixUtilExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <Name>WixNetFxExtension</Name>
+      <HintPath>$(ProgramFileS)\Windows Installer XML v3.5\bin\WixNetFxExtension.dll</HintPath>
+    </WixExtension>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <!-- To modify your build process, add your task inside one of the
+       targets below and uncomment it.  Other similar extension points
+       exist, see Wix.targets.
+
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
+  <Target Name="AfterBuild">
+    <Message Text="Post Processing the MSI..." />
+    <Message Text="TargetFileName= $(TargetFileName)" />
+    <Exec Command="&quot;$(SystemRoot)\System32\cscript.exe&quot; PostProcessMsi.js &quot;$(OutputPath)en-us\$(TargetFileName)&quot; " />
+  </Target>
+  <ItemGroup>
+    <ProjectReference Include="..\Zip\Zip DLL.csproj">
+      <Name>Zip DLL</Name>
+      <Project>{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

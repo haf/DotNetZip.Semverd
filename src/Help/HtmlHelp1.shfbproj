@@ -1,0 +1,94 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <!-- The configuration and platform will be used to determine which
+         assemblies to include from solution and project documentation
+         sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{b4390741-ad2c-41f3-9c33-937bd218b91c}</ProjectGuid>
+    <SHFBSchemaVersion>1.9.0.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
+         Studio adds them anyway -->
+    <AssemblyName>Documentation</AssemblyName>
+    <RootNamespace>Documentation</RootNamespace>
+    <Name>Documentation</Name>
+    <!-- SHFB properties -->
+    <OutputPath>.\bin\HtmlHelp1</OutputPath>
+    <HtmlHelpName>DotNetZipLib-v1.9.1.6</HtmlHelpName>
+    <ProjectSummary>DotNetZip is a small, easy-to-use class library for manipulating .zip files. It can enable .NET applications written in VB.NET, C#, any .NET language, to easily create, read, and update zip files.  DotNetZip is donationware:  http://cheeso.members.winisp.net/DotNetZipDonate.aspx</ProjectSummary>
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <HtmlHelp1xCompilerPath>
+    </HtmlHelp1xCompilerPath>
+    <HtmlHelp2xCompilerPath>c:\Program Files (x86)\Common Files\microsoft shared\Help 2.0 Compiler\</HtmlHelp2xCompilerPath>
+    <SandcastlePath>
+    </SandcastlePath>
+    <WorkingPath>
+    </WorkingPath>
+    <FrameworkVersion>3.0</FrameworkVersion>
+    <HelpTitle>Ionic Zip Library v1.9.1.6</HelpTitle>
+    <FeedbackEMailAddress>dpchiesa%40hotmail.com</FeedbackEMailAddress>
+    <PresentationStyle>Prototype</PresentationStyle>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="..\Zip\bin\Debug\Ionic.Zip.dll" xmlns="" />
+      <DocumentationSource sourceFile="..\Zip\bin\Debug\Ionic.Zip.xml" xmlns="" />
+    </DocumentationSources>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" />
+<NamespaceSummaryItem name="Ionic" isDocumented="True">The Ionic namespace includes supporting classes used in the DotNetZip library.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Ionic.Zip" isDocumented="True">&lt;para&gt;Classes in the Ionic.Zip namespace allow applications to read and write zip files according to
+&lt;see href='http://www.pkware.com/business_and_developers/developer/popups/appnote.txt.'&gt;the format
+described by PKWARE&lt;/see&gt;
+&lt;/para&gt;
+&lt;para&gt;
+DotNetZip is donationware.  &lt;see href='http://cheeso.members.winisp.net/DotNetZipDonate.aspx'&gt;Please donate.&lt;/see&gt;&lt;/para&gt;</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Ionic.Zlib" isDocumented="True">Ionic.Zlib namespace includes classes for doing ZLIB, DEFLATE, and GZIP compression and decompression, according to RFC 1950, RFC 1951, and RFC 1952.  It includes stream classes that can directly replace the DeflateStream and GZipStream classes that are included in the Base Class Library of the .NET Framework.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Ionic.BZip2" isDocumented="True">The Ionic.BZip2 namespace includes classes for doing BZip2 compression and decompression, according to the BZip2 specification provided by Julian Seward.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Ionic.Crc" isDocumented="True">The Ionic.Crc namespace includes a classes that calculate 32-bit Cyclic Redundancy Checks (CRC32) for data.</NamespaceSummaryItem></NamespaceSummaries>
+    <CopyrightText>Copyright 2009-2011, Dino Chiesa</CopyrightText>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
+    <RootNamespaceTitle>Reference</RootNamespaceTitle>
+    <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
+  </PropertyGroup>
+  <!-- There are no properties for these two groups but they need to appear in
+       order for Visual Studio to perform the build. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Introduction\Introduction.htm" />
+    <Content Include="Introduction\About.htm" />
+    <Content Include="Introduction\GettingStarted.htm" />
+    <Content Include="Introduction\CompactFramework.htm" />
+    <Content Include="Code Examples\Powershell.htm" />
+    <Content Include="Code Examples\COM.htm" />
+    <Content Include="Code Examples\Code Examples.htm" />
+    <Content Include="Code Examples\VB.htm" />
+    <Content Include="Code Examples\Cpp.htm" />
+    <Content Include="Code Examples\ASPNET-Csharp.htm" />
+    <Content Include="Code Examples\ASPNET-VB.htm" />
+    <Content Include="Code Examples\CSharp.htm" />
+    <Content Include="Tools and Utilities\Tools and Utilities.htm" />
+    <Content Include="Tools and Utilities\CmdLine.htm" />
+    <Content Include="Tools and Utilities\BZip2Gzip.htm" />
+    <Content Include="Tools and Utilities\GUI.htm" />
+    <Content Include="Tools and Utilities\ZipTool1.png" />
+    <Content Include="Tools and Utilities\ZipTool2.png" />
+    <Content Include="Tools and Utilities\ZipTool3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Introduction\" />
+    <Folder Include="Code Examples\" />
+    <Folder Include="Tools and Utilities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zip\Zip DLL.csproj">
+      <Project>{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}</Project>
+      <Name>Zip Full DLL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- Import the SHFB build targets -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+</Project>
