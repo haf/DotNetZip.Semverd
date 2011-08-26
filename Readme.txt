@@ -1,3 +1,9 @@
+Fri, 27 Aug 2011  01:21
+
+Here is a fork of the project that's easily semverd. This is not the official project, but you may clone it - it's easier to build at least. Forked off of http://dotnetzip.codeplex.com/SourceControl/changeset/changes/81674
+
+
+
 Mon, 11 Jul 2011  20:10
 
 
