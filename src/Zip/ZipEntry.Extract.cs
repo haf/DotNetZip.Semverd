@@ -1396,7 +1396,7 @@ namespace Ionic.Zip
                 // Sometimes the name on the entry starts with a slash.
                 // Rather than unpack to the root of the volume, we're going to
                 // drop the slash and unpack to the specified base directory.
-                string f = this.FileName.Replace("\\","/");
+                var f = FileName.Replace(Path.DirectorySeparatorChar, '/');
 
                 // workitem 11772: remove drive letter with separator
                 if (f.IndexOf(':') == 1)
@@ -1414,7 +1414,7 @@ namespace Ionic.Zip
                     outFileName = Path.Combine(basedir, f);
 
                 // workitem 10639
-                outFileName = outFileName.Replace("/","\\");
+                outFileName = outFileName.Replace('/', Path.DirectorySeparatorChar);
 
                 // check if it is a directory
                 if ((IsDirectory) || (FileName.EndsWith("/")))
