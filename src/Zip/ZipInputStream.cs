@@ -576,7 +576,7 @@ namespace  Ionic.Zip
             if (_LeftToRead == 0)
             {
                 int CrcResult = _crcStream.Crc;
-                _currentEntry.VerifyCrcAfterExtract(CrcResult);
+                _currentEntry.VerifyCrcAfterExtract(CrcResult, _currentEntry.Encryption, _currentEntry._Crc32, _currentEntry.ArchiveStream, _currentEntry.UncompressedSize);
                 _inputStream.Seek(_endOfEntry, SeekOrigin.Begin);
                 // workitem 10178
                 Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_inputStream);

@@ -517,7 +517,7 @@ namespace Ionic.Crc
         /// </remarks>
         /// <param name="stream">The underlying stream</param>
         public CrcCalculatorStream(System.IO.Stream stream)
-            : this(true, CrcCalculatorStream.UnsetLengthLimit, stream, null)
+            : this(true, UnsetLengthLimit, stream, null)
         {
         }
 
