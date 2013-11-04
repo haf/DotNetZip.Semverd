@@ -73,9 +73,8 @@ namespace Ionic.Zip
         /// </remarks>
         public void Extract()
         {
-            InternalExtract(".", null, null);
+            InternalExtract(".", null, null, _container, _Source);
         }
-
 
         /// <summary>
         ///   Extract the entry to a file in the filesystem, using the specified
@@ -96,7 +95,7 @@ namespace Ionic.Zip
         public void Extract(ExtractExistingFileAction extractExistingFile)
         {
             ExtractExistingFile = extractExistingFile;
-            InternalExtract(".", null, null);
+            InternalExtract(".", null, null, _container, _Source);
         }
 
         /// <summary>
@@ -124,7 +123,7 @@ namespace Ionic.Zip
         ///
         public void Extract(Stream stream)
         {
-            InternalExtract(null, stream, null);
+            InternalExtract(null, stream, null, _container, _Source);
         }
 
         /// <summary>
@@ -180,12 +179,8 @@ namespace Ionic.Zip
         /// </remarks>
         public void Extract(string baseDirectory)
         {
-            InternalExtract(baseDirectory, null, null);
+            InternalExtract(baseDirectory, null, null, _container, _Source);
         }
-
-
-
-
 
         /// <summary>
         ///   Extract the entry to the filesystem, starting at the specified base
@@ -237,9 +232,8 @@ namespace Ionic.Zip
         public void Extract(string baseDirectory, ExtractExistingFileAction extractExistingFile)
         {
             ExtractExistingFile = extractExistingFile;
-            InternalExtract(baseDirectory, null, null);
+            InternalExtract(baseDirectory, null, null, _container, _Source);
         }
-
 
         /// <summary>
         ///   Extract the entry to the filesystem, using the current working directory
@@ -302,7 +296,7 @@ namespace Ionic.Zip
         /// <param name="password">The Password to use for decrypting the entry.</param>
         public void ExtractWithPassword(string password)
         {
-            InternalExtract(".", null, password);
+            InternalExtract(".", null, password, _container, _Source);
         }
 
         /// <summary>
@@ -332,11 +326,8 @@ namespace Ionic.Zip
         /// <param name="password">The Password to use for decrypting the entry.</param>
         public void ExtractWithPassword(string baseDirectory, string password)
         {
-            InternalExtract(baseDirectory, null, password);
+            InternalExtract(baseDirectory, null, password, _container, _Source);
         }
-
-
-
 
         /// <summary>
         ///   Extract the entry to a file in the filesystem, relative to the
@@ -359,10 +350,8 @@ namespace Ionic.Zip
         public void ExtractWithPassword(ExtractExistingFileAction extractExistingFile, string password)
         {
             ExtractExistingFile = extractExistingFile;
-            InternalExtract(".", null, password);
+            InternalExtract(".", null, password, _container, _Source);
         }
-
-
 
         /// <summary>
         ///   Extract the entry to the filesystem, starting at the specified base
@@ -384,7 +373,7 @@ namespace Ionic.Zip
         public void ExtractWithPassword(string baseDirectory, ExtractExistingFileAction extractExistingFile, string password)
         {
             ExtractExistingFile = extractExistingFile;
-            InternalExtract(baseDirectory, null, password);
+            InternalExtract(baseDirectory, null, password, _container, _Source);
         }
 
         /// <summary>
@@ -417,9 +406,8 @@ namespace Ionic.Zip
         /// </param>
         public void ExtractWithPassword(Stream stream, string password)
         {
-            InternalExtract(null, stream, password);
+            InternalExtract(null, stream, password, _container, _Source);
         }
-
 
         /// <summary>
         ///   Opens a readable stream corresponding to the zip entry in the
@@ -578,7 +566,7 @@ namespace Ionic.Zip
 
         internal Crc.CrcCalculatorStream InternalOpenReader(string password)
         {
-            ValidateCompression();
+            ValidateCompression(_CompressionMethod_FromZipFile, FileName, UnsupportedCompressionMethod);
             ValidateEncryption();
             SetupCryptoForExtract(password);
 
@@ -610,14 +598,15 @@ namespace Ionic.Zip
             _ioOperationCanceled = _container.ZipFile.OnExtractBlock(this, bytesWritten, totalBytesToWrite);
         }
 
-        void OnBeforeExtract(string path)
+        static void OnBeforeExtract(ZipEntry zipEntryInstance, string path, ZipFile zipFile)
         {
             // When in the context of a ZipFile.ExtractAll, the events are generated from
             // the ZipFile method, not from within the ZipEntry instance. (why?)
             // Therefore we suppress the events originating from the ZipEntry method.
-            if (_container.ZipFile == null) return;
-            if (_container.ZipFile._inExtractAll) return;
-            _ioOperationCanceled = _container.ZipFile.OnSingleEntryExtract(this, path, true);
+            if (zipFile == null) return;
+            if (zipFile._inExtractAll) return;
+            // returned boolean is always ignored for all callers of OnBeforeExtract
+            zipFile.OnSingleEntryExtract(zipEntryInstance, path, true);
         }
 
         private void OnAfterExtract(string path)
@@ -658,25 +647,27 @@ namespace Ionic.Zip
                 _container.ZipFile.StatusMessageTextWriter.WriteLine(format, args);
         }
 
-        // Pass in either basedir or s, but not both.
-        // In other words, you can extract to a stream or to a directory (filesystem), but not both!
-        // The Password param is required for encrypted entries.
-        void InternalExtract(string baseDir, Stream outstream, string password)
+        /// <summary>
+        /// Pass in either basedir or s, but not both.
+        /// In other words, you can extract to a stream or to a directory (filesystem), but not both!
+        /// The Password param is required for encrypted entries.
+        /// </summary>
+        void InternalExtract(string baseDir, Stream outstream, string password, ZipContainer zipContainer, ZipEntrySource zipEntrySource)
         {
             // workitem 7958
-            if (_container == null)
+            if (zipContainer == null)
                 throw new BadStateException("This entry is an orphan");
 
             // workitem 10355
-            if (_container.ZipFile == null)
+            if (zipContainer.ZipFile == null)
                 throw new InvalidOperationException("Use Extract() only with ZipFile.");
 
-            _container.ZipFile.Reset(false);
+            zipContainer.ZipFile.Reset(false);
 
-            if (_Source != ZipEntrySource.ZipFile)
+            if (zipEntrySource != ZipEntrySource.ZipFile)
                 throw new BadStateException("You must call ZipFile.Save before calling any Extract method");
 
-            OnBeforeExtract(baseDir);
+            OnBeforeExtract(this, baseDir, zipContainer.ZipFile);
 
             _ioOperationCanceled = false;
 
@@ -686,7 +677,7 @@ namespace Ionic.Zip
             Stream output = null;
             try
             {
-                ValidateCompression();
+                ValidateCompression(_CompressionMethod_FromZipFile, FileName, UnsupportedCompressionMethod);
                 ValidateEncryption();
 
                 if (IsDoneWithOutput(baseDir, outstream, out targetFileName))
@@ -1275,37 +1266,34 @@ namespace Ionic.Zip
             }
         }
 
-
-        internal void ValidateEncryption()
+        void ValidateEncryption()
         {
             if (Encryption != EncryptionAlgorithm.PkzipWeak &&
 #if AESCRYPTO
- Encryption != EncryptionAlgorithm.WinZipAes128 &&
+                Encryption != EncryptionAlgorithm.WinZipAes128 &&
                 Encryption != EncryptionAlgorithm.WinZipAes256 &&
 #endif
- Encryption != EncryptionAlgorithm.None)
+                Encryption != EncryptionAlgorithm.None)
             {
                 // workitem 7968
                 if (_UnsupportedAlgorithmId != 0)
-                    throw new ZipException(String.Format("Cannot extract: Entry {0} is encrypted with an algorithm not supported by DotNetZip: {1}",
+                    throw new ZipException(string.Format("Cannot extract: Entry {0} is encrypted with an algorithm not supported by DotNetZip: {1}",
                                                          FileName, UnsupportedAlgorithm));
-                else
-                    throw new ZipException(String.Format("Cannot extract: Entry {0} uses an unsupported encryption algorithm ({1:X2})",
-                                                         FileName, (int)Encryption));
+                throw new ZipException(string.Format("Cannot extract: Entry {0} uses an unsupported encryption algorithm ({1:X2})",
+                                                     FileName, (int)Encryption));
             }
         }
 
-
-        void ValidateCompression()
+        static void ValidateCompression(short compressionMethod, string fileName, string compressionMethodName)
         {
-            if ((_CompressionMethod_FromZipFile != (short)CompressionMethod.None) &&
-                (_CompressionMethod_FromZipFile != (short)CompressionMethod.Deflate)
+            if ((compressionMethod != (short)CompressionMethod.None) &&
+                (compressionMethod != (short)CompressionMethod.Deflate)
 #if BZIP
-                && (_CompressionMethod_FromZipFile != (short)CompressionMethod.BZip2)
+                && (compressionMethod != (short)CompressionMethod.BZip2)
 #endif
                 )
                 throw new ZipException(String.Format("Entry {0} uses an unsupported compression method (0x{1:X2}, {2})",
-                                                          FileName, _CompressionMethod_FromZipFile, UnsupportedCompressionMethod));
+                                                          fileName, compressionMethod, compressionMethodName));
         }
 
 
