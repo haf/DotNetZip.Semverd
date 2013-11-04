@@ -41,9 +41,9 @@ namespace Ionic.Zip
         public static Int64 GetFileLength(string fileName)
         {
             if (!File.Exists(fileName))
-                throw new System.IO.FileNotFoundException(fileName);
+                throw new FileNotFoundException(fileName);
 
-            long fileLength = 0L;
+            long fileLength;
             FileShare fs = FileShare.ReadWrite;
 #if !NETCF
             // FileShare.Delete is not defined for the Compact Framework

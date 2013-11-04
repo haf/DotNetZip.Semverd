@@ -217,11 +217,11 @@ namespace Ionic.Zip
         }
 
 
-        private int BufferSize
+        int BufferSize
         {
             get
             {
-                return this._container.BufferSize;
+                return _container.BufferSize;
             }
         }
 
