@@ -1,5 +1,6 @@
---- 
+---
 :major: 1
 :minor: 9
 :patch: 0
-:special: ""
+:special: rc1
+:metadata: ''

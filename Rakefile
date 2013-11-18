@@ -16,7 +16,7 @@ task :build => [:versioning, :restore, :asmver, :build_quick]
 
 desc 'generate SolutionVersion.cs'
 asmver :asmver do |a|
-  ver = ENV['NUGET_VERSION'] 
+  ver = ENV['FORMAL_VERSION']
   a.file_path  = 'src/SolutionInfo.cs'
   a.namespace  = '' # empty for C# projects
   a.attributes \
