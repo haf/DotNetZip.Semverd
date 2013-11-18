@@ -24,11 +24,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
-using Ionic.Zip;
 using Ionic.Zip.Tests.Utilities;
 
 namespace Ionic.Zip.Tests.Password
@@ -512,7 +510,7 @@ namespace Ionic.Zip.Tests.Password
                                                     (i==0)? password : wrongPassword);
                     }
                 }
-                catch (Ionic.Zip.BadPasswordException bpe1)
+                catch (BadPasswordException)
                 {
                     // only swallow exceptions on the first go-round
                     if (i==0) throw;
