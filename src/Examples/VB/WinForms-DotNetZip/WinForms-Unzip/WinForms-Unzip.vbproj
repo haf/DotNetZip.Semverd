@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -43,10 +43,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Zip\bin\Debug\Ionic.Zip.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -120,6 +116,20 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BZip2\BZip2 DLL.csproj">
+      <Project>{E2CE0D56-7AF8-4404-BD0C-BC562CBD74D4}</Project>
+      <Name>BZip2 DLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Zip\Zip DLL.csproj">
+      <Project>{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}</Project>
+      <Name>Zip DLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Zlib\Zlib DLL.csproj">
+      <Project>{9816BA86-9250-4C00-A912-25F07F8677D1}</Project>
+      <Name>Zlib DLL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -361,8 +361,8 @@ namespace Ionic.Zip
         /// <param name="mode">To either encrypt or decrypt.</param>
         /// <param name="cipher">The pre-initialized ZipCrypto object.</param>
         public ZipCipherStream(System.IO.Stream s, ZipCrypto cipher, CryptoMode mode)
-            : base()
         {
+            if (s == null) throw new ArgumentNullException("s");
             _cipher = cipher;
             _s = s;
             _mode = mode;

@@ -496,14 +496,14 @@ namespace Ionic.Crc
     /// DotNetZip library.
     /// </para>
     /// </remarks>
-    public class CrcCalculatorStream : System.IO.Stream, System.IDisposable
+    public class CrcCalculatorStream : System.IO.Stream, IDisposable
     {
-        private static readonly Int64 UnsetLengthLimit = -99;
+        static readonly Int64 UnsetLengthLimit = -99;
 
-        internal System.IO.Stream _innerStream;
-        private CRC32 _Crc32;
-        private Int64 _lengthLimit = -99;
-        private bool _leaveOpen;
+        readonly System.IO.Stream _innerStream;
+        readonly CRC32 _crc32;
+        readonly Int64 _lengthLimit = -99;
+        bool _leaveOpen;
 
         /// <summary>
         /// The default constructor.
@@ -517,7 +517,7 @@ namespace Ionic.Crc
         /// </remarks>
         /// <param name="stream">The underlying stream</param>
         public CrcCalculatorStream(System.IO.Stream stream)
-            : this(true, CrcCalculatorStream.UnsetLengthLimit, stream, null)
+            : this(true, UnsetLengthLimit, stream, null)
         {
         }
 
@@ -535,7 +535,7 @@ namespace Ionic.Crc
         /// <param name="leaveOpen">true to leave the underlying stream
         /// open upon close of the <c>CrcCalculatorStream</c>; false otherwise.</param>
         public CrcCalculatorStream(System.IO.Stream stream, bool leaveOpen)
-            : this(leaveOpen, CrcCalculatorStream.UnsetLengthLimit, stream, null)
+            : this(leaveOpen, UnsetLengthLimit, stream, null)
         {
         }
 
@@ -609,17 +609,17 @@ namespace Ionic.Crc
         }
 
 
-        // This ctor is private - no validation is done here.  This is to allow the use
+        // This ctor is private - no validation except null is done here.
+        // This is to allow the use
         // of a (specific) negative value for the _lengthLimit, to indicate that there
         // is no length set.  So we validate the length limit in those ctors that use an
         // explicit param, otherwise we don't validate, because it could be our special
         // value.
-        private CrcCalculatorStream
-            (bool leaveOpen, Int64 length, System.IO.Stream stream, CRC32 crc32)
-            : base()
+        CrcCalculatorStream(bool leaveOpen, Int64 length, System.IO.Stream stream, CRC32 crc32)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
             _innerStream = stream;
-            _Crc32 = crc32 ?? new CRC32();
+            _crc32 = crc32 ?? new CRC32();
             _lengthLimit = length;
             _leaveOpen = leaveOpen;
         }
@@ -635,7 +635,7 @@ namespace Ionic.Crc
         /// </remarks>
         public Int64 TotalBytesSlurped
         {
-            get { return _Crc32.TotalBytesRead; }
+            get { return _crc32.TotalBytesRead; }
         }
 
         /// <summary>
@@ -650,7 +650,7 @@ namespace Ionic.Crc
         /// </remarks>
         public Int32 Crc
         {
-            get { return _Crc32.Crc32Result; }
+            get { return _crc32.Crc32Result; }
         }
 
         /// <summary>
@@ -689,12 +689,12 @@ namespace Ionic.Crc
 
             if (_lengthLimit != CrcCalculatorStream.UnsetLengthLimit)
             {
-                if (_Crc32.TotalBytesRead >= _lengthLimit) return 0; // EOF
-                Int64 bytesRemaining = _lengthLimit - _Crc32.TotalBytesRead;
+                if (_crc32.TotalBytesRead >= _lengthLimit) return 0; // EOF
+                Int64 bytesRemaining = _lengthLimit - _crc32.TotalBytesRead;
                 if (bytesRemaining < count) bytesToRead = (int)bytesRemaining;
             }
             int n = _innerStream.Read(buffer, offset, bytesToRead);
-            if (n > 0) _Crc32.SlurpBlock(buffer, offset, n);
+            if (n > 0) _crc32.SlurpBlock(buffer, offset, n);
             return n;
         }
 
@@ -706,7 +706,7 @@ namespace Ionic.Crc
         /// <param name="count">the number of bytes to write</param>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (count > 0) _Crc32.SlurpBlock(buffer, offset, count);
+            if (count > 0) _crc32.SlurpBlock(buffer, offset, count);
             _innerStream.Write(buffer, offset, count);
         }
 
@@ -767,7 +767,7 @@ namespace Ionic.Crc
         /// </summary>
         public override long Position
         {
-            get { return _Crc32.TotalBytesRead; }
+            get { return _crc32.TotalBytesRead; }
             set { throw new NotSupportedException(); }
         }
 

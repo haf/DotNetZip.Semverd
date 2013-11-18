@@ -217,11 +217,11 @@ namespace Ionic.Zip
         }
 
 
-        private int BufferSize
+        int BufferSize
         {
             get
             {
-                return this._container.BufferSize;
+                return _container.BufferSize;
             }
         }
 
@@ -2584,9 +2584,9 @@ namespace Ionic.Zip
                 // workitem 10178
                 Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(this.ArchiveStream);
             }
-            catch (System.IO.IOException exc1)
+            catch (IOException exc1)
             {
-                string description = String.Format("Exception seeking  entry({0}) offset(0x{1:X8}) len(0x{2:X8})",
+                var description = String.Format("Exception seeking  entry({0}) offset(0x{1:X8}) len(0x{2:X8})",
                                                    this.FileName, this._RelativeOffsetOfLocalHeader,
                                                    this.ArchiveStream.Length);
                 throw new BadStateException(description, exc1);

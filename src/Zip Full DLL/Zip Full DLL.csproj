@@ -58,29 +58,10 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <!--
-    <ItemGroup>
-        < ! - - Create the output path as an item so that we can use %(FullPath) on it. - - >
-        <_OutputPathItem Include="$(OutputPath)"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <BuiltProjectOutputGroupKeyOutput Include="$(TargetPath)">
-            <IsKeyOutput>true</IsKeyOutput>
-            <FinalOutputPath>$(TargetPath)</FinalOutputPath>
-            <TargetPath>$(TargetFileName)</TargetPath>
-        </BuiltProjectOutputGroupKeyOutput>
-    </ItemGroup>
--->
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!--
-  <Target Name="BeforeBuild">
-    <MakeDir Directories="$(OutputPath)" />
-  </Target>
--->
   <Target Name="Compile">
     <!-- Outputs="$(IntermediateOutputPath)$(TargetFileName)" -->
     <!-- Outputs="$(TargetPath)" -->
@@ -102,48 +83,9 @@
     <!-- we do it here explicitly. -->
     <Copy SourceFiles="$(IntermediateOutputPath)$(AssemblyName).XML" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="$(OverwriteReadOnlyFiles)" />
   </Target>
-  <!--
-    Output group to allow the merged DLL to be consumed by other projects
-    borrowed from http://eminentprojects.com/svn/eminent/tools/trunk/MsBuildTasks/Microsoft/WebDeployment/v8.0/Microsoft.WebDeployment.targets
-    -->
-  <!--
-  <Target Name="BuiltProjectOutputGroup" >
-    <CreateItem Include="$(TargetPath)">
-      <Output ItemName="_BuiltProjectOutputGroupOutput" TaskParameter="Include"/>
-    </CreateItem>
-    <CreateItem
-      Include="@(_BuiltProjectOutputGroupOutput)"
-      AdditionalMetadata="TargetPath=%(_BuiltProjectOutputGroupOutput.SubFolder)%(_BuiltProjectOutputGroupOutput.RecursiveDir)%(Filename)%(Extension)">
-      <Output ItemName="BuiltProjectOutputGroupOutput" TaskParameter="Include"/>
-    </CreateItem>
-    <Message Text="Project output= @(BuiltProjectOutputGroupOutput)" />
-  </Target>
-
--->
   <Target Name="EchoTargetPath">
     <Message Text="TargetPath= $(TargetPath)" />
   </Target>
-  <!--
-
-    <Target
-        Name="GetTargetPath"
-        Outputs="$(TargetPath)"/>
--->
-  <!--
-    <ItemGroup>
-        <BuiltProjectOutputGroupOutput Include="$(MSBuildProjectDirectory)\$(OutputPath)$(AssemblyName).dll">
-            <IsKeyOutput>true</IsKeyOutput>
-            < ! - - TargetPath>@(DocFileItem->'%(Filename)%(Extension)')</TargetPath - - >
-        </BuiltProjectOutputGroupOutput>
-    </ItemGroup>
--->
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <ItemGroup>
     <ProjectReference Include="..\Zip Partial DLL\Zip Partial DLL.csproj">
       <Project>{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}</Project>
