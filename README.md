@@ -1,3 +1,11 @@
+Mon, 18 Nov 2013 20:53 UTC+0100
+
+Released v1.9.2-rc1 to NuGet. This version fixes the tmp-file bug and a lockup-
+bug with "PendingOverwrite" so that OverwriteSilently works better. It's a RC,
+because as a part of this bugfix, I actually cleaned up some code and that might
+have changed semantics (although I don't think it has, I've tested the function
+that I changed).
+
 Fri, 27 Aug 2011  01:21
 
 Here is a fork of the project that's easily semverd. This is not the official project, but you may clone it - it's easier to build at least. Forked off of http://dotnetzip.codeplex.com/SourceControl/changeset/changes/81674
