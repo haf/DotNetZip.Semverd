@@ -33,7 +33,7 @@ directory 'build/pkg'
 
 desc "package nugets"
 nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
-  p.files         = %w[src/Zip\ Full\ DLL/Zip\ Full\ DLL.csproj]
+  p.files         = %w[src/Zip/Zip\ DLL.csproj]
   p.out           = 'build/pkg'
   p.exe           = 'buildsupport/NuGet.exe'
   p.configuration = 'Release'
