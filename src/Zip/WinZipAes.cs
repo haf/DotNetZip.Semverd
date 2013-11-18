@@ -395,17 +395,17 @@ namespace Ionic.Zip
         /// <param name="mode">To either encrypt or decrypt.</param>
         /// <param name="cryptoParams">The pre-initialized WinZipAesCrypto object.</param>
         /// <param name="length">The maximum number of bytes to read from the stream.</param>
-        internal WinZipAesCipherStream(System.IO.Stream s, WinZipAesCrypto cryptoParams, long length, CryptoMode mode)
+        internal WinZipAesCipherStream(Stream s, WinZipAesCrypto cryptoParams, long length, CryptoMode mode)
             : this(s, cryptoParams, mode)
         {
+            if (s == null) throw new ArgumentNullException("s");
             // don't read beyond this limit!
             _length = length;
             //Console.WriteLine("max length of AES stream: {0}", _length);
         }
 
-
 #if WANT_TRACE
-            Stream untransformed;
+        Stream untransformed;
         String traceFileUntransformed;
         Stream transformed;
         String traceFileTransformed;

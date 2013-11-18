@@ -717,10 +717,11 @@ namespace Ionic.Zip
                     EnsurePassword(password);
 
                 // set up the output stream
-                string tmpName = Path.GetRandomFileName();
+                var tmpName = Path.GetRandomFileName();
+                var tmpPath = Path.Combine(Path.GetDirectoryName(targetFileName), tmpName);
                 WriteStatus("extract file {0}...", targetFileName);
 
-                using (var output = OpenFileStream(tmpName, ref checkLaterForResetDirTimes))
+                using (var output = OpenFileStream(tmpPath, ref checkLaterForResetDirTimes))
                 {
                     if (ExtractToStream(ArchiveStream, output, Encryption, _Crc32))
                         goto ExitTry;
@@ -728,7 +729,7 @@ namespace Ionic.Zip
                     output.Close();
                 }
 
-                MoveFileInPlace(fileExistsBeforeExtraction, targetFileName, tmpName, checkLaterForResetDirTimes);
+                MoveFileInPlace(fileExistsBeforeExtraction, targetFileName, tmpPath, checkLaterForResetDirTimes);
 
                 OnAfterExtract(baseDir);
 
@@ -826,8 +827,9 @@ namespace Ionic.Zip
             if (_ioOperationCanceled)
                 return true;
 
-            var calculatedCrc32 = ExtractAndCrc(archiveStream, output, _CompressionMethod_FromZipFile, _CompressedFileDataSize,
-                                                _inputDecryptorStream, UncompressedSize);
+            var calculatedCrc32 = ExtractAndCrc(archiveStream, output,
+                _CompressionMethod_FromZipFile, _CompressedFileDataSize,
+                UncompressedSize);
 
             if (_ioOperationCanceled)
                 return true;
@@ -836,7 +838,10 @@ namespace Ionic.Zip
             return false;
         }
 
-        void MoveFileInPlace(bool fileExistsBeforeExtraction, string targetFileName, string tmpName, bool checkLaterForResetDirTimes)
+        void MoveFileInPlace(
+            bool fileExistsBeforeExtraction,
+            string targetFileName,
+            string tmpPath, bool checkLaterForResetDirTimes)
         {
             // workitem 10639
             // move file to permanent home
@@ -855,11 +860,11 @@ namespace Ionic.Zip
                 //        the target file name;
                 //     3. delete the zombie.
                 //
-                zombie = targetFileName + ".PendingOverwrite";
+                zombie = targetFileName + Path.GetRandomFileName() + ".PendingOverwrite";
                 File.Move(targetFileName, zombie);
             }
 
-            File.Move(tmpName, targetFileName);
+            File.Move(tmpPath, targetFileName);
             _SetTimes(targetFileName, true);
 
             if (zombie != null && File.Exists(zombie))
@@ -910,9 +915,9 @@ namespace Ionic.Zip
             SetupCryptoForExtract(p);
         }
 
-        Stream OpenFileStream(string tmpName, ref bool checkLaterForResetDirTimes)
+        Stream OpenFileStream(string tmpPath, ref bool checkLaterForResetDirTimes)
         {
-            var dirName = Path.GetDirectoryName(tmpName);
+            var dirName = Path.GetDirectoryName(tmpPath);
             // ensure the target path exists
             if (!Directory.Exists(dirName))
             {
@@ -930,7 +935,7 @@ namespace Ionic.Zip
             }
 
             // File.Create(CreateNew) will overwrite any existing file.
-            return new FileStream(tmpName, FileMode.CreateNew);
+            return new FileStream(tmpPath, FileMode.CreateNew);
         }
 
 #if NOT
@@ -1035,7 +1040,6 @@ namespace Ionic.Zip
         int ExtractAndCrc(Stream archiveStream, Stream targetOutput,
             short compressionMethod,
             long compressedFileDataSize,
-            Stream inputDecryptorStream,
             long uncompressedSize)
         {
             int crcResult;
@@ -1063,7 +1067,7 @@ namespace Ionic.Zip
                 // Get a stream that either decrypts or not.
                 _inputDecryptorStream = GetExtractDecryptor(input);
 
-                var input3 = GetExtractDecompressor( inputDecryptorStream );
+                var input3 = GetExtractDecompressor( _inputDecryptorStream );
 
                 var bytesWritten = 0L;
                 // As we read, we maybe decrypt, and then we maybe decompress. Then we write.
@@ -1114,8 +1118,10 @@ namespace Ionic.Zip
             return crcResult;
         }
 
-        internal Stream GetExtractDecompressor(Stream input2)
+        Stream GetExtractDecompressor(Stream input2)
         {
+            if (input2 == null) throw new ArgumentNullException("input2");
+
             // get a stream that either decompresses or not.
             switch (_CompressionMethod_FromZipFile)
             {
@@ -1129,14 +1135,15 @@ namespace Ionic.Zip
 #endif
             }
 
-            return null;
+            throw new Exception(string.Format("Failed to find decompressor matching {0}",
+                _CompressionMethod_FromZipFile));
         }
 
-
-
-        internal Stream GetExtractDecryptor(Stream input)
+        Stream GetExtractDecryptor(Stream input)
         {
-            Stream input2 = null;
+            if (input == null) throw new ArgumentNullException("input");
+
+            Stream input2;
             if (_Encryption_FromZipFile == EncryptionAlgorithm.PkzipWeak)
                 input2 = new ZipCipherStream(input, _zipCrypto_forExtract, CryptoMode.Decrypt);
 

@@ -1152,10 +1152,7 @@ namespace Ionic.Zip
             _EntryHeader = bytes;
         }
 
-
-
-
-        private Int32 FigureCrc32()
+        Int32 FigureCrc32()
         {
             if (_crcCalculated == false)
             {
