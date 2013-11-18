@@ -1,3 +1,18 @@
+Introducing the DotNetZip Library and Tools
+-------------------------------------------
+
+DotNetZip is the name of an open-source project that delivers a .NET
+library for handling ZIP files, and some associated tools.
+
+ - The library allows .NET or Silverlight programmers to build
+   applications that read, create and modify ZIP files.
+
+ - The tools are .NET programs that rely on the library, and can be used
+   by anyone on any Windows machine to build or extract ZIP files.
+
+
+## Release Notes
+
 Mon, 18 Nov 2013 20:53 UTC+0100
 
 Released v1.9.2-rc1 to NuGet. This version fixes the tmp-file bug and a lockup-
@@ -11,22 +26,12 @@ Fri, 27 Aug 2011  01:21
 Here is a fork of the project that's easily semverd. This is not the official project, but you may clone it - it's easier to build at least. Forked off of http://dotnetzip.codeplex.com/SourceControl/changeset/changes/81674
 
 
-
 Mon, 11 Jul 2011  20:10
 
 
-Introducing the DotNetZip Library and Tools
--------------------------------------------
+## How to build?
 
-DotNetZip is the name of an open-source project that delivers a .NET
-library for handling ZIP files, and some associated tools.
-
- - The library allows .NET or Silverlight programmers to build
-   applications that read, create and modify ZIP files.
-
- - The tools are .NET programs that rely on the library, and can be used
-   by anyone on any Windows machine to build or extract ZIP files.
-
+`bundle && rake`
 
 
 Why DotNetZip?
