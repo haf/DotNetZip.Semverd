@@ -13,6 +13,10 @@ library for handling ZIP files, and some associated tools.
 
 ## Release Notes
 
+Mon, 6 Jan 2014 14:35 UTC+0100
+
+Released v1.9.2 to NuGet. This version is identical to the release candidate.
+
 Mon, 18 Nov 2013 20:53 UTC+0100
 
 Released v1.9.2-rc1 to NuGet. This version fixes the tmp-file bug and a lockup-
