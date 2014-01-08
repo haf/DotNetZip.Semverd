@@ -523,6 +523,37 @@ namespace Ionic.BZip2.Tests
             }
         }
 
+        [TestMethod]
+        public void BZ_StreamCopy()
+        {
+            var src = new MemoryStream(Encoding.ASCII.GetBytes("Hello"));
+
+            var ms = new MemoryStream();
+
+            using (var output = new BZip2OutputStream(ms, true))
+            {
+                src.CopyTo(output);
+            }
+
+            Assert.IsTrue(ms.Length > 0);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            using (var input = new BZip2InputStream(ms, true))
+            {
+                var dst = new MemoryStream();
+                input.CopyTo(dst);
+
+                Assert.AreEqual(dst.Length, src.Length);
+
+                src.Position = 0;
+                dst.Position = 0;
+
+                while (src.Position != src.Length)
+                {
+                    Assert.AreEqual(src.ReadByte(), dst.ReadByte());
+                }
+            }
+        }
 
         [TestMethod]
         public void BZ_Samples()
