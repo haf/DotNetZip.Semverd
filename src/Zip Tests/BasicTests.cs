@@ -497,6 +497,42 @@ namespace Ionic.Zip.Tests.Basic
         }
 
 
+        [TestMethod]
+        public void CreateZip_KeepStreamOpen()
+        {
+            int i;
+            string zipFileToCreate = "CreateZip_KeepStreamOpen.zip";
+            string subdir = "files";
+            string[] filesToZip = TestUtilities.GenerateFilesFlat(subdir);
+
+            using (ZipFile zip1 = new ZipFile())
+            {
+                for (i = 0; i < filesToZip.Length; i++)
+                    zip1.AddFile(filesToZip[i], "files");
+                zip1.Save(zipFileToCreate);
+            }
+
+            // Verify the number of files in the zip
+            Assert.AreEqual<int>(TestUtilities.CountEntries(zipFileToCreate),
+                                 filesToZip.Length);
+
+            using (ZipFile zip1 = ZipFile.Read(zipFileToCreate))
+            {
+                foreach (var e in zip1)
+                {
+                    // extract to a stream
+                    using (var ms1 = new MemoryStream())
+                    {
+                        e.Extract(ms1);
+
+                        // check if stream is kept open after extracting the file
+                        Assert.AreEqual<bool>(true, ms1.CanRead);
+                    }
+                }
+            }
+        }
+
+
         private void _Internal_ZeroLengthFiles(int fileCount, string nameStub, string password)
         {
             string zipFileToCreate = Path.Combine(TopLevelDir, nameStub + ".zip");
