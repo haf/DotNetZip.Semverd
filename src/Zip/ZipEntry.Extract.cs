@@ -809,8 +809,6 @@ namespace Ionic.Zip
                 if (ExtractToStream(archiveStream, outStream, Encryption, _Crc32))
                     goto ExitTry;
 
-                outStream.Close();
-
                 OnAfterExtract(null);
 
                 ExitTry: ;
