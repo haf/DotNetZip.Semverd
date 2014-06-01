@@ -132,8 +132,6 @@ namespace Ionic.Zip
         /// </remarks>
         public static Stream ForUpdate(string name, uint diskNumber)
         {
-            if (diskNumber >= 99)
-                throw new ArgumentOutOfRangeException("diskNumber");
 
             string fname =
                 String.Format("{0}.z{1:D2}",
@@ -208,11 +206,6 @@ namespace Ionic.Zip
 
         private string _NameForSegment(uint diskNumber)
         {
-            if (diskNumber >= 99)
-            {
-                _exceptionPending = true;
-                throw new OverflowException("The number of zip segments would exceed 99.");
-            }
 
             return String.Format("{0}.z{1:D2}",
                                  Path.Combine(Path.GetDirectoryName(_baseName),
@@ -380,8 +373,6 @@ namespace Ionic.Zip
         {
             // Console.WriteLine("***ZSS.Trunc to disk {0}", diskNumber);
             // Console.WriteLine("***ZSS.Trunc:  current disk {0}", CurrentSegment);
-            if (diskNumber >= 99)
-                throw new ArgumentOutOfRangeException("diskNumber");
 
             if (rwMode != RwMode.Write)
             {
