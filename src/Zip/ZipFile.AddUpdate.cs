@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------
 //
 // last saved (in emacs):
-// Time-stamp: <2011-August-01 16:42:07>
+// Time-stamp: <2011-November-01 13:56:58>
 //
 // ------------------------------------------------------------------
 //
@@ -607,13 +607,16 @@ namespace Ionic.Zip
         /// </summary>
         ///
         /// <remarks>
+        ///
         /// <para>
-        ///   If preserveDirHierarchy is true, any directory structure present in the
-        ///   filenames contained in the list is preserved in the archive.  On the other
-        ///   hand, if preserveDirHierarchy is false, any directory structure that may
-        ///   be present in the filenames contained in the list is "flattened" in the
-        ///   archive; Each file in the list is added to the archive in the specified
-        ///   top-level directory.
+        ///   Think of the <paramref name="directoryPathInArchive"/> as a "root" or
+        ///   base directory used in the archive for the files that get added.  when
+        ///   <paramref name="preserveDirHierarchy"/> is true, the hierarchy of files
+        ///   found in the filesystem will be placed, with the hierarchy intact,
+        ///   starting at that root in the archive. When <c>preserveDirHierarchy</c>
+        ///   is false, the path hierarchy of files is flattned, and the flattened
+        ///   set of files gets placed in the root within the archive as specified in
+        ///   <c>directoryPathInArchive</c>.
         /// </para>
         ///
         /// <para>
@@ -634,7 +637,7 @@ namespace Ionic.Zip
         /// </param>
         ///
         /// <param name="directoryPathInArchive">
-        ///   Specifies a directory path to use to override any path in the file name.
+        ///   Specifies a directory path to use as a prefix for each entry name.
         ///   This path may, or may not, correspond to a real directory in the current
         ///   filesystem.  If the files within the zip are later extracted, this is the
         ///   path used for the extracted file.  Passing <c>null</c> (<c>Nothing</c> in
@@ -645,13 +648,15 @@ namespace Ionic.Zip
         ///
         /// <param name="preserveDirHierarchy">
         ///   whether the entries in the zip archive will reflect the directory
-        ///   hierarchy that is present in the various filenames.  For example, if <paramref name="fileNames"/>
-        ///   includes two paths, \Animalia\Chordata\Mammalia\Info.txt and
-        ///   \Plantae\Magnoliophyta\Dicotyledon\Info.txt, then calling this method with
-        ///   <paramref name="preserveDirHierarchy"/> = <c>false</c> will result in an
-        ///   exception because of a duplicate entry name, while calling this method
-        ///   with <paramref name="preserveDirHierarchy"/> = <c>true</c> will result in the
-        ///   full direcory paths being included in the entries added to the ZipFile.
+        ///   hierarchy that is present in the various filenames.  For example, if
+        ///   <paramref name="fileNames"/> includes two paths,
+        ///   \Animalia\Chordata\Mammalia\Info.txt and
+        ///   \Plantae\Magnoliophyta\Dicotyledon\Info.txt, then calling this method
+        ///   with <paramref name="preserveDirHierarchy"/> = <c>false</c> will
+        ///   result in an exception because of a duplicate entry name, while
+        ///   calling this method with <paramref name="preserveDirHierarchy"/> =
+        ///   <c>true</c> will result in the full direcory paths being included in
+        ///   the entries added to the ZipFile.
         /// </param>
         /// <seealso cref="Ionic.Zip.ZipFile.AddSelectedFiles(String, String)" />
         public void AddFiles(System.Collections.Generic.IEnumerable<String> fileNames,
@@ -1486,16 +1491,26 @@ namespace Ionic.Zip
 
 
         /// <summary>
-        ///   Add an entry, for which the application will provide a stream,
-        ///   just-in-time.
+        ///   Add an entry, for which the application will provide a stream
+        ///   containing the entry data, on a just-in-time basis.
         /// </summary>
         ///
         /// <remarks>
         /// <para>
-        ///   In cases where the application wishes to open the stream that holds
-        ///   the content for the ZipEntry, on a just-in-time basis, the application
-        ///   can use this method and provide delegates to open and close the
-        ///   stream.
+        ///   In cases where the application wishes to open the stream that
+        ///   holds the content for the ZipEntry, on a just-in-time basis, the
+        ///   application can use this method.  The application provides an
+        ///   opener delegate that will be called by the DotNetZip library to
+        ///   obtain a readable stream that can be read to get the bytes for
+        ///   the given entry.  Typically, this delegate opens a stream.
+        ///   Optionally, the application can provide a closer delegate as
+        ///   well, which will be called by DotNetZip when all bytes have been
+        ///   read from the entry.
+        /// </para>
+        ///
+        /// <para>
+        ///   These delegates are called from within the scope of the call to
+        ///   ZipFile.Save().
         /// </para>
         ///
         /// <para>
@@ -1512,9 +1527,7 @@ namespace Ionic.Zip
         /// <example>
         ///
         ///   This example uses anonymous methods in C# to open and close the
-        ///   source stream for the content for a zip entry.  In a real
-        ///   application, the logic for the OpenDelegate would probably be more
-        ///   involved.
+        ///   source stream for the content for a zip entry.
         ///
         /// <code lang="C#">
         /// using(Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile())
@@ -1570,10 +1583,16 @@ namespace Ionic.Zip
         ///
         /// <param name="entryName">the name of the entry to add</param>
         /// <param name="opener">
-        ///  the delegate that will be invoked to open the stream
+        ///  the delegate that will be invoked by ZipFile.Save() to get the
+        ///  readable stream for the given entry. ZipFile.Save() will call
+        ///  read on this stream to obtain the data for the entry. This data
+        ///  will then be compressed and written to the newly created zip
+        ///  file.
         /// </param>
         /// <param name="closer">
-        ///  the delegate that will be invoked to close the stream
+        ///  the delegate that will be invoked to close the stream. This may
+        ///  be null (Nothing in VB), in which case no call is makde to close
+        ///  the stream.
         /// </param>
         /// <returns>the ZipEntry added</returns>
         ///

@@ -85,6 +85,9 @@ namespace Ionic.Zip.Examples
                 {
                     using (var compressor = new Ionic.Zlib.GZipStream(output, Ionic.Zlib.CompressionMode.Compress))
                     {
+                        compressor.FileName = fname;
+                        var fi = new FileInfo(fname);
+                        compressor.LastModified = fi.LastWriteTime;
                         Pump(fs, compressor);
                     }
                 }

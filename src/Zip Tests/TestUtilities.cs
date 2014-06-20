@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------
 //
 // last saved (in emacs):
-// Time-stamp: <2011-July-26 16:19:47>
+// Time-stamp: <2011-August-11 07:54:52>
 //
 // ------------------------------------------------------------------
 //
@@ -754,32 +754,28 @@ namespace Ionic.Zip.Tests.Utilities
         internal static int Exec_NoContext(string program, string args, bool waitForExit, out string output)
         {
             System.Diagnostics.Process p = new System.Diagnostics.Process
+            {
+                StartInfo =
                 {
-                    StartInfo =
-                    {
-                        FileName = program,
-                        CreateNoWindow = true,
-                        Arguments = args,
-                        WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
-                        UseShellExecute = false,
-                    }
-
-                };
+                    FileName = program,
+                    CreateNoWindow = true,
+                    Arguments = args,
+                    WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                }
+            };
 
             if (waitForExit)
             {
-                StringBuilder sb = new StringBuilder();
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.RedirectStandardError = true;
-                // must read at least one of the stderr or stdout asynchronously,
-                // to avoid deadlock
-                Action<Object, System.Diagnostics.DataReceivedEventArgs> stdErrorRead = (o, e) =>
-                {
-                    if (!String.IsNullOrEmpty(e.Data))
-                        sb.Append(e.Data);
-                };
-
-                p.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(stdErrorRead);
+                // Must read at least one of the stderr or stdout asynchronously,
+                // to avoid deadlock. I choose to read stderr.
+                StringBuilder sb = new StringBuilder();
+                p.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler((o, e) => {
+                        if (!String.IsNullOrEmpty(e.Data))
+                            sb.Append(e.Data);
+                    });
                 p.Start();
                 p.BeginErrorReadLine();
                 output = p.StandardOutput.ReadToEnd();
