@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------
 //
 // last saved (in emacs):
-// Time-stamp: <2011-August-11 17:32:19>
+// Time-stamp: <2011-November-01 13:56:58>
 //
 // ------------------------------------------------------------------
 //
@@ -1491,16 +1491,26 @@ namespace Ionic.Zip
 
 
         /// <summary>
-        ///   Add an entry, for which the application will provide a stream,
-        ///   just-in-time.
+        ///   Add an entry, for which the application will provide a stream
+        ///   containing the entry data, on a just-in-time basis.
         /// </summary>
         ///
         /// <remarks>
         /// <para>
-        ///   In cases where the application wishes to open the stream that holds
-        ///   the content for the ZipEntry, on a just-in-time basis, the application
-        ///   can use this method and provide delegates to open and close the
-        ///   stream.
+        ///   In cases where the application wishes to open the stream that
+        ///   holds the content for the ZipEntry, on a just-in-time basis, the
+        ///   application can use this method.  The application provides an
+        ///   opener delegate that will be called by the DotNetZip library to
+        ///   obtain a readable stream that can be read to get the bytes for
+        ///   the given entry.  Typically, this delegate opens a stream.
+        ///   Optionally, the application can provide a closer delegate as
+        ///   well, which will be called by DotNetZip when all bytes have been
+        ///   read from the entry.
+        /// </para>
+        ///
+        /// <para>
+        ///   These delegates are called from within the scope of the call to
+        ///   ZipFile.Save().
         /// </para>
         ///
         /// <para>
@@ -1517,9 +1527,7 @@ namespace Ionic.Zip
         /// <example>
         ///
         ///   This example uses anonymous methods in C# to open and close the
-        ///   source stream for the content for a zip entry.  In a real
-        ///   application, the logic for the OpenDelegate would probably be more
-        ///   involved.
+        ///   source stream for the content for a zip entry.
         ///
         /// <code lang="C#">
         /// using(Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile())
@@ -1575,10 +1583,16 @@ namespace Ionic.Zip
         ///
         /// <param name="entryName">the name of the entry to add</param>
         /// <param name="opener">
-        ///  the delegate that will be invoked to open the stream
+        ///  the delegate that will be invoked by ZipFile.Save() to get the
+        ///  readable stream for the given entry. ZipFile.Save() will call
+        ///  read on this stream to obtain the data for the entry. This data
+        ///  will then be compressed and written to the newly created zip
+        ///  file.
         /// </param>
         /// <param name="closer">
-        ///  the delegate that will be invoked to close the stream
+        ///  the delegate that will be invoked to close the stream. This may
+        ///  be null (Nothing in VB), in which case no call is makde to close
+        ///  the stream.
         /// </param>
         /// <returns>the ZipEntry added</returns>
         ///
