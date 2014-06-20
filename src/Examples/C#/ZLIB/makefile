@@ -16,11 +16,11 @@ _CSC=$(_NETHOME)\csc.exe
 _BASE_IMPORTS=/R:System.dll /R:Ionic.Zlib.dll
 
 
-default: Ionic.Zlib.dll ZlibDeflateInflate.exe test_dict_deflate_inflate.exe test_flush_sync.exe test_large_deflate_inflate.exe  ZlibStreamExample.exe
+default: Ionic.Zlib.dll ZlibDeflateInflate.exe test_dict_deflate_inflate.exe test_flush_sync.exe test_large_deflate_inflate.exe  ZlibStreamExample.exe QuickCompress.exe
 
 
 Ionic.Zlib.dll: ..\..\..\Zlib\obj\Debug\Ionic.Zlib.dll ..\..\..\Zlib\obj\Debug\Ionic.Zlib.pdb
-        copy ..\..\..\Zlib\obj\Debug\Ionic.Zlib.* .
+        copy /y ..\..\..\Zlib\obj\Debug\Ionic.Zlib.* .
 
 .cs.exe:
         if not exist  Ionic.Zlib.dll ( copy ..\..\..\Zlib\obj\Debug\Ionic.Zlib.* . )
@@ -28,7 +28,7 @@ Ionic.Zlib.dll: ..\..\..\Zlib\obj\Debug\Ionic.Zlib.dll ..\..\..\Zlib\obj\Debug\I
 
 
 clean:
-        -del ZlibDeflateInflate.exe test_dict_deflate_inflate.exe test_flush_sync.exe test_large_deflate_inflate.exe  ZlibStreamExample.exe
-        -del Ionic.Zlib.dll 
+        -del ZlibDeflateInflate.exe test_dict_deflate_inflate.exe test_flush_sync.exe test_large_deflate_inflate.exe  ZlibStreamExample.exe  QuickCompress.exe
+        -del Ionic.Zlib.dll
         -del *.pdb
 

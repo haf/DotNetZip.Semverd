@@ -89,6 +89,9 @@
     <Compile Include="..\CommonSrc\CRC32.cs">
       <Link>CRC32.cs</Link>
     </Compile>
+    <Compile Include="..\CommonSrc\Iso8859Dash1Encoding.cs">
+      <Link>Iso8859Dash1Encoding.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
