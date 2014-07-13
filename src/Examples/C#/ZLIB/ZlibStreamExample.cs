@@ -1,14 +1,14 @@
 // ZlibDeflateInflate.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009 by Dino Chiesa
+// Copyright (c) 2009-2011 by Dino Chiesa
 // All rights reserved!
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
 //
-// This code is licensed under the Microsoft Public License. 
+// This code is licensed under the Microsoft Public License.
 // See the file License.txt for the license details.
 // More info on: http://dotnetzip.codeplex.com
 //
@@ -16,7 +16,7 @@
 //
 // Purpose: Demonstrate compression and decompression with the ZlibStream
 // class, which is part of the Ionic.Zlib namespace.
-// 
+//
 // ------------------------------------------------------------------
 //
 
@@ -31,7 +31,7 @@ using Ionic.Zlib;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Dino Chiesa")]
 [assembly: AssemblyProduct("DotNetZip Examples")]
-[assembly: AssemblyCopyright("Copyright © Dino Chiesa 2009")]
+[assembly: AssemblyCopyright("Copyright © Dino Chiesa 2009-2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("1.1.1.1")]
@@ -53,7 +53,7 @@ namespace Ionic.ToolsAndTests
         }
 
         /// <summary>
-        /// Converts a MemoryStream to a string. Makes some assumptions about the content of the stream. 
+        /// Converts a MemoryStream to a string. Makes some assumptions about the content of the stream.
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -64,19 +64,14 @@ namespace Ionic.ToolsAndTests
         }
 
 
-
         static void CopyStream(System.IO.Stream src, System.IO.Stream dest)
         {
             byte[] buffer = new byte[1024];
-            int len = src.Read(buffer, 0, buffer.Length);
-            while (len > 0)
-            {
+            int len;
+            while ((len = src.Read(buffer, 0, buffer.Length)) > 0)
                 dest.Write(buffer, 0, len);
-                len = src.Read(buffer, 0, buffer.Length);
-            }
             dest.Flush();
         }
-
 
         [STAThread]
         public static void Main(System.String[] args)
@@ -87,7 +82,7 @@ namespace Ionic.ToolsAndTests
                 System.IO.MemoryStream msSinkDecompressed;
                 ZlibStream zOut;
                 String originalText = "Hello, World!  This String will be compressed... ";
-                
+
                 System.Console.Out.WriteLine("original:     {0}", originalText);
 
                 // first, compress:

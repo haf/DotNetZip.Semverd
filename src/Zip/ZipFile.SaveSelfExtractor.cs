@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------
 //
 // last saved (in emacs):
-// Time-stamp: <2011-August-03 16:42:15>
+// Time-stamp: <2011-August-10 19:22:46>
 //
 // ------------------------------------------------------------------
 //
@@ -757,10 +757,11 @@ namespace Ionic.Zip
                 // get the Ionic.Zip assembly
                 Assembly a1 = typeof(ZipFile).Assembly;
 
-                using (var csharp = new Microsoft.CSharp.CSharpCodeProvider())
-                {
+                using (var csharp = new Microsoft.CSharp.CSharpCodeProvider
+                       (new Dictionary<string,string>() { { "CompilerVersion", "v2.0" } })) {
+
                     // The following is a perfect opportunity for a linq query, but
-                    // I cannot use it.  The generated SFX needs to run on .NET 2.0,
+                    // I cannot use it.  DotNetZip needs to run on .NET 2.0,
                     // and using LINQ would break that. Here's what it would look
                     // like:
                     //
