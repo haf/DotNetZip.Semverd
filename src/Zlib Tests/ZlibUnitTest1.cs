@@ -1824,6 +1824,38 @@ namespace Ionic.Zlib.Tests
             TestContext.WriteLine("{0}: Done...", sw.Elapsed );
         }
 
+        [TestMethod]
+        public void Zlib_ParallelDeflateStream2()
+        {
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            TestContext.WriteLine("{0}: Zlib_ParallelDeflateStream2 Start", sw.Elapsed);
+            int sz = (128 * 1024) /*default buffer size*/ * rnd.Next(14, 28);
+            using (Stream s = new MemoryStream())
+            {
+                TestContext.WriteLine("{0}: Creating zip...", sw.Elapsed);
+                using (Stream compressor = new Ionic.Zlib.ParallelDeflateOutputStream(s, true))
+                {
+                    compressor.Write(new byte[sz], 0, sz);
+                    s.Position = 0;
+                }
+
+                TestContext.WriteLine("{0}: Trying to extract...", sw.Elapsed);
+                using (Stream decompressor = new Ionic.Zlib.DeflateStream(s, Ionic.Zlib.CompressionMode.Decompress, true))
+                using (Stream os = new MemoryStream())
+                {
+                    try
+                    {
+                        decompressor.Read(new byte[sz], 0, sz);
+                    }
+                    catch (Ionic.Zlib.ZlibException)
+                    {
+                        Assert.Fail("ParallelDeflate failed");
+                    }
+                }
+            }
+            TestContext.WriteLine("{0}: Done...", sw.Elapsed);
+        }
 
 
 
