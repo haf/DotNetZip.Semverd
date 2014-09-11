@@ -926,7 +926,7 @@ namespace Ionic
                     new string[] { @"(.)\)\)", "$1) )" },
 
                     // C. single open paren with a following word - insert a space between
-                    new string[] { @"\((\S)", "( $1" },
+                    new string[] { @"\(([^'\f\n\r\t\v\x85\p{Z}])", "( $1" },
 
                     // D. single close paren with a preceding word - insert a space between the two
                     new string[] { @"(\S)\)", "$1 )" },
@@ -939,7 +939,7 @@ namespace Ionic
                     new string[] { @"(\S)\(", "$1 (" },
 
                     // G. single close paren followed by word - insert a paren after close paren
-                    new string[] { @"\)(\S)", ") $1" },
+                    new string[] { @"\)([^'\f\n\r\t\v\x85\p{Z}])", ") $1" },
 
                     // H. insert space between = and a following single quote
                     //new string[] { @"(=|!=)('[^']*')", "$1 $2" },
