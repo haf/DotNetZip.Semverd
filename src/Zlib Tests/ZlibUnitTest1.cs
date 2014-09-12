@@ -1842,7 +1842,6 @@ namespace Ionic.Zlib.Tests
 
                 TestContext.WriteLine("{0}: Trying to extract...", sw.Elapsed);
                 using (Stream decompressor = new Ionic.Zlib.DeflateStream(s, Ionic.Zlib.CompressionMode.Decompress, true))
-                using (Stream os = new MemoryStream())
                 {
                     try
                     {
