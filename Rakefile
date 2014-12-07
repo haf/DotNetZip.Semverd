@@ -50,7 +50,7 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
     m.language      = 'en-GB'
     m.copyright     = 'Dino Chiesa'
     m.release_notes = "Full version: #{ENV['BUILD_VERSION']}."
-    m.license_url   = "https://raw.github.com/haf/DotNetZip.Semverd/develop/LICENSE"
+    m.license_url   = "https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE"
     m.project_url   = "https://github.com/haf/DotNetZip.Semverd"
   end
 
