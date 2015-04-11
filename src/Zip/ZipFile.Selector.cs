@@ -1255,8 +1255,8 @@ namespace Ionic
     {
         internal override bool Evaluate(Ionic.Zip.ZipEntry entry)
         {
-            // swap forward slashes in the entry.FileName for backslashes
-            string transformedFileName = entry.FileName.Replace("/", "\\");
+            // swap slashes in reference to local configuration
+            string transformedFileName = entry.FileName.Replace(Path.DirectorySeparatorChar == '/' ? '\\' : '/', Path.DirectorySeparatorChar);
 
             return _Evaluate(transformedFileName);
         }

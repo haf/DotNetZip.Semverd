@@ -249,7 +249,7 @@ namespace Ionic
                 // workitem 8245
                 if (Directory.Exists(value))
                 {
-                    _MatchingFileSpec = ".\\" + value + "\\*.*";
+                    _MatchingFileSpec = "." + Path.DirectorySeparatorChar + value + Path.DirectorySeparatorChar + "*.*";
                 }
                 else
                 {
@@ -295,7 +295,7 @@ namespace Ionic
             CriterionTrace("NameCriterion::Evaluate({0})", fullpath);
             // No slash in the pattern implicitly means recurse, which means compare to
             // filename only, not full path.
-            String f = (_MatchingFileSpec.IndexOf('\\') == -1)
+            String f = (_MatchingFileSpec.IndexOf(Path.DirectorySeparatorChar) == -1)
                 ? System.IO.Path.GetFileName(fullpath)
                 : fullpath; // compare to fullpath
 
@@ -1164,6 +1164,10 @@ namespace Ionic
 
                             // if (m.StartsWith("'"))
                             //     m = m.Replace("\u0006", " ");
+
+                            //Fix for Unix -> NormalizeCriteriaExpression replaces all slashes with backslashes
+                            if (Path.DirectorySeparatorChar == '/')
+                                m = m.Replace('\\', Path.DirectorySeparatorChar);
 
                             current = new NameCriterion
                             {
