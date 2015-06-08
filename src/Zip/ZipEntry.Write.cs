@@ -1414,6 +1414,7 @@ namespace Ionic.Zip
                     // allow the application to close the stream
                     if (this._CloseDelegate != null)
                         this._CloseDelegate(this.FileName, input);
+                    this._sourceStream = null;
                 }
                 else if ((input as FileStream) != null)
                 {
