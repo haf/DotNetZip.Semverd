@@ -1,0 +1,14 @@
+version: 1.0.{build}
+install:
+- gem install rake -v 10.3.2
+- gem install map -v 6.5.5
+- gem install mini_portile -v 0.6.0
+- gem install nokogiri -v 1.6.3.1
+- gem install semver2 -v 3.4
+- gem install albacore -v 2.0.16
+- rake
+build: off
+test: off
+artifacts:
+- path: build\pkg\DotNetZip.*.nupkg
+  name: Nuget
