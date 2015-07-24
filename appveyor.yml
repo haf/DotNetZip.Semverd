@@ -12,3 +12,7 @@ test: off
 artifacts:
 - path: build\pkg\DotNetZip.*.nupkg
   name: Nuget
+
+environment:
+  nuget_key:
+    secure: M7LFZYxeE65s2U7APTgVFyzBDEiE5LFVFIf+d3ahGxgylxrctFcFJx9cmnamH30f
