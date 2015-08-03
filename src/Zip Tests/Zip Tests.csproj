@@ -156,6 +156,9 @@
     <Content Include="zips\fireone.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="zips\wizzquiz.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="zips\winzip-sfx.exe">

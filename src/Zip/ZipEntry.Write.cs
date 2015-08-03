@@ -2439,7 +2439,7 @@ namespace Ionic.Zip
 
                     // read
                     n = input.Read(bytes, 0, len);
-                    //_CheckRead(n);
+                    _CheckRead(n);
 
                     // write
                     outstream.Write(bytes, 0, n);
@@ -2549,7 +2549,7 @@ namespace Ionic.Zip
 
                 // read
                 n = input.Read(bytes, 0, len);
-                //_CheckRead(n);
+                _CheckRead(n);
 
                 // write
                 outstream.Write(bytes, 0, n);
