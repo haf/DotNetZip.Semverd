@@ -36,7 +36,8 @@ namespace Ionic.Zip
     {
         internal void WriteCentralDirectoryEntry(Stream s)
         {
-            byte[] bytes = new byte[4096];
+            //CDE header size: 46 + extra field length + filename length + comment length
+            byte[] bytes = new byte[8192];
             int i = 0;
             // signature
             bytes[i++] = (byte)(ZipConstants.ZipDirEntrySignature & 0x000000FF);
@@ -183,10 +184,8 @@ namespace Ionic.Zip
             // the _CommentBytes private field was set during WriteHeader()
             int commentLength = (_CommentBytes == null) ? 0 : _CommentBytes.Length;
 
-            // the size of our buffer defines the max length of the comment we can write
-            if (commentLength + i > bytes.Length) commentLength = bytes.Length - i;
-            bytes[i++] = (byte)(commentLength & 0x00FF);
-            bytes[i++] = (byte)((commentLength & 0xFF00) >> 8);
+            // skip comment length because we set it at the end
+            i += 2;
 
             // Disk number start
             bool segmented = (this._container.ZipFile != null) &&
@@ -273,12 +272,18 @@ namespace Ionic.Zip
             // file (entry) comment
             if (commentLength != 0)
             {
+                // the size of our buffer defines the max length of the comment we can write
+                if (commentLength + i > bytes.Length)
+                    commentLength = bytes.Length - i;
                 // now actually write the comment itself into the byte buffer
                 Buffer.BlockCopy(_CommentBytes, 0, bytes, i, commentLength);
                 // for (j = 0; (j < commentLength) && (i + j < bytes.Length); j++)
                 //     bytes[i + j] = _CommentBytes[j];
                 i += commentLength;
             }
+
+            bytes[32] = (byte)(commentLength & 0x00FF);
+            bytes[33] = (byte)((commentLength & 0xFF00) >> 8);
 
             s.Write(bytes, 0, i);
         }
