@@ -1319,6 +1319,21 @@ namespace Ionic.Zip.Tests.Basic
 
 
         [TestMethod]
+        public void ExtraField_TestNull()
+        {
+            string filename = Path.Combine(CurrentDir, "zips\\fireone.zip");
+            int entries = 0;
+            using (ZipFile zip = ZipFile.Read(filename))
+            {
+                foreach (ZipEntry e in zip.Entries)
+                    entries++;
+            }
+
+            Assert.AreEqual<int>(14, entries, "Error opening zip file with extra field");
+        }
+
+
+        [TestMethod]
         public void Retrieve_ViaIndexer2_wi11056()
         {
             string fileName = "wi11056.dwf";

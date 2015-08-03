@@ -502,7 +502,7 @@ namespace Ionic.Zip
                 {
                     int start = j;
                     UInt16 headerId = (UInt16)(buffer[j++] + buffer[j++] * 256);
-                    Int16 dataSize = (short)(buffer[j++] + buffer[j++] * 256);
+                    UInt16 dataSize = (UInt16)(buffer[j++] + buffer[j++] * 256);
 
                     switch (headerId)
                     {
@@ -580,7 +580,7 @@ namespace Ionic.Zip
 
 
 #if AESCRYPTO
-        private int ProcessExtraFieldWinZipAes(byte[] buffer, int j, Int16 dataSize, long posn)
+        private int ProcessExtraFieldWinZipAes(byte[] buffer, int j, UInt16 dataSize, long posn)
         {
             if (this._CompressionMethod == 0x0063)
             {
@@ -627,7 +627,7 @@ namespace Ionic.Zip
 
         private delegate T Func<T>();
 
-        private int ProcessExtraFieldZip64(byte[] buffer, int j, Int16 dataSize, long posn)
+        private int ProcessExtraFieldZip64(byte[] buffer, int j, UInt16 dataSize, long posn)
         {
             // The PKWare spec says that any of {UncompressedSize, CompressedSize,
             // RelativeOffset} exceeding 0xFFFFFFFF can lead to the ZIP64 header,
@@ -669,7 +669,7 @@ namespace Ionic.Zip
         }
 
 
-        private int ProcessExtraFieldInfoZipTimes(byte[] buffer, int j, Int16 dataSize, long posn)
+        private int ProcessExtraFieldInfoZipTimes(byte[] buffer, int j, UInt16 dataSize, long posn)
         {
             if (dataSize != 12 && dataSize != 8)
                 throw new BadReadException(String.Format("  Unexpected size (0x{0:X4}) for InfoZip v1 extra field at position 0x{1:X16}", dataSize, posn));
@@ -690,7 +690,7 @@ namespace Ionic.Zip
 
 
 
-        private int ProcessExtraFieldUnixTimes(byte[] buffer, int j, Int16 dataSize, long posn)
+        private int ProcessExtraFieldUnixTimes(byte[] buffer, int j, UInt16 dataSize, long posn)
         {
             // The Unix filetimes are 32-bit unsigned integers,
             // storing seconds since Unix epoch.
@@ -734,7 +734,7 @@ namespace Ionic.Zip
         }
 
 
-        private int ProcessExtraFieldWindowsTimes(byte[] buffer, int j, Int16 dataSize, long posn)
+        private int ProcessExtraFieldWindowsTimes(byte[] buffer, int j, UInt16 dataSize, long posn)
         {
             // The NTFS filetimes are 64-bit unsigned integers, stored in Intel
             // (least significant byte first) byte order. They are expressed as the
