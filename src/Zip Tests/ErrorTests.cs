@@ -589,6 +589,23 @@ namespace Ionic.Zip.Tests.Error
 
 
         [TestMethod]
+        [ExpectedException(typeof(BadReadException))]
+        public void Error_TestCorruptedZipFile()
+        {
+            string filename = Path.Combine(CurrentDir, "zips\\wizzquiz.zip");
+            using (ZipFile zip = ZipFile.Read(filename))
+            {
+                foreach (ZipEntry ze in zip)
+                {
+                    ze.FileName = "newname";
+                    break;
+                }
+                zip.Save();
+            }
+        }
+
+
+        [TestMethod]
         [ExpectedException(typeof(ZipException))] // not sure which exception - could be one of several.
         public void Error_ReadCorruptedZipFile_Passwords()
         {
