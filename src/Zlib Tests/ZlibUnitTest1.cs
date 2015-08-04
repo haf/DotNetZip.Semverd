@@ -1835,17 +1835,16 @@ namespace Ionic.Zlib.Tests
             {
                 TestContext.WriteLine("{0}: Creating zip...", sw.Elapsed);
                 using (Stream compressor = new Ionic.Zlib.ParallelDeflateOutputStream(s, true))
-                {
                     compressor.Write(new byte[sz], 0, sz);
-                    s.Position = 0;
-                }
 
+                s.Position = 0;
                 TestContext.WriteLine("{0}: Trying to extract...", sw.Elapsed);
                 using (Stream decompressor = new Ionic.Zlib.DeflateStream(s, Ionic.Zlib.CompressionMode.Decompress, true))
                 {
                     try
                     {
-                        decompressor.Read(new byte[sz], 0, sz);
+                        int bread = decompressor.Read(new byte[sz], 0, sz);
+                        Assert.AreEqual(sz, bread, "Size of decompressed bytes does not match size of input bytes");
                     }
                     catch (Ionic.Zlib.ZlibException)
                     {
