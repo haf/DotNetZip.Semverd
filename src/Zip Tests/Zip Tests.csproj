@@ -159,6 +159,7 @@
     <Content Include="zips\wizzquiz.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="zips\UnicodeCharactersInFileName.zip" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="zips\winzip-sfx.exe">
