@@ -2373,7 +2373,8 @@ namespace Ionic.Zip
                         {
                             if (e1.FileName == e2.FileName)
                             {
-                                e2.CopyMetaData(e1);
+                                if (!e2.IsChanged)
+                                    e2.CopyMetaData(e1);
                                 break;
                             }
                         }
