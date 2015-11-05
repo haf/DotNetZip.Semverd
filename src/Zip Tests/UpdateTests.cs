@@ -1080,7 +1080,7 @@ namespace Ionic.Zip.Tests.Update
         {
             string filename = "text.txt";
             string contentText1 = "Content 1";
-            string contentText2 = "Content 2";
+            string contentText2 = "Content 2 - this is longer";
 
             // select the name of the zip file
             string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateTwice.zip");
@@ -1090,7 +1090,8 @@ namespace Ionic.Zip.Tests.Update
             using (ZipFile zip1 = new ZipFile())
             {
                 var content1 = new MemoryStream(Encoding.Default.GetBytes(contentText1));
-                zip1.UpdateEntry(filename, content1);
+                var entry1 = zip1.UpdateEntry(filename, content1);
+                Assert.IsNotNull(entry1);
                 zip1.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateTwice(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
 
@@ -1106,7 +1107,8 @@ namespace Ionic.Zip.Tests.Update
                 }
 
                 var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
-                zip1.UpdateEntry(filename, content2);
+                var entry2 = zip1.UpdateEntry(filename, content2);
+                Assert.IsNotNull(entry2);
                 zip1.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateTwice(): This archive was updated.";
                 zip1.Save(zipFileToCreate);
 
