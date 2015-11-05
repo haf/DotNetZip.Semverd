@@ -1076,6 +1076,55 @@ namespace Ionic.Zip.Tests.Update
 
 
         [TestMethod]
+        public void UpdateZip_UpdateItem_UpdateTwice()
+        {
+            string filename = "text.txt";
+            string contentText1 = "Content 1";
+            string contentText2 = "Content 2";
+
+            // select the name of the zip file
+            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateTwice.zip");
+
+            // Create the zip file
+            Directory.SetCurrentDirectory(TopLevelDir);
+            using (ZipFile zip1 = new ZipFile())
+            {
+                var content1 = new MemoryStream(Encoding.Default.GetBytes(contentText1));
+                zip1.UpdateEntry(filename, content1);
+                zip1.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateTwice(): This archive will be updated.";
+                zip1.Save(zipFileToCreate);
+
+                using (ZipFile zip2 = new ZipFile(zipFileToCreate))
+                {
+                    var entry = zip2[filename];
+                    using (var ms = new MemoryStream())
+                    {
+                        entry.OpenReader().CopyTo(ms);
+                        var content = Encoding.Default.GetString(ms.ToArray());
+                        Assert.AreEqual(contentText1, content);
+                    }
+                }
+
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                zip1.UpdateEntry(filename, content2);
+                zip1.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateTwice(): This archive was updated.";
+                zip1.Save(zipFileToCreate);
+
+                using (ZipFile zip3 = new ZipFile(zipFileToCreate))
+                {
+                    var entry = zip3[filename];
+                    using (var ms = new MemoryStream())
+                    {
+                        entry.OpenReader().CopyTo(ms);
+                        var content = Encoding.Default.GetString(ms.ToArray());
+                        Assert.AreEqual(contentText2, content);
+                    }
+                }
+            }
+        }
+
+
+        [TestMethod]
         public void UpdateZip_AddFile_NewEntriesWithPassword()
         {
             string password = "V.Secret!";
