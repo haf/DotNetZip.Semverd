@@ -611,6 +611,30 @@ namespace Ionic.Zip.Tests.WinZipAes
             }
         }
 
+        [TestMethod]
+        public void WZA_CreateZip_Spanned()
+        {
+            int filesize = 1024 * 1024;
+            TestUtilities.CreateAndFillFileBinary("aestest.dat", filesize);
+            using (ZipFile zip1 = new ZipFile())
+            {
+                zip1.Encryption = EncryptionAlgorithm.WinZipAes256;
+                zip1.MaxOutputSegmentSize = 262144;
+                zip1.Password = "test1234";
+                zip1.AddFile("aestest.dat");
+                zip1.Save("aes256test.zip");
+            }
+
+            using (Stream sr = new MemoryStream())
+            {
+                using (ZipFile zip2 = ZipFile.Read("aes256test.zip"))
+                {
+                    foreach (ZipEntry ze in zip2.Entries)
+                        ze.ExtractWithPassword(sr, "test1234");
+                }
+                Assert.AreEqual<long>(filesize, sr.Length, "Unexpected output length");
+            }
+        }
 
 
         [TestMethod]
