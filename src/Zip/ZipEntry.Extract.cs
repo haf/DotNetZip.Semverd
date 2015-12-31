@@ -825,15 +825,32 @@ namespace Ionic.Zip
             if (_ioOperationCanceled)
                 return true;
 
-            var calculatedCrc32 = ExtractAndCrc(archiveStream, output,
-                _CompressionMethod_FromZipFile, _CompressedFileDataSize,
-                UncompressedSize);
+            try
+            {
+                var calculatedCrc32 = ExtractAndCrc(archiveStream, output,
+                    _CompressionMethod_FromZipFile, _CompressedFileDataSize,
+                    UncompressedSize);
 
-            if (_ioOperationCanceled)
-                return true;
+                if (_ioOperationCanceled)
+                    return true;
 
-            VerifyCrcAfterExtract(calculatedCrc32, encryptionAlgorithm, expectedCrc32, archiveStream, UncompressedSize);
-            return false;
+                VerifyCrcAfterExtract(calculatedCrc32, encryptionAlgorithm, expectedCrc32, archiveStream, UncompressedSize);
+                return false;
+            }
+            finally
+            {
+                var zss = archiveStream as ZipSegmentedStream;
+                if (zss != null)
+                {
+#if NETCF
+                    zss.Close();
+#else
+                    // need to dispose it
+                    zss.Dispose();
+#endif
+                    _archiveStream = null;
+                }
+            }
         }
 
         void MoveFileInPlace(
@@ -1043,74 +1060,57 @@ namespace Ionic.Zip
             int crcResult;
             var input = archiveStream;
 
-            try
+            // change for workitem 8098
+            input.Seek(FileDataPosition, SeekOrigin.Begin);
+            // workitem 10178
+            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(input);
+
+            var bytes = new byte[BufferSize];
+
+            // The extraction process varies depending on how the entry was
+            // stored.  It could have been encrypted, and it coould have
+            // been compressed, or both, or neither. So we need to check
+            // both the encryption flag and the compression flag, and take
+            // the proper action in all cases.
+
+            var leftToRead = (compressionMethod != (short)CompressionMethod.None)
+                ? uncompressedSize
+                : compressedFileDataSize;
+
+            // Get a stream that either decrypts or not.
+            _inputDecryptorStream = GetExtractDecryptor(input);
+
+            var input3 = GetExtractDecompressor(_inputDecryptorStream);
+
+            var bytesWritten = 0L;
+            // As we read, we maybe decrypt, and then we maybe decompress. Then we write.
+            using (var s1 = new Crc.CrcCalculatorStream(input3))
             {
-                // change for workitem 8098
-                input.Seek(FileDataPosition, SeekOrigin.Begin);
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(input);
-
-                var bytes = new byte[BufferSize];
-
-                // The extraction process varies depending on how the entry was
-                // stored.  It could have been encrypted, and it coould have
-                // been compressed, or both, or neither. So we need to check
-                // both the encryption flag and the compression flag, and take
-                // the proper action in all cases.
-
-                var leftToRead = (compressionMethod != (short)CompressionMethod.None)
-                    ? uncompressedSize
-                    : compressedFileDataSize;
-
-                // Get a stream that either decrypts or not.
-                _inputDecryptorStream = GetExtractDecryptor(input);
-
-                var input3 = GetExtractDecompressor( _inputDecryptorStream );
-
-                var bytesWritten = 0L;
-                // As we read, we maybe decrypt, and then we maybe decompress. Then we write.
-                using (var s1 = new Crc.CrcCalculatorStream(input3))
+                while (leftToRead > 0)
                 {
-                    while (leftToRead > 0)
-                    {
-                        //Console.WriteLine("ExtractOne: LeftToRead {0}", LeftToRead);
+                    //Console.WriteLine("ExtractOne: LeftToRead {0}", LeftToRead);
 
-                        // Casting LeftToRead down to an int is ok here in the else clause,
-                        // because that only happens when it is less than bytes.Length,
-                        // which is much less than MAX_INT.
-                        int len = (leftToRead > bytes.Length) ? bytes.Length : (int)leftToRead;
-                        int n = s1.Read(bytes, 0, len);
+                    // Casting LeftToRead down to an int is ok here in the else clause,
+                    // because that only happens when it is less than bytes.Length,
+                    // which is much less than MAX_INT.
+                    int len = (leftToRead > bytes.Length) ? bytes.Length : (int)leftToRead;
+                    int n = s1.Read(bytes, 0, len);
 
-                        // must check data read - essential for detecting corrupt zip files
-                        _CheckRead(n);
+                    // must check data read - essential for detecting corrupt zip files
+                    _CheckRead(n);
 
-                        targetOutput.Write(bytes, 0, n);
-                        leftToRead -= n;
-                        bytesWritten += n;
+                    targetOutput.Write(bytes, 0, n);
+                    leftToRead -= n;
+                    bytesWritten += n;
 
-                        // fire the progress event, check for cancels
-                        OnExtractProgress(bytesWritten, uncompressedSize);
+                    // fire the progress event, check for cancels
+                    OnExtractProgress(bytesWritten, uncompressedSize);
 
-                        if (_ioOperationCanceled)
-                            break;
-                    }
-
-                    crcResult = s1.Crc;
+                    if (_ioOperationCanceled)
+                        break;
                 }
-            }
-            finally
-            {
-                var zss = input as ZipSegmentedStream;
-                if (zss != null)
-                {
-#if NETCF
-                    zss.Close();
-#else
-                    // need to dispose it
-                    zss.Dispose();
-#endif
-                    _archiveStream = null;
-                }
+
+                crcResult = s1.Crc;
             }
 
             return crcResult;
