@@ -722,7 +722,8 @@ namespace Ionic.Zip
             bool inputUsesZip64 = false;
             ZipEntry de;
             // in lieu of hashset, use a dictionary
-            var previouslySeen = new Dictionary<String,object>();
+            var sc = (zf.CaseSensitiveRetrieval) ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
+            var previouslySeen = new Dictionary<String,object>(sc);
             while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen)) != null)
             {
                 de.ResetDirEntry();
