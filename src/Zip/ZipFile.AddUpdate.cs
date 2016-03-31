@@ -2067,6 +2067,8 @@ namespace Ionic.Zip
         internal void InternalAddEntry(String name, ZipEntry entry)
         {
             _entries.Add(name, entry);
+            if (!_entriesInsensitive.ContainsKey(name))
+                _entriesInsensitive.Add(name, entry);
             _zipEntriesAsList = null;
             _contentsChanged = true;
         }
