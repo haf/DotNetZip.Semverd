@@ -311,6 +311,7 @@ namespace Ionic.Zip
                         }
 
                     }
+                    _readName = _name;
                     _fileAlreadyExists = true;
                 }
 
@@ -473,7 +474,7 @@ namespace Ionic.Zip
             if (Directory.Exists(_name))
                 throw new ZipException("Bad Directory", new System.ArgumentException("That name specifies an existing directory. Please specify a filename.", "fileName"));
             _contentsChanged = true;
-            _fileAlreadyExists = File.Exists(_name);
+            _fileAlreadyExists = File.Exists(_readName);
             Save();
         }
 
