@@ -1318,11 +1318,9 @@ namespace Ionic.Zip.Tests.Update
                 Assert.IsNotNull(entry2);
                 zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated once.";
 
-                using (var memoryStream = new MemoryStream())
-                {
-                    zipSave.Save(memoryStream);
-                    File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
-                }
+                var memoryStream = new MemoryStream(); //Attention: the source stream can't be disposed, as its needed to read not edited entries on the next save
+                zipSave.Save(memoryStream);
+                File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
                 Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
 
                 var content3 = new MemoryStream(Encoding.Default.GetBytes(contentText3));
@@ -1330,11 +1328,9 @@ namespace Ionic.Zip.Tests.Update
                 Assert.IsNotNull(entry3);
                 zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated twice.";
 
-                using (var memoryStream = new MemoryStream())
-                {
-                    zipSave.Save(memoryStream);
-                    File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
-                }
+                memoryStream = new MemoryStream();
+                zipSave.Save(memoryStream);
+                File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
             }
 
             Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
@@ -1401,11 +1397,9 @@ namespace Ionic.Zip.Tests.Update
                 Assert.IsNotNull(entry2);
                 zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated once.";
 
-                using (var memoryStream = new MemoryStream())
-                {
-                    zipSave.Save(memoryStream);
-                    File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
-                }
+                var memoryStream = new MemoryStream(); //Attention: the source stream can't be disposed, as its needed to read not edited entries on the next save
+                zipSave.Save(memoryStream);
+                File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
                 Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
 
                 var content3 = new MemoryStream(Encoding.Default.GetBytes(contentText3));
@@ -1413,11 +1407,9 @@ namespace Ionic.Zip.Tests.Update
                 Assert.IsNotNull(entry3);
                 zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated twice.";
 
-                using (var memoryStream = new MemoryStream())
-                {
-                    zipSave.Save(memoryStream);
-                    File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
-                }
+                memoryStream = new MemoryStream();
+                zipSave.Save(memoryStream);
+                File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
             }
 
             Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));

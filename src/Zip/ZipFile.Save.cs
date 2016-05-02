@@ -207,6 +207,25 @@ namespace Ionic.Zip
                 thisSaveUsedZip64 |= directoryNeededZip64;
                 _OutputUsesZip64 = new Nullable<bool>(thisSaveUsedZip64);
 
+                if (_fileAlreadyExists && this._readstream != null)
+                {
+                    // This means we opened and read a zip file.
+                    // If we are now saving, we need to close the orig file, first.
+                    this._readstream.Close();
+                    this._readstream = null;
+                }
+                // the archiveStream for each entry needs to be null
+                foreach (var e in c)
+                {
+                    var zss1 = e._archiveStream as ZipSegmentedStream;
+                    if (zss1 != null)
+#if NETCF
+                        zss1.Close();
+#else
+                        zss1.Dispose();
+#endif
+                    e._archiveStream = null;
+                }
 
                 // do the rename as necessary
                 if (_name != null &&
@@ -219,29 +238,9 @@ namespace Ionic.Zip
 #else
                     WriteStream.Dispose();
 #endif
+
                     if (_saveOperationCanceled)
                         return;
-
-                    if (_fileAlreadyExists && this._readstream != null)
-                    {
-                        // This means we opened and read a zip file.
-                        // If we are now saving to the same file, we need to close the
-                        // orig file, first.
-                        this._readstream.Close();
-                        this._readstream = null;
-                        // the archiveStream for each entry needs to be null
-                        foreach (var e in c)
-                        {
-                            var zss1 = e._archiveStream as ZipSegmentedStream;
-                            if (zss1 != null)
-#if NETCF
-                                zss1.Close();
-#else
-                                zss1.Dispose();
-#endif
-                            e._archiveStream = null;
-                        }
-                    }
 
                     string tmpName = null;
                     if (File.Exists(_name))
@@ -311,9 +310,9 @@ namespace Ionic.Zip
                         }
 
                     }
-                    _readName = _name;
                     _fileAlreadyExists = true;
                 }
+                _readName = _name;
 
                 NotifyEntriesSaveComplete(c);
                 OnSaveCompleted();
@@ -578,11 +577,17 @@ namespace Ionic.Zip
             // if we had a filename to save to, we are now obliterating it.
             _name = null;
 
+            if(_writestream != null) // if we saved to a stream before read from there
+                _readstream = _writestream;
             _writestream = new CountingStream(outputStream);
 
             _contentsChanged = true;
-            _fileAlreadyExists = false;
+            _fileAlreadyExists = File.Exists(_readName); // if we saved to or read from a file before
+
             Save();
+
+            _fileAlreadyExists = false;
+            _readName = null; // if we had a filename to save to, we are now obliterating it.
         }
 
 
