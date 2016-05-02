@@ -538,7 +538,7 @@ namespace Ionic.Zip
         /// </para>
         ///
         /// <code lang="C#">
-        /// using (var fs = new FileSteeam(filename, FileMode.Open))
+        /// using (var fs = new FileStream(filename, FileMode.Open))
         /// {
         ///   using (var zip = Ionic.Zip.ZipFile.Read(inputStream))
         ///   {
@@ -564,7 +564,7 @@ namespace Ionic.Zip
         ///
         /// <param name="outputStream">
         ///   The <c>System.IO.Stream</c> to write to. It must be
-        ///   writable. If you created the ZipFile instanct by calling
+        ///   writable. If you created the ZipFile instance by calling
         ///   ZipFile.Read(), this stream must not be the same stream
         ///   you passed to ZipFile.Read().
         /// </param>
