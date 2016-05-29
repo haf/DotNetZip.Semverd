@@ -1,0 +1,39 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    "DNX,Version=v4.5.1": {
+      "Zlib.Portable/1.0.0": {
+        "type": "project",
+        "framework": ".NETPortable,Version=v4.5,Profile=Profile259"
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x86": {
+      "Zlib.Portable/1.0.0": {
+        "type": "project",
+        "framework": ".NETPortable,Version=v4.5,Profile=Profile259"
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x64": {
+      "Zlib.Portable/1.0.0": {
+        "type": "project",
+        "framework": ".NETPortable,Version=v4.5,Profile=Profile259"
+      }
+    }
+  },
+  "libraries": {
+    "Zlib.Portable/1.0.0": {
+      "type": "project",
+      "path": "../wrap/Zlib.Portable/project.json"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "Zlib.Portable "
+    ],
+    "DNX,Version=v4.5.1": [
+      "fx/System.Runtime >= 4.0.10",
+      "fx/System.IO >= 4.0.0"
+    ]
+  }
+}

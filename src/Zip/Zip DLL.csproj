@@ -73,50 +73,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ZipEntrySource.cs" />
-    <Compile Include="ZipOutputStream.cs" />
-    <Compile Include="ZipInputStream.cs" />
-    <Compile Include="ZipSegmentedStream.cs" />
-    <Compile Include="ComHelper.cs" />
-    <Compile Include="OffsetStream.cs" />
-    <Compile Include="ZipErrorAction.cs" />
-    <Compile Include="EncryptionAlgorithm.cs" />
-    <Compile Include="ExtractExistingFileAction.cs" />
-    <Compile Include="FileSelector.cs" />
-    <Compile Include="WinZipAes.cs" />
-    <Compile Include="ZipConstants.cs" />
-    <Compile Include="Exceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shared.cs" />
-    <Compile Include="ZipCrypto.cs" />
-    <Compile Include="Events.cs" />
-    <Compile Include="ZipDirEntry.cs" />
-    <Compile Include="ZipEntry.cs" />
-    <Compile Include="ZipEntry.Extract.cs" />
-    <Compile Include="ZipEntry.Read.cs" />
-    <Compile Include="ZipEntry.Write.cs" />
-    <Compile Include="ZipFile.AddUpdate.cs" />
-    <Compile Include="ZipFile.Check.cs" />
-    <Compile Include="ZipFile.cs" />
-    <Compile Include="ZipFile.Events.cs" />
-    <Compile Include="ZipFile.Extract.cs" />
-    <Compile Include="ZipFile.Read.cs" />
-    <Compile Include="ZipFile.Save.cs" />
-    <Compile Include="ZipFile.Selector.cs" />
-    <Compile Include="ZipFile.SaveSelfExtractor.cs" />
-    <Compile Include="ZipFile.x-IEnumerable.cs" />
     <Compile Include="..\BZip2\*.cs">
       <Link>BZip2\%(FileName)</Link>
-    </Compile>
-    <Compile Include="..\Zlib\*.cs">
-      <Link>Zlib\%(FileName)</Link>
-    </Compile>
-    <Compile Include="..\CommonSrc\CRC32.cs">
-      <Link>CRC32.cs</Link>
     </Compile>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="ZipFile.SaveSelfExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Migrated rules for Zip DLL.ruleset" />
@@ -181,6 +145,8 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Import Project="..\Zip.Shared\Zip.Shared.projitems" Label="Shared" />
+  <Import Project="..\Zlib.Shared\Zlib.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
