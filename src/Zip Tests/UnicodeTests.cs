@@ -24,6 +24,7 @@
 
 
 using System;
+using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -40,6 +41,15 @@ namespace Ionic.Zip.Tests.Unicode
     [TestClass]
     public class UnicodeTests : IonicTestClass
     {
+        protected static string CurrentDir = null;
+
+        [ClassInitialize]
+        public static void Initialize(TestContext testContext)
+        {
+            CurrentDir = Directory.GetCurrentDirectory();
+        }
+
+
         public UnicodeTests() : base() { }
 
 
@@ -384,6 +394,24 @@ namespace Ionic.Zip.Tests.Unicode
                     Assert.IsTrue(e.FileName == specialEntryName, "name mismatch");
                 }
             }
+        }
+
+
+        [TestMethod]
+        public void UnicodeUpdate_wi17551()
+        {
+            var zipPath = Path.Combine(CurrentDir, @"..\..\zips\UnicodeCharactersInFileName.zip");
+            var zip = ZipFile.Read(zipPath);
+            var zipEntries = zip.ToList();
+
+            // 0-level folders exist and have the correct names.
+            Assert.IsTrue(zipEntries.Any(x => x.IsDirectory && x.FileName == "ÆØ æøå/"));
+            Assert.IsTrue(zipEntries.Any(x => x.IsDirectory && x.FileName == "Τζ ΣδΗ/"));
+
+            // 1-level folders exist and have the correct names.
+            Assert.IsTrue(zipEntries.Any(x => x.IsDirectory && x.FileName == "ÆØ æøå/Test 1-å Áá Čč Đđ Ŋŋ Šš Ŧŧ Žž End/"));
+            Assert.IsTrue(zipEntries.Any(x => x.IsDirectory && x.FileName == "ÆØ æøå/Test 2 -æ Ελληνικά End/"));
+            Assert.IsTrue(zipEntries.Any(x => x.IsDirectory && x.FileName == "Τζ ΣδΗ/Start Ζ Θ Γ Λ Ι Κ Ν Μ Υ Ψ Ω Β og α End/"));
         }
 
 
