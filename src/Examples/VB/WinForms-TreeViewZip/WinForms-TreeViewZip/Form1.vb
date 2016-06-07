@@ -13,7 +13,7 @@ Public Class Form1
         PopulateTreeView()
     End Sub
 
-    Private zip As Ionic.Zip.ZipFile
+	Private zip As ZipFile
 
     ''' <summary>
     ''' Populates TreeView1 with the entries in the zipfile, named by TextBox1
