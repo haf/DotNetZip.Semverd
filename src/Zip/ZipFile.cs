@@ -2358,10 +2358,19 @@ namespace Ionic.Zip
                 // read in the just-saved zip archive
                 using (ZipFile x = new ZipFile())
                 {
-                    // workitem 10735
-                    x._readName = x._name = whileSaving
-                        ? (this._readName ?? this._name)
-                        : this._name;
+                    if (File.Exists(this._readName ?? this._name))
+                    {
+                        // workitem 10735
+                        x._readName = x._name = whileSaving
+                            ? (this._readName ?? this._name)
+                            : this._name;
+                    }
+                    else // if we just saved to a stream no file is available to read from
+                    {
+                        if (_readstream.CanSeek)
+                            _readstream.Seek(0, SeekOrigin.Begin);
+                        x._readstream = _readstream;
+                    }
                     x.AlternateEncoding = this.AlternateEncoding;
                     x.AlternateEncodingUsage = this.AlternateEncodingUsage;
                     ReadIntoInstance(x);
