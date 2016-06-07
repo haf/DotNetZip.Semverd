@@ -1127,6 +1127,306 @@ namespace Ionic.Zip.Tests.Update
 
 
         [TestMethod]
+        public void UpdateZip_UpdateItem_UpdateMultipleTimes_SaveAs_Save()
+        {
+            string filename = "text1.txt";
+            string filename2 = "text2.txt";
+            string contentText1 = "Content 1";
+            string contentText2 = "Content 2 - this is longer";
+            string contentText3 = "Content 3";
+
+            // select the name of the zip file
+            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateMultipleTimes.zip");
+            string zipFileToSaveAs = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateMultipleTimes_New.zip");
+
+            #region Create the zip file
+
+            Directory.SetCurrentDirectory(TopLevelDir);
+            using (ZipFile zipSave = new ZipFile())
+            {
+                var content1 = new MemoryStream(Encoding.Default.GetBytes(contentText1));
+                var entry1 = zipSave.UpdateEntry(filename, content1);
+                Assert.IsNotNull(entry1);
+
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                var entry2 = zipSave.UpdateEntry(filename2, content2);
+                Assert.IsNotNull(entry2);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive will be updated.";
+                zipSave.Save(zipFileToCreate);
+            }
+            using (ZipFile zipTest = new ZipFile(zipFileToCreate))
+            {
+                var entry = zipTest[filename];
+                using (var ms = new MemoryStream())
+                {
+                    entry.OpenReader().CopyTo(ms);
+                    var content = Encoding.Default.GetString(ms.ToArray());
+                    Assert.AreEqual(contentText1, content);
+                }
+            }
+
+            #endregion
+
+            using (ZipFile zipSave = new ZipFile(zipFileToCreate))
+            {
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                var entry2 = zipSave.UpdateEntry(filename, content2);
+                Assert.IsNotNull(entry2);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated once.";
+                zipSave.Save(zipFileToSaveAs);
+
+                Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
+
+                var content3 = new MemoryStream(Encoding.Default.GetBytes(contentText3));
+                var entry3 = zipSave.UpdateEntry(filename, content3);
+                Assert.IsNotNull(entry3);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated twice.";
+                zipSave.Save();
+            }
+
+            Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
+            using (ZipFile zipTest = new ZipFile(zipFileToSaveAs))
+            {
+                var entry = zipTest[filename];
+                using (var ms = new MemoryStream())
+                {
+                    entry.OpenReader().CopyTo(ms);
+                    var content = Encoding.Default.GetString(ms.ToArray());
+                    Assert.AreEqual(contentText3, content);
+                }
+            }
+        }
+
+
+        [TestMethod]
+        public void UpdateZip_UpdateItem_UpdateMultipleTimes_SaveAsTwice()
+        {
+            string filename = "text1.txt";
+            string filename2 = "text2.txt";
+            string contentText1 = "Content 1";
+            string contentText2 = "Content 2 - this is longer";
+            string contentText3 = "Content 3";
+
+            // select the name of the zip file
+            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateMultipleTimes.zip");
+            string zipFileToSaveAs = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateMultipleTimes_New.zip");
+
+            #region Create the zip file
+
+            Directory.SetCurrentDirectory(TopLevelDir);
+            using (ZipFile zipSave = new ZipFile())
+            {
+                var content1 = new MemoryStream(Encoding.Default.GetBytes(contentText1));
+                var entry1 = zipSave.UpdateEntry(filename, content1);
+                Assert.IsNotNull(entry1);
+
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                var entry2 = zipSave.UpdateEntry(filename2, content2);
+                Assert.IsNotNull(entry2);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive will be updated.";
+                zipSave.Save(zipFileToCreate);
+            }
+            using (ZipFile zipTest = new ZipFile(zipFileToCreate))
+            {
+                var entry = zipTest[filename];
+                using (var ms = new MemoryStream())
+                {
+                    entry.OpenReader().CopyTo(ms);
+                    var content = Encoding.Default.GetString(ms.ToArray());
+                    Assert.AreEqual(contentText1, content);
+                }
+            }
+
+            #endregion
+
+            using (ZipFile zipSave = new ZipFile(zipFileToCreate))
+            {
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                var entry2 = zipSave.UpdateEntry(filename, content2);
+                Assert.IsNotNull(entry2);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated once.";
+                zipSave.Save(zipFileToSaveAs);
+
+                Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
+
+                var content3 = new MemoryStream(Encoding.Default.GetBytes(contentText3));
+                var entry3 = zipSave.UpdateEntry(filename, content3);
+                Assert.IsNotNull(entry3);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated twice.";
+                zipSave.Save(zipFileToSaveAs);
+            }
+
+            Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
+            using (ZipFile zipTest = new ZipFile(zipFileToSaveAs))
+            {
+                var entry = zipTest[filename];
+                using (var ms = new MemoryStream())
+                {
+                    entry.OpenReader().CopyTo(ms);
+                    var content = Encoding.Default.GetString(ms.ToArray());
+                    Assert.AreEqual(contentText3, content);
+                }
+            }
+        }
+
+
+        [TestMethod]
+        public void UpdateZip_UpdateItem_UpdateMultipleTimes_SaveAsStream()
+        {
+            string filename = "text1.txt";
+            string filename2 = "text2.txt";
+            string contentText1 = "Content 1";
+            string contentText2 = "Content 2 - this is longer";
+            string contentText3 = "Content 3";
+
+            // select the name of the zip file
+            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateMultipleTimes.zip");
+            string zipFileToSaveAs = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateMultipleTimes_New.zip");
+
+            #region Create the zip file
+
+            Directory.SetCurrentDirectory(TopLevelDir);
+            using (ZipFile zipSave = new ZipFile())
+            {
+                var content1 = new MemoryStream(Encoding.Default.GetBytes(contentText1));
+                var entry1 = zipSave.UpdateEntry(filename, content1);
+                Assert.IsNotNull(entry1);
+
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                var entry2 = zipSave.UpdateEntry(filename2, content2);
+                Assert.IsNotNull(entry2);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive will be updated.";
+                zipSave.Save(zipFileToCreate);
+            }
+            using (ZipFile zipTest = new ZipFile(zipFileToCreate))
+            {
+                var entry = zipTest[filename];
+                using (var ms = new MemoryStream())
+                {
+                    entry.OpenReader().CopyTo(ms);
+                    var content = Encoding.Default.GetString(ms.ToArray());
+                    Assert.AreEqual(contentText1, content);
+                }
+            }
+
+            #endregion
+
+            using (ZipFile zipSave = new ZipFile(zipFileToCreate))
+            {
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                var entry2 = zipSave.UpdateEntry(filename, content2);
+                Assert.IsNotNull(entry2);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated once.";
+
+                var memoryStream = new MemoryStream(); //Attention: the source stream can't be disposed, as its needed to read not edited entries on the next save
+                zipSave.Save(memoryStream);
+                File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
+                Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
+
+                var content3 = new MemoryStream(Encoding.Default.GetBytes(contentText3));
+                var entry3 = zipSave.UpdateEntry(filename, content3);
+                Assert.IsNotNull(entry3);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated twice.";
+
+                memoryStream = new MemoryStream();
+                zipSave.Save(memoryStream);
+                File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
+            }
+
+            Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
+            using (ZipFile zipTest = new ZipFile(zipFileToSaveAs))
+            {
+                var entry = zipTest[filename];
+                using (var ms = new MemoryStream())
+                {
+                    entry.OpenReader().CopyTo(ms);
+                    var content = Encoding.Default.GetString(ms.ToArray());
+                    Assert.AreEqual(contentText3, content);
+                }
+            }
+        }
+
+
+        [TestMethod]
+        public void UpdateZip_UpdateItem_UpdateMultipleTimesFromStream_SaveAsStream()
+        {
+            string filename = "text1.txt";
+            string filename2 = "text2.txt";
+            string contentText1 = "Content 1";
+            string contentText2 = "Content 2 - this is longer";
+            string contentText3 = "Content 3";
+
+            // select the name of the zip file
+            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateMultipleTimes.zip");
+            string zipFileToSaveAs = Path.Combine(TopLevelDir, "UpdateZip_UpdateItem_UpdateMultipleTimes_New.zip");
+
+            #region Create the zip file
+
+            Directory.SetCurrentDirectory(TopLevelDir);
+            using (ZipFile zipSave = new ZipFile())
+            {
+                var content1 = new MemoryStream(Encoding.Default.GetBytes(contentText1));
+                var entry1 = zipSave.UpdateEntry(filename, content1);
+                Assert.IsNotNull(entry1);
+
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                var entry2 = zipSave.UpdateEntry(filename2, content2);
+                Assert.IsNotNull(entry2);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive will be updated.";
+                zipSave.Save(zipFileToCreate);
+            }
+            using (ZipFile zipTest = new ZipFile(zipFileToCreate))
+            {
+                var entry = zipTest[filename];
+                using (var ms = new MemoryStream())
+                {
+                    entry.OpenReader().CopyTo(ms);
+                    var content = Encoding.Default.GetString(ms.ToArray());
+                    Assert.AreEqual(contentText1, content);
+                }
+            }
+
+            #endregion
+
+            var zipData = File.ReadAllBytes(zipFileToCreate);
+            var sourceStream = new MemoryStream(zipData);
+            using (ZipFile zipSave = ZipFile.Read(sourceStream))
+            {
+                var content2 = new MemoryStream(Encoding.Default.GetBytes(contentText2));
+                var entry2 = zipSave.UpdateEntry(filename, content2);
+                Assert.IsNotNull(entry2);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated once.";
+
+                var memoryStream = new MemoryStream(); //Attention: the source stream can't be disposed, as its needed to read not edited entries on the next save
+                zipSave.Save(memoryStream);
+                File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
+                Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
+
+                var content3 = new MemoryStream(Encoding.Default.GetBytes(contentText3));
+                var entry3 = zipSave.UpdateEntry(filename, content3);
+                Assert.IsNotNull(entry3);
+                zipSave.Comment = "UpdateTests::UpdateZip_UpdateItem_UpdateMultipleTimes(): This archive was updated twice.";
+
+                memoryStream = new MemoryStream();
+                zipSave.Save(memoryStream);
+                File.WriteAllBytes(zipFileToSaveAs, memoryStream.ToArray());
+            }
+
+            Assert.IsTrue(ZipFile.CheckZip(zipFileToSaveAs));
+            using (ZipFile zipTest = new ZipFile(zipFileToSaveAs))
+            {
+                var entry = zipTest[filename];
+                using (var ms = new MemoryStream())
+                {
+                    entry.OpenReader().CopyTo(ms);
+                    var content = Encoding.Default.GetString(ms.ToArray());
+                    Assert.AreEqual(contentText3, content);
+                }
+            }
+        }
+
+
+        [TestMethod]
         public void UpdateZip_AddFile_NewEntriesWithPassword()
         {
             string password = "V.Secret!";

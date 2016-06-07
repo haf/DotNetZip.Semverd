@@ -802,7 +802,7 @@ namespace Ionic.Zip
         public bool ContainsEntry(string name)
         {
             // workitem 12534
-            return _entries.ContainsKey(SharedUtilities.NormalizePathForUseInZipFile(name));
+            return RetrievalEntries.ContainsKey(SharedUtilities.NormalizePathForUseInZipFile(name));
         }
 
 
@@ -826,16 +826,16 @@ namespace Ionic.Zip
             {
                 return _CaseSensitiveRetrieval;
             }
-
             set
             {
-                // workitem 9868
-                if (value != _CaseSensitiveRetrieval)
-                {
-                    _CaseSensitiveRetrieval = value;
-                    _initEntriesDictionary();
-                }
+                _CaseSensitiveRetrieval = value;
             }
+        }
+
+
+        private Dictionary<string, ZipEntry> RetrievalEntries
+        {
+            get { return CaseSensitiveRetrieval ? _entries : _entriesInsensitive; }
         }
 
 
@@ -2358,10 +2358,19 @@ namespace Ionic.Zip
                 // read in the just-saved zip archive
                 using (ZipFile x = new ZipFile())
                 {
-                    // workitem 10735
-                    x._readName = x._name = whileSaving
-                        ? (this._readName ?? this._name)
-                        : this._name;
+                    if (File.Exists(this._readName ?? this._name))
+                    {
+                        // workitem 10735
+                        x._readName = x._name = whileSaving
+                            ? (this._readName ?? this._name)
+                            : this._name;
+                    }
+                    else // if we just saved to a stream no file is available to read from
+                    {
+                        if (_readstream.CanSeek)
+                            _readstream.Seek(0, SeekOrigin.Begin);
+                        x._readstream = _readstream;
+                    }
                     x.AlternateEncoding = this.AlternateEncoding;
                     x.AlternateEncodingUsage = this.AlternateEncodingUsage;
                     ReadIntoInstance(x);
@@ -2824,15 +2833,6 @@ namespace Ionic.Zip
 
 
 
-        private void _initEntriesDictionary()
-        {
-            // workitem 9868
-            StringComparer sc = (CaseSensitiveRetrieval) ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
-            _entries = (_entries == null)
-                ? new Dictionary<String, ZipEntry>(sc)
-                : new Dictionary<String, ZipEntry>(_entries, sc);
-        }
-
 
         private void _InitInstance(string zipFileName, TextWriter statusMessageWriter)
         {
@@ -2846,7 +2846,8 @@ namespace Ionic.Zip
             ParallelDeflateThreshold = 512 * 1024;
 #endif
             // workitem 7685, 9868
-            _initEntriesDictionary();
+            _entries = new Dictionary<string, ZipEntry>(StringComparer.Ordinal);
+            _entriesInsensitive = new Dictionary<string, ZipEntry>(StringComparer.OrdinalIgnoreCase);
 
             if (File.Exists(_name))
             {
@@ -3006,13 +3007,14 @@ namespace Ionic.Zip
         {
             get
             {
+                var entries = RetrievalEntries;
                 var key = SharedUtilities.NormalizePathForUseInZipFile(fileName);
-                if (_entries.ContainsKey(key))
-                    return _entries[key];
+                if (entries.ContainsKey(key))
+                    return entries[key];
                 // workitem 11056
                 key = key.Replace("/", "\\");
-                if (_entries.ContainsKey(key))
-                    return _entries[key];
+                if (entries.ContainsKey(key))
+                    return entries[key];
                 return null;
 
 #if MESSY
@@ -3319,7 +3321,10 @@ namespace Ionic.Zip
             if (entry == null)
                 throw new ArgumentNullException("entry");
 
-            _entries.Remove(SharedUtilities.NormalizePathForUseInZipFile(entry.FileName));
+            var path = SharedUtilities.NormalizePathForUseInZipFile(entry.FileName);
+            _entries.Remove(path);
+            if (!AnyCaseInsensitiveMatches(path))
+                _entriesInsensitive.Remove(path);
             _zipEntriesAsList = null;
 
 #if NOTNEEDED
@@ -3344,6 +3349,16 @@ namespace Ionic.Zip
         }
 
 
+        private bool AnyCaseInsensitiveMatches(string path)
+        {
+            // this has to search _entries rather than _caseInsensitiveEntries because it's used to determine whether to update the latter
+            foreach (var entry in _entries.Values)
+            {
+                if (String.Equals(entry.FileName, path, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
+        }
 
 
         /// <summary>
@@ -3608,6 +3623,7 @@ namespace Ionic.Zip
         private bool _disposed;
         //private System.Collections.Generic.List<ZipEntry> _entries;
         private System.Collections.Generic.Dictionary<String, ZipEntry> _entries;
+        private System.Collections.Generic.Dictionary<String, ZipEntry> _entriesInsensitive;
         private List<ZipEntry> _zipEntriesAsList;
         private string _name;
         private string _readName;

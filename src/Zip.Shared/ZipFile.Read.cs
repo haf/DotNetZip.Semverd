@@ -1,3 +1,5 @@
+<<<<<<< HEAD:src/Zip.Shared/ZipFile.Read.cs
+=======
 // ZipFile.Read.cs
 // ------------------------------------------------------------------
 //
@@ -722,7 +724,7 @@ namespace Ionic.Zip
             bool inputUsesZip64 = false;
             ZipEntry de;
             // in lieu of hashset, use a dictionary
-            var previouslySeen = new Dictionary<String,object>();
+            var previouslySeen = new Dictionary<String, object>(StringComparer.Ordinal);
             while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen)) != null)
             {
                 de.ResetDirEntry();
@@ -732,6 +734,8 @@ namespace Ionic.Zip
                     zf.StatusMessageTextWriter.WriteLine("entry {0}", de.FileName);
 
                 zf._entries.Add(de.FileName,de);
+                if (!zf._entriesInsensitive.ContainsKey(de.FileName))
+                    zf._entriesInsensitive.Add(de.FileName,de);
 
                 // workitem 9214
                 if (de._InputUsesZip64) inputUsesZip64 = true;
@@ -765,8 +769,8 @@ namespace Ionic.Zip
         private static void ReadIntoInstance_Orig(ZipFile zf)
         {
             zf.OnReadStarted();
-            //zf._entries = new System.Collections.Generic.List<ZipEntry>();
-            zf._entries = new System.Collections.Generic.Dictionary<String,ZipEntry>();
+            zf._entries.Clear();
+            zf._entriesInsensitive.Clear();
 
             ZipEntry e;
             if (zf.Verbose)
@@ -784,6 +788,8 @@ namespace Ionic.Zip
                     zf.StatusMessageTextWriter.WriteLine("  {0}", e.FileName);
 
                 zf._entries.Add(e.FileName,e);
+                if (!zf._entriesInsensitive.ContainsKey(e.FileName))
+                    zf._entriesInsensitive.Add(e.FileName,e);
                 firstEntry = false;
             }
 
@@ -794,7 +800,7 @@ namespace Ionic.Zip
             {
                 ZipEntry de;
                 // in lieu of hashset, use a dictionary
-                var previouslySeen = new Dictionary<String,Object>();
+                var previouslySeen = new Dictionary<String,Object>(StringComparer.Ordinal);
                 while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen)) != null)
                 {
                     // Housekeeping: Since ZipFile exposes ZipEntry elements in the enumerator,
@@ -1108,3 +1114,4 @@ namespace Ionic.Zip
     }
 
 }
+>>>>>>> refs/remotes/haf/master:src/Zip/ZipFile.Read.cs
