@@ -1,5 +1,3 @@
-<<<<<<< HEAD:src/Zip.Shared/ZipFile.Save.cs
-=======
 // ZipFile.Save.cs
 // ------------------------------------------------------------------
 //
@@ -970,4 +968,3 @@ namespace Ionic.Zip
 
     }
 }
->>>>>>> refs/remotes/haf/master:src/Zip/ZipFile.Save.cs

@@ -1,5 +1,3 @@
-<<<<<<< HEAD:src/Zip.Shared/ZipFile.AddUpdate.cs
-=======
 // ZipFile.AddUpdate.cs
 // ------------------------------------------------------------------
 //
@@ -2184,4 +2182,3 @@ namespace Ionic.Zip
     }
 
 }
->>>>>>> refs/remotes/haf/master:src/Zip/ZipFile.AddUpdate.cs

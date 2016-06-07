@@ -1,5 +1,3 @@
-<<<<<<< HEAD:src/Zip.Shared/ZipFile.Read.cs
-=======
 // ZipFile.Read.cs
 // ------------------------------------------------------------------
 //
@@ -1114,4 +1112,3 @@ namespace Ionic.Zip
     }
 
 }
->>>>>>> refs/remotes/haf/master:src/Zip/ZipFile.Read.cs
