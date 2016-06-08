@@ -6,7 +6,7 @@
   "projectUrl": "",
   "licenseUrl": "",
   "dependencies": {
-    "Zlib.Portable": "" 
+    "Zlib.Portable": "1.0.0.0"
   },
 
   "frameworks": {
