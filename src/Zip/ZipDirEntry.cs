@@ -60,6 +60,9 @@ namespace Ionic.Zip
 
             // set _LengthOfHeader to 0, to indicate we need to read later.
             this._LengthOfHeader = 0;
+
+            // reset the copy counter because we've got a good entry now
+            CopyHelper.Reset();
         }
 
         /// <summary>
@@ -117,6 +120,11 @@ namespace Ionic.Zip
                 new System.Text.RegularExpressions.Regex(" \\(copy (\\d+)\\)$");
 
             private static int callCount = 0;
+
+            internal static void Reset()
+            {
+                callCount = 0;
+            }
 
             internal static string AppendCopyToFileName(string f)
             {
