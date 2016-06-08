@@ -21,7 +21,6 @@
   - gem install bundler --no-ri --no-rdoc
   - bundle install
   build_script:
-  - dotnet restore
   - rake
   test: off
   artifacts:
