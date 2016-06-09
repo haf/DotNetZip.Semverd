@@ -840,6 +840,24 @@ namespace Ionic.Zip
 
 
         /// <summary>
+        ///   Indicates whether to ignore duplicate files (report only the first entry)
+        ///   when loading a zipfile.
+        /// </summary>
+        /// 
+        /// <remarks>
+        ///   The default value is <c>false</c>, which will try to make all files
+        ///   available (duplicates will have a "copy" suffix appended to their name).
+        ///   Setting this to <c>true</c> prior to using <c>Initialize</c> to read a
+        ///   zipfile will prevent this and instead just ignore the duplicates.
+        /// </remarks>
+        public bool IgnoreDuplicateFiles
+        {
+            get { return _IgnoreDuplicateFiles; }
+            set { _IgnoreDuplicateFiles = value; }
+        }
+
+
+        /// <summary>
         ///   Indicates whether to encode entry filenames and entry comments using Unicode
         ///   (UTF-8).
         /// </summary>
@@ -3612,6 +3630,7 @@ namespace Ionic.Zip
         #region private fields
         private TextWriter _StatusMessageTextWriter;
         private bool _CaseSensitiveRetrieval;
+        private bool _IgnoreDuplicateFiles;
         private Stream _readstream;
         private Stream _writestream;
         private UInt16 _versionMadeBy;
