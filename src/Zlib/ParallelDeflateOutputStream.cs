@@ -969,7 +969,7 @@ namespace Ionic.Zlib
 
                 } while (nextToWrite >= 0);
 
-            } while (doAll && (_lastWritten != _lastFilled));
+            } while (doAll && (_lastWritten != _latestCompressed || _lastWritten != _lastFilled));
 
             emitting = false;
         }
