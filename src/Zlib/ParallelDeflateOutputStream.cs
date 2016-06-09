@@ -880,8 +880,9 @@ namespace Ionic.Zlib
 
             if (emitting) return;
             emitting = true;
-            if (doAll || mustWait)
+            if ((doAll && (_lastCompressed != _lastFilled)) || mustWait) {
                 _newlyCompressedBlob.WaitOne();
+            }
 
             do
             {
@@ -968,7 +969,7 @@ namespace Ionic.Zlib
 
                 } while (nextToWrite >= 0);
 
-            } while (doAll && (_lastWritten != _latestCompressed || _lastWritten != _lastFilled));
+            } while (doAll && (_lastWritten != _lastFilled));
 
             emitting = false;
         }
@@ -1382,5 +1383,4 @@ namespace Ionic.Zlib
     }
 
 }
-
 
