@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>c6b960da-45d1-4d38-8697-05c0ba439503</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Zlib.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CRC32.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DeflateStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GZipStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Inflate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InfTree.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParallelDeflateOutputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tree.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zlib.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ZlibBaseStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ZlibCodec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ZlibConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ZlibStream.cs" />
+  </ItemGroup>
+</Project>

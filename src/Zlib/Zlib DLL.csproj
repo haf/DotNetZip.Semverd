@@ -128,22 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ParallelDeflateOutputStream.cs" />
-    <Compile Include="DeflateStream.cs" />
-    <Compile Include="GZipStream.cs" />
-    <Compile Include="ZlibConstants.cs" />
-    <Compile Include="Deflate.cs" />
-    <Compile Include="Inflate.cs" />
-    <Compile Include="InfTree.cs" />
-    <Compile Include="Tree.cs" />
-    <Compile Include="Zlib.cs" />
-    <Compile Include="ZlibStream.cs" />
-    <Compile Include="ZlibBaseStream.cs" />
-    <Compile Include="ZlibCodec.cs" />
     <Content Include="LICENSE.txt" />
-    <Compile Include="..\CommonSrc\CRC32.cs">
-      <Link>CRC32.cs</Link>
-    </Compile>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -180,6 +165,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Import Project="..\Zlib.Shared\Zlib.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
