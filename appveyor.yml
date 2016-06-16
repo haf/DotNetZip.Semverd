@@ -22,7 +22,7 @@
   - bundle install
   build_script:
   - rake
-  test: on
+  test: off
   artifacts:
   - path: build\pkg\DotNetZip.*.nupkg
     name: Nuget Package

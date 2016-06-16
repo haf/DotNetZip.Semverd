@@ -62,10 +62,10 @@ end
 desc "package nugets"
 nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   p.configuration = 'Release'
-  p.files         = 'Package.nuspec'
-#  p.nuspec        = 'Package.nuspec'
+  p.files         = FileList['src/Zip/*.csproj', 'src/Zip.Android/*.csproj', 'src/Zip.iOS/*.csproj']
   p.out           = 'build/pkg'
   p.exe           = 'buildsupport/NuGet.exe'
+  p.leave_nuspec
   
   p.with_metadata do |m|
     m.id            = 'DotNetZip'
