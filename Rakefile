@@ -59,12 +59,11 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
 end
 =end
 
-=begin
 desc "package nugets"
 nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   p.configuration = 'Release'
   p.files         = 'Package.nuspec'
-  p.nuspec        = 'Package.nuspec'
+#  p.nuspec        = 'Package.nuspec'
   p.out           = 'build/pkg'
   p.exe           = 'buildsupport/NuGet.exe'
   
@@ -84,7 +83,6 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   
   p.no_project_dependencies
 end
-=end
 
 task :default => :create_nugets
 
