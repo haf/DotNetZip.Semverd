@@ -32,6 +32,7 @@ end
 
 directory 'build/pkg'
 
+=begin
 desc "package nugets"
 nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   p.files         = %w[src/Zip/Zip\ DLL.csproj]
@@ -56,13 +57,31 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
 
   p.no_project_dependencies
 end
+=end
 
-desc "Package all targets in NuGet"
-nugetpack :pack_nugets => [:build] do |nuget|
-   nuget.nuspec           = "Package.nuspec"
-   nuget.base_path	      = "working/"
-   nuget.output_directory = "build/pkg"
+desc "package nugets"
+nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
+  p.configuration = 'Release'
+  p.files         = 'Package.nuspec'
+  p.nuspec        = 'Package.nuspec'
+  p.out           = 'build/pkg'
+  p.exe           = 'buildsupport/NuGet.exe'
+  
+  p.with_metadata do |m|
+    m.id            = 'DotNetZip'
+    m.version       = ENV['NUGET_VERSION']
+    # of the nuget at least
+    m.authors       = 'Henrik/Dino Chisa'
+    m.description   = 'A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to follow semver to avoid versioning conflicts. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.'
+    m.summary       = 'A library for dealing with zip, bzip and zlib from .Net'
+    m.language      = 'en-GB'
+    m.copyright     = 'Dino Chiesa'
+    m.release_notes = "Full version: #{ENV['BUILD_VERSION']}."
+    m.license_url   = "https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE"
+    m.project_url   = "https://github.com/haf/DotNetZip.Semverd"
+  end
+  
+  p.no_project_dependencies
 end
 
-task :default => :pack_nugets
-# task :default => :create_nugets
+task :default => :create_nugets
