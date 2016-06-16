@@ -85,5 +85,5 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   p.no_project_dependencies
 end
 
-#task :default => :create_nugets
+task :default => :create_nugets
 
