@@ -59,7 +59,6 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
 end
 =end
 
-=begin
 desc "package nugets"
 nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   p.configuration = 'Release'
@@ -85,8 +84,6 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   
   p.no_project_dependencies
 end
-=end
 
 #task :default => :create_nugets
-task :default => :build
 
