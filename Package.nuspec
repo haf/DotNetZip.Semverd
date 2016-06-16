@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DotNetZip</id>
+    <version>$version$</version>
+    <authors>Henrik/Dino Chisa</authors>
+    <owners>Henrik/Dino Chisa</owners>
+    <licenseUrl>https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/haf/DotNetZip.Semverd</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to follow semver to avoid versioning conflicts. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.</description>
+    <releaseNotes>Full version: $version$</releaseNotes>
+    <copyright>Dino Chiesa</copyright>
+    <files>
+		<file src="src\Zip\bin\Release\*.dll" target="lib\net20" />
+		<file src="src\Zip.Android\bin\Release\*.dll" target="lib\MonoAndroid10" />
+		<file src="src\Zip.iOS\bin\iPhone\Release\*.dll" target="lib\Xamarin.iOS10" />
+	</files>
+  </metadata>
+</package>

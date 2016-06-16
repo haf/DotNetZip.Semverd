@@ -57,4 +57,12 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   p.no_project_dependencies
 end
 
-task :default => :create_nugets
+desc "Package all targets in NuGet"
+nugetpack :pack_nugets => [:build] do |nuget|
+   nuget.nuspec           = "Package.nuspec"
+   nuget.base_path	      = "working/"
+   nuget.output_directory = "build/pkg"
+end
+
+task :default => :pack_nugets
+# task :default => :create_nugets
