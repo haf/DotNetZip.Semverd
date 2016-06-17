@@ -65,11 +65,11 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   p.files         = FileList['src/Zip/*.csproj', 'src/Zip.Android/*.csproj', 'src/Zip.iOS/*.csproj']
   p.out           = 'build/pkg'
   p.exe           = 'buildsupport/NuGet.exe'
-  p.target        = 'net20'
   p.leave_nuspec
   
   p.with_metadata do |m|
-    m.id            = 'DotNetZip'
+    # Don't override id, let the assembly name from the project files provide this.
+    # m.id            = 'DotNetZip'
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
     m.authors       = 'Henrik/Dino Chisa'
