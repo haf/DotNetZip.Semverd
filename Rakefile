@@ -43,7 +43,6 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :build] do |p|
   p.with_metadata do |m|
     # Don't override id, let the assembly name from the project files provide this.
     # m.id            = 'DotNetZip'
-	m.framework_assembly ".NETFramework", "net20"
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
     m.authors       = 'Henrik/Dino Chisa'
