@@ -26,6 +26,7 @@
   artifacts:
   - path: build\pkg\*.nupkg
     name: Nuget Package
+  - path: '**\*.nuspec'
   deploy:
   - provider: NuGet
     api_key:
