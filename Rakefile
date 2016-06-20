@@ -66,7 +66,7 @@ nugets_pack :create_nuget_net20 => ['build/pkg', :versioning, :build] do |p|
   puts "creating nuget for net20"
   p.target = 'net20'
   p.configuration = 'Release'
-  p.files         = 'src/Zip/*.csproj'
+  p.files         = FileList['src/Zip/*.csproj']
   #FileList['src/Zip/*.csproj', 'src/Zip.Android/*.csproj', 'src/Zip.iOS/*.csproj']
   p.out           = 'build/pkg'
   p.exe           = 'buildsupport/NuGet.exe'
