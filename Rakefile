@@ -62,7 +62,7 @@ end
 #I'm sorry
 
 desc "Pack the standard Zip library"
-nugets_pack :create_nuget_net20 => ['build/pkg', :versioning, :build] do |p|
+nugets_pack 'create_nuget_net20' => ['build/pkg', :versioning, :build] do |p|
   puts "creating nuget for net20"
   p.target = 'net20'
   p.configuration = 'Release'
@@ -91,7 +91,7 @@ nugets_pack :create_nuget_net20 => ['build/pkg', :versioning, :build] do |p|
 end
 
 desc "Pack the Android library"
-nugets_pack :create_nuget_MonoAndroid10 => ['build/pkg', :versioning, :build] do |p|
+nugets_pack 'create_nuget_MonoAndroid10' => ['build/pkg', :versioning, :build] do |p|
   puts "creating nuget for MonoAndroid10"
   p.target = 'MonoAndroid10'
   p.configuration = 'Release'
@@ -119,7 +119,7 @@ nugets_pack :create_nuget_MonoAndroid10 => ['build/pkg', :versioning, :build] do
 end
 
 desc "Pack the iOS library"
-nugets_pack :create_nuget_Xamarin.iOS10 => ['build/pkg', :versioning, :build] do |p|
+nugets_pack 'create_nuget_Xamarin.iOS10' => ['build/pkg', :versioning, :build] do |p|
   puts "creating nuget for Xamarin.iOS10"
   p.target = 'Xamarin.iOS10'
   p.configuration = 'Release'
