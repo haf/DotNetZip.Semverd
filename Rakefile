@@ -66,7 +66,8 @@ nugets_pack :create_nuget_net20 => ['build/pkg', :versioning, :build] do |p|
   puts "creating nuget for net20"
   p.target = 'net20'
   p.configuration = 'Release'
-  p.files         = FileList['src/Zip/*.csproj', 'src/Zip.Android/*.csproj', 'src/Zip.iOS/*.csproj']
+  p.files         = 'src/Zip/*.csproj'
+  #FileList['src/Zip/*.csproj', 'src/Zip.Android/*.csproj', 'src/Zip.iOS/*.csproj']
   p.out           = 'build/pkg'
   p.exe           = 'buildsupport/NuGet.exe'
   p.leave_nuspec #remove me when not debugging
