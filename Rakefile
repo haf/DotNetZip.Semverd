@@ -8,7 +8,7 @@ Albacore::Tasks::Versionizer.new :versioning
 
 nugets_restore :restore do |p|
   p.out = 'packages'
-  p.exe = 'buildsupport/NuGet.exe'
+  p.exe = 'buildsupport/nuget.exe'
 end
 
 desc "Perform full build"
