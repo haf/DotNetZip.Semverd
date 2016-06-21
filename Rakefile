@@ -102,7 +102,7 @@ nugets_pack 'create_nuget_MonoAndroid10' => ['build/pkg', :versioning, :build] d
   
   p.with_metadata do |m|
     # Don't override id, let the assembly name from the project files provide this.
-    # m.id            = 'DotNetZip'
+    m.id            = 'DotNetZip.Android'
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
     m.authors       = 'Henrik/Dino Chisa'
