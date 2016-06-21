@@ -20,8 +20,10 @@
   install:
   - gem install bundler --no-ri --no-rdoc
   - bundle install
+  environment:
+    DEBUG: true
   build_script:
-  - DEBUG=true rake
+  - rake
   test: off
   artifacts:
   - path: build\pkg\*.nupkg
