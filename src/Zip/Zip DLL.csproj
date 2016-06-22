@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ionic.Zip</RootNamespace>
-    <AssemblyName>Ionic.Zip</AssemblyName>
+    <AssemblyName>DotNetZip</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Ionic.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
@@ -50,7 +50,7 @@
     <DefineConstants>TRACE;DEBUG;AESCRYPTO;BZIP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Ionic.Zip.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\DotNetZip.xml</DocumentationFile>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <CodeAnalysisRules>
     </CodeAnalysisRules>
@@ -63,7 +63,7 @@
     <DefineConstants>TRACE;AESCRYPTO;BZIP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Ionic.Zip.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\DotNetZip.xml</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>

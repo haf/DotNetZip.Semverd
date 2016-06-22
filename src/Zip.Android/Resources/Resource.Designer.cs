@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Zip.Android.Resource", IsApplication=false)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Ionic.Zip.Resource", IsApplication=false)]
 
-namespace Zip.Android
+namespace Ionic.Zip
 {
 	
 	
