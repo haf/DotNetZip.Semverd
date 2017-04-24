@@ -40,7 +40,7 @@ namespace Ionic.Zip
         public static Int64 GetFileLength(string fileName)
         {
             if (!File.Exists(fileName))
-                throw new FileNotFoundException(fileName);
+                throw new FileNotFoundException(String.Format("Could not find file '{0}'.", fileName), fileName);
 
             long fileLength;
             FileShare fs = FileShare.ReadWrite;
