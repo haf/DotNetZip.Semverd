@@ -1,0 +1,28 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    "DNX,Version=v4.5.1": {
+      "Zlib.Portable/1.0.0": {
+        "type": "project"
+      }
+    }
+  },
+  "libraries": {
+    "Zlib.Portable/1.0.0": {
+      "type": "project",
+      "msbuildProject": "../Zlib.Portable/Zlib.Portable.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "Zlib.Portable >= 1.0.0"
+    ],
+    "DNX,Version=v4.5.1": [
+      "System.IO >= 4.0.0",
+      "System.Runtime >= 4.0.10"
+    ]
+  },
+  "tools": {},
+  "projectFileToolGroups": {}
+}

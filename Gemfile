@@ -1,6 +1,4 @@
 source "http://rubygems.org"
 
-gem 'rake'
-gem 'albacore', :git => 'https://github.com/Albacore/albacore.git', :branch => 'clean_slate'
-gem 'semver2'
-gem 'bundler'
+# gem 'albacore', :git => 'https://github.com/Albacore/albacore.git', :branch => 'clean_slate'
+gem 'albacore', '~> 2.0.0'

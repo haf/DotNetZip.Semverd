@@ -66,19 +66,19 @@ namespace Ionic.Zip.Examples
             "  -r+                   - recurse directories.\n" +
             "  -s <entry> 'string'   - insert an entry of the given name into the \n" +
             "                          archive, with the given string as its content.\n" +
-            "  -sfx [w|c]            - create a self-extracting archive, either a Windows or console app." +
+            "  -sfx [w|c]            - create a self-extracting archive, either a Windows or console app.\n" +
             "                          (cannot be used with -split)\n"+
             "  -split <maxsize>      - produce a split zip, with the specified maximum size. You can\n" +
             "                          optionally use kb or mb as a suffix to the size. \n" +
             "                          (-split cannot be used with -sfx).\n" +
             "  -Tw+                  - store Windows-format extended times (default).\n" +
             "  -Tw-                  - don't store Windows-format extended times.\n" +
-            "  -Tu+                  - store Unix-format extended times (default).\n" +
+            "  -Tu+                  - store Unix-format extended times.\n" +
             "  -Tu-                  - don't store Unix-format extended times (default).\n" +
-            "  -UTnow                - use uniform date/time, NOW, for all entries. \n" +
-            "  -UTnewest             - use uniform date/time, newest entry, for all entries. \n" +
-            "  -UToldest             - use uniform date/time, oldest entry, for all entries. \n" +
-            "  -UT <datetime>        - use uniform date/time, specified, for all entries. \n" +
+            "  -UTnow                - use the same date/time, NOW, for all entries. \n" +
+            "  -UTnewest             - use the same date/time, same as newest entry, for all entries. \n" +
+            "  -UToldest             - use the same date/time, equal to oldest entry, for all entries. \n" +
+            "  -UT <datetime>        - use the same date/time, as specified, for all entries. \n" +
             "  -utf8                 - use UTF-8 encoding for entry filenames and comments,\n" +
             "                          instead of the the default IBM437 code page.\n" +
             "                          (cannot be used with -cp option)\n" +

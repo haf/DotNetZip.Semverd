@@ -26,7 +26,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Ionic.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -96,6 +96,9 @@
     </Compile>
     <Compile Include="..\CommonSrc\CRC32.cs">
       <Link>CRC32.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonSrc\Iso8859Dash1Encoding.cs">
+      <Link>Iso8859Dash1Encoding.cs</Link>
     </Compile>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>

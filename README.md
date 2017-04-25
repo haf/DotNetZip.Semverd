@@ -1,12 +1,3 @@
-Fri, 27 Aug 2011  01:21
-
-Here is a fork of the project that's easily semverd. This is not the official project, but you may clone it - it's easier to build at least. Forked off of http://dotnetzip.codeplex.com/SourceControl/changeset/changes/81674
-
-
-
-Mon, 11 Jul 2011  20:10
-
-
 Introducing the DotNetZip Library and Tools
 -------------------------------------------
 
@@ -19,6 +10,32 @@ library for handling ZIP files, and some associated tools.
  - The tools are .NET programs that rely on the library, and can be used
    by anyone on any Windows machine to build or extract ZIP files.
 
+
+## Release Notes
+
+Mon, 6 Jan 2014 14:35 UTC+0100
+
+Released v1.9.2 to NuGet. This version is identical to the release candidate.
+
+Mon, 18 Nov 2013 20:53 UTC+0100
+
+Released v1.9.2-rc1 to NuGet. This version fixes the tmp-file bug and a lockup-
+bug with "PendingOverwrite" so that OverwriteSilently works better. It's a RC,
+because as a part of this bugfix, I actually cleaned up some code and that might
+have changed semantics (although I don't think it has, I've tested the function
+that I changed).
+
+Fri, 27 Aug 2011  01:21
+
+Here is a fork of the project that's easily semverd. This is not the official project, but you may clone it - it's easier to build at least. Forked off of http://dotnetzip.codeplex.com/SourceControl/changeset/changes/81674
+
+
+Mon, 11 Jul 2011  20:10
+
+
+## How to build?
+
+`bundle && rake`
 
 
 Why DotNetZip?

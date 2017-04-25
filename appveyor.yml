@@ -1,0 +1,35 @@
+-
+  version: 1.0.{build}
+  branches:
+    except:
+      - master
+  install:
+  - gem install bundler --no-ri --no-rdoc
+  - bundle install
+  build_script:
+  - rake
+  test: off
+  artifacts:
+  - path: build\pkg\DotNetZip.*.nupkg
+    name: Nuget Package
+-
+  version: 1.0.{build}
+  branches:
+    only:
+      - master
+  install:
+  - gem install bundler --no-ri --no-rdoc
+  - bundle install
+  build_script:
+  - rake
+  test: off
+  artifacts:
+  - path: build\pkg\*.nupkg
+    name: Nuget Package
+  - path: '**\*.nuspec'
+  deploy:
+  - provider: NuGet
+    api_key:
+      secure: M7LFZYxeE65s2U7APTgVFyzBDEiE5LFVFIf+d3ahGxgylxrctFcFJx9cmnamH30f
+    skip_symbols: true
+    artifact: /.*\.nupkg/ 

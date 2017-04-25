@@ -82,9 +82,7 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Qunzip.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Qunzip.vb" />
     <Compile Include="AssemblyInfo.vb" />
   </ItemGroup>
   <ItemGroup>
