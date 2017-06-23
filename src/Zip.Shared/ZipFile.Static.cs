@@ -30,6 +30,7 @@ namespace Ionic.Zip
             {
 
             }
+#if !WINDOWS_PHONE_APP
             if (ibm437 == null)
             {
                 try
@@ -41,7 +42,7 @@ namespace Ionic.Zip
 
                 }
             }
-
+#endif
             _defaultEncoding = ibm437;
         }
 
