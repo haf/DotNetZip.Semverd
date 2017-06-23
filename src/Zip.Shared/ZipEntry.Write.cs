@@ -1047,7 +1047,15 @@ namespace Ionic.Zip
 #endif
 
             // LastMod
-            _TimeBlob = Ionic.Zip.SharedUtilities.DateTimeToPacked(LastModified);
+            if (_dontEmitLastModified)
+            {
+                _TimeBlob = 0;
+            }
+            else
+            {
+                _TimeBlob = Ionic.Zip.SharedUtilities.DateTimeToPacked(LastModified);
+            }
+            
 
             // (i==10) time blob
             block[i++] = (byte)(_TimeBlob & 0x000000FF);
@@ -2318,7 +2326,15 @@ namespace Ionic.Zip
                     // http://www.info-zip.org/pub/infozip/
 
                     // Also, winzip insists on this!
-                    _TimeBlob = Ionic.Zip.SharedUtilities.DateTimeToPacked(LastModified);
+                    if (_dontEmitLastModified)
+                    {
+                        _TimeBlob = 0;
+                    }
+                    else
+                    {
+                        _TimeBlob = Ionic.Zip.SharedUtilities.DateTimeToPacked(LastModified);
+                    }
+                    
                     encryptionHeader[11] = (byte)((this._TimeBlob >> 8) & 0xff);
                 }
                 else

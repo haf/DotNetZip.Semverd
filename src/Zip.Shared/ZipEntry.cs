@@ -216,6 +216,16 @@ namespace Ionic.Zip
             }
         }
 
+        /// <summary>
+        /// Ability to set Last Modified DOS time to zero
+        /// (for using with EmitTimesInWindowsFormatWhenSaving+EmitTimesInUnixFormatWhenSaving setted to false)
+        /// some flasher hardware use as marker of first binary
+        /// </summary>
+        public bool DontEmitLastModified
+        {
+            get { return _dontEmitLastModified; }
+            set { _dontEmitLastModified = value; }
+        }
 
         int BufferSize
         {
@@ -2689,6 +2699,7 @@ namespace Ionic.Zip
 #endif
 
         internal DateTime _LastModified;
+        private bool _dontEmitLastModified;
         private DateTime _Mtime, _Atime, _Ctime;  // workitem 6878: NTFS quantities
         private bool _ntfsTimesAreSet;
         private bool _emitNtfsTimes = true;

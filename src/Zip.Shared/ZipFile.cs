@@ -1393,18 +1393,7 @@ namespace Ionic.Zip
         }
 
 
-        /// <summary>
-        /// The default text encoding used in zip archives.  It is numeric 437, also
-        /// known as IBM437.
-        /// </summary>
-        /// <seealso cref="Ionic.Zip.ZipFile.ProvisionalAlternateEncoding"/>
-        public static System.Text.Encoding DefaultEncoding
-        {
-            get
-            {
-                return _defaultEncoding;
-            }
-        }
+        
 
 
         /// <summary>
@@ -2416,6 +2405,8 @@ namespace Ionic.Zip
 
         #region Constructors
 
+        
+
         /// <summary>
         ///   Creates a new <c>ZipFile</c> instance, using the specified filename.
         /// </summary>
@@ -2508,6 +2499,15 @@ namespace Ionic.Zip
         ///
         public ZipFile(string fileName)
         {
+            if (DefaultEncoding == null)
+            {
+                _alternateEncoding = System.Text.Encoding.UTF8;
+                AlternateEncodingUsage = ZipOption.Always;
+            }
+            else
+            {
+                _alternateEncoding = DefaultEncoding;
+            }
             try
             {
                 _InitInstance(fileName, null);
@@ -2628,6 +2628,15 @@ namespace Ionic.Zip
         /// </example>
         public ZipFile()
         {
+            if (DefaultEncoding == null)
+            {
+                _alternateEncoding = System.Text.Encoding.UTF8;
+                AlternateEncodingUsage = ZipOption.Always;
+            }
+            else
+            {
+                _alternateEncoding = DefaultEncoding;
+            }
             _InitInstance(null, null);
         }
 
@@ -2728,6 +2737,16 @@ namespace Ionic.Zip
         /// verbose status messages.</param>
         public ZipFile(string fileName, TextWriter statusMessageWriter)
         {
+            if (DefaultEncoding == null)
+            {
+                _alternateEncoding = System.Text.Encoding.UTF8;
+                AlternateEncodingUsage = ZipOption.Always;
+            }
+            else
+            {
+                _alternateEncoding = DefaultEncoding;
+            }
+
             try
             {
                 _InitInstance(fileName, statusMessageWriter);
@@ -3669,9 +3688,9 @@ namespace Ionic.Zip
         private Int64 _OffsetOfCentralDirectory64;
         private Nullable<bool> _OutputUsesZip64;
         internal bool _inExtractAll;
-        private System.Text.Encoding _alternateEncoding = System.Text.Encoding.GetEncoding("IBM437"); // UTF-8
+        private System.Text.Encoding _alternateEncoding = null;
         private ZipOption _alternateEncodingUsage = ZipOption.Never;
-        private static System.Text.Encoding _defaultEncoding = System.Text.Encoding.GetEncoding("IBM437");
+        
 
         private int _BufferSize = BufferSizeDefault;
 
