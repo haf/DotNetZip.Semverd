@@ -35,6 +35,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ZipFile.Read.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ZipFile.Save.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ZipFile.Selector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ZipFile.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ZipFile.x-IEnumerable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ZipInputStream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ZipOutputStream.cs" />
