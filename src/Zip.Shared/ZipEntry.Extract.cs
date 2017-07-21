@@ -717,7 +717,7 @@ namespace Ionic.Zip
                     EnsurePassword(password);
 
                 // set up the output stream
-                var tmpName = Path.GetRandomFileName()+".tmp";
+                var tmpName = SharedUtilities.InternalGetTempFileName();
                 var tmpPath = Path.Combine(Path.GetDirectoryName(targetFileName), tmpName);
                 WriteStatus("extract file {0}...", targetFileName);
 
