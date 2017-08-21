@@ -197,14 +197,6 @@
       <Project>{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}</Project>
       <Name>Zip DLL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tools\UnZip\UnZip.csproj">
-      <Project>{A22C89E0-B5D4-4881-A61F-4B1FD82F2453}</Project>
-      <Name>UnZip</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tools\ZipIt\ZipIt.csproj">
-      <Project>{98008721-C4DD-4F34-B3AE-A3453E29BB65}</Project>
-      <Name>ZipIt</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Ionic.snk">

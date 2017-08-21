@@ -81,10 +81,6 @@
       <Project>{9816BA86-9250-4C00-A912-25F07F8677D1}</Project>
       <Name>Zlib DLL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tools\GZip\GZip.csproj">
-      <Project>{52542d59-25ec-4ee4-8af2-85de50c70ea6}</Project>
-      <Name>GZip</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
