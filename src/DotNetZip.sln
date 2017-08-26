@@ -2,11 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E1C14695-E75F-4317-919A-5341EA1F9C01}"
-	ProjectSection(SolutionItems) = preProject
-		DotNetZip.vsmdi = DotNetZip.vsmdi
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zip DLL", "Zip\Zip DLL.csproj", "{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zip Tests", "Zip Tests\Zip Tests.csproj", "{549466CE-5CA6-4904-BA44-58141544BE70}"
