@@ -54,7 +54,8 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <CodeAnalysisRules>
     </CodeAnalysisRules>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -64,7 +65,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\DotNetZip.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -83,7 +85,6 @@
     <Compile Include="ZipFile.SaveSelfExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrated rules for Zip DLL.ruleset" />
     <None Include="Resources\CommandLineSelfExtractorStub.cs" />
     <None Include="Resources\PasswordDialog.cs" />
     <None Include="Resources\PasswordDialog.designer.cs">
