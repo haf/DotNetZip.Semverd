@@ -35,7 +35,8 @@ namespace Ionic.Zip
     using System.Reflection;
     using System.IO;
     using System.Collections.Generic;
-    using System.Windows.Forms;
+    using System.Text.RegularExpressions;
+	using System.Windows.Forms;
     using System.Diagnostics;
     using System.Threading;   // ThreadPool, WaitCallback
     using Ionic.Zip;
@@ -92,9 +93,24 @@ namespace Ionic.Zip
             foreach (System.Collections.DictionaryEntry de in envVars)
             {
                 string t = "%" + de.Key + "%";
-                s= s.Replace(t, de.Value as String);
+                s = s.Replace(t, de.Value as String);
             }
+			//Now replace common window keywords like %temp% with actual window directory, add more as needed
+	        s = Regex.Replace(s, "%temp%", Path.GetTempPath(), RegexOptions.IgnoreCase);
 
+			//Remove any duplicate "\" as it causes some issues, but not the leading "\\" used in network paths
+	        bool isNetwork = false;
+	        if (s.StartsWith("\\\\"))
+	        {
+		        isNetwork = true;
+		        s = s.Substring(2);
+	        }
+	        s = s.Replace("\\\\", "\\");
+	        if (isNetwork)
+	        {
+		        s = "\\\\" + s;
+	        }
+			
             return s;
         }
 
@@ -445,7 +461,9 @@ namespace Ionic.Zip
             string currentPassword = "";
             SetProgressBars();
 
-            try
+	        bool targetDirectoryExistsBeforehand = Directory.Exists(targetDirectory);
+
+			try
             {
                 // zip has already been set, when opening the exe.
 
@@ -590,16 +608,23 @@ namespace Ionic.Zip
             postUpackExeDone = new ManualResetEvent(false);
             if (this.chk_ExeAfterUnpack.Checked && PostUnpackCmdLineIsSet())
             {
-                try
+	            if (!Interactive)
+	            {
+					//Since this is quiet mode, we don't want user to accidentally hit
+					//"Quit" button before it completes operation (run and cleanup files)
+		            Hide();
+	            }
+	            try
                 {
                     string[] cmd = SplitCommandLine(txtPostUnpackCmdLine.Text);
                     if (cmd != null && cmd.Length > 0)
                     {
                         object[] args = { cmd,
                                           this.chk_Remove.Checked,
-                                          itemsExtracted,
+										  targetDirectoryExistsBeforehand,
+										  itemsExtracted,
                                           targetDirectory
-                        };
+						};
                         ThreadPool.QueueUserWorkItem(new WaitCallback(StartPostUnpackProc), args);
                     }
                     else postUpackExeDone.Set();
@@ -613,7 +638,7 @@ namespace Ionic.Zip
             // quit if this is non-interactive
             if (!Interactive)
             {
-                postUpackExeDone.WaitOne();
+				postUpackExeDone.WaitOne();
                 Application.Exit();
             }
         }
@@ -647,11 +672,13 @@ namespace Ionic.Zip
             Object[] args = (object[]) arg;
             String[] cmd = (String[]) args[0];
             bool removeAfter = (bool) args[1];
+	        bool directoryAlreadyExists = (bool)args[2];
 
-            List<String> itemsToRemove = (List<String>) args[2];
-            String basePath = (String) args[3] ;
+			List<String> itemsToRemove = (List<String>) args[3];
+            String basePath = (String) args[4];
+	        
 
-            ProcessStartInfo startInfo = new ProcessStartInfo(cmd[0]);
+			ProcessStartInfo startInfo = new ProcessStartInfo(cmd[0]);
             startInfo.WorkingDirectory = basePath;
             startInfo.CreateNoWindow = true;
             if (cmd.Length > 1)
@@ -671,33 +698,51 @@ namespace Ionic.Zip
                         {
                             if (removeAfter)
                             {
-                                List<string> failedToRemove = new List<String>();
-                                foreach (string s in itemsToRemove)
-                                {
-                                    string fullPath = Path.Combine(basePath,s);
-                                    try
-                                    {
-                                        if (File.Exists(fullPath))
-                                            File.Delete(fullPath);
-                                        else if (Directory.Exists(fullPath))
-                                            Directory.Delete(fullPath, true);
-                                    }
-                                    catch
-                                    {
-                                        failedToRemove.Add(s);
-                                    }
+	                            if (!directoryAlreadyExists)
+	                            {
+		                            try
+		                            {
+			                            //This directory was created from extracting the zip, simply delete
+			                            Directory.Delete(basePath, true);
+		                            }
+		                            catch
+		                            {
+			                            string header = "This directory was not removed:";
 
-                                    if (failedToRemove.Count > 0)
-                                    {
-                                        string header = (failedToRemove.Count == 1)
-                                            ? "This file was not removed:"
-                                            : String.Format("These {0} files were not removed:",
-                                                            failedToRemove.Count);
+			                            string message = basePath;
+			                            ProvideStatus(header, message);
+		                            }
+	                            }
+	                            else
+	                            {
+		                            List<string> failedToRemove = new List<String>();
+		                            foreach (string s in itemsToRemove)
+		                            {
+			                            string fullPath = Path.Combine(basePath, s);
+			                            try
+			                            {
+				                            if (File.Exists(fullPath))
+					                            File.Delete(fullPath);
+				                            else if (Directory.Exists(fullPath))
+					                            Directory.Delete(fullPath, true);
+			                            }
+			                            catch
+			                            {
+				                            failedToRemove.Add(s);
+			                            }
 
-                                        string message = String.Join("\r\n", failedToRemove.ToArray());
-                                        ProvideStatus(header, message);
-                                    }
-                                }
+			                            if (failedToRemove.Count > 0)
+			                            {
+				                            string header = (failedToRemove.Count == 1)
+					                            ? "This file was not removed:"
+					                            : String.Format("These {0} files were not removed:",
+						                            failedToRemove.Count);
+
+				                            string message = String.Join("\r\n", failedToRemove.ToArray());
+				                            ProvideStatus(header, message);
+			                            }
+		                            }
+	                            }
                             }
                         }
                         else
