@@ -2733,7 +2733,11 @@ namespace Ionic.Zip
         private bool _skippedDuringSave;
         private UInt32 _diskNumber;
 
-        //private static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("IBM437");
+#if NETSTANDARD2_0 || NETCOREAPP2_0
+        private static System.Text.Encoding ibm437 = System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252);
+#else
+        private static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("IBM437");
+#endif
         //private System.Text.Encoding _provisionalAlternateEncoding = System.Text.Encoding.GetEncoding("IBM437");
         private System.Text.Encoding _actualEncoding;
 
