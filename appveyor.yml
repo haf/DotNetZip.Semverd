@@ -21,6 +21,7 @@
   install:
   - gem install bundler --no-ri --no-rdoc
   - bundle install
+  - msbuild /t:restore
   build_script:
   - rake
   test: off
