@@ -634,7 +634,7 @@ namespace Ionic.Zip
                     n = s.Read(buffer, offset, count);
                     done = true;
                 }
-#if NETCF || SILVERLIGHT || NETSTANDARD2_0 || NETCOREAPP2_0
+#if NETCF || SILVERLIGHT
                 catch (System.IO.IOException)
                 {
                     throw;
