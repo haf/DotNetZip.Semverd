@@ -73,8 +73,23 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="..\BZip2\*.cs">
-      <Link>BZip2\%(FileName)</Link>
+    <Compile Include="..\BZip2\BitWriter.cs">
+      <Link>BZip2\BitWriter</Link>
+    </Compile>
+    <Compile Include="..\BZip2\BZip2Compressor.cs">
+      <Link>BZip2\BZip2Compressor</Link>
+    </Compile>
+    <Compile Include="..\BZip2\BZip2InputStream.cs">
+      <Link>BZip2\BZip2InputStream</Link>
+    </Compile>
+    <Compile Include="..\BZip2\BZip2OutputStream.cs">
+      <Link>BZip2\BZip2OutputStream</Link>
+    </Compile>
+    <Compile Include="..\BZip2\ParallelBZip2OutputStream.cs">
+      <Link>BZip2\ParallelBZip2OutputStream</Link>
+    </Compile>
+    <Compile Include="..\BZip2\Rand.cs">
+      <Link>BZip2\Rand</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">

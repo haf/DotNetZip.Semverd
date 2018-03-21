@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>Ionic.Zip.NetStandard</AssemblyName>
+        <RootNamespace>Zip_NetStandard</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\BZip2\BitWriter.cs" Link="BZip2\BitWriter.cs" />
+        <Compile Include="..\BZip2\BZip2Compressor.cs" Link="BZip2\BZip2Compressor.cs" />
+        <Compile Include="..\BZip2\BZip2InputStream.cs" Link="BZip2\BZip2InputStream.cs" />
+        <Compile Include="..\BZip2\BZip2OutputStream.cs" Link="BZip2\BZip2OutputStream.cs" />
+        <Compile Include="..\BZip2\ParallelBZip2OutputStream.cs" Link="BZip2\ParallelBZip2OutputStream.cs" />
+        <Compile Include="..\BZip2\Rand.cs" Link="BZip2\Rand.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Security.Permissions" Version="4.4.1" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
+        <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="BZip2\" />
+    </ItemGroup>
+
+    <Import Project="..\Zlib.Shared\Zlib.Shared.projitems" Label="Shared" />
+
+    <Import Project="..\Zip.Shared\Zip.Shared.projitems" Label="Shared" />
+
+</Project>

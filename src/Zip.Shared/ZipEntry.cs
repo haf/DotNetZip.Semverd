@@ -57,7 +57,12 @@ namespace Ionic.Zip
             _CompressionLevel = Ionic.Zlib.CompressionLevel.Default;
             _Encryption = EncryptionAlgorithm.None;
             _Source = ZipEntrySource.None;
+#if NETCOREAPP2_0 || NETSTANDARD2_0
+            AlternateEncoding = System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252);
+#else
             AlternateEncoding = System.Text.Encoding.GetEncoding("IBM437");
+#endif
+
             AlternateEncodingUsage = ZipOption.Never;
         }
 
@@ -2728,7 +2733,11 @@ namespace Ionic.Zip
         private bool _skippedDuringSave;
         private UInt32 _diskNumber;
 
+#if NETSTANDARD2_0 || NETCOREAPP2_0
+        private static System.Text.Encoding ibm437 = System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252);
+#else
         private static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("IBM437");
+#endif
         //private System.Text.Encoding _provisionalAlternateEncoding = System.Text.Encoding.GetEncoding("IBM437");
         private System.Text.Encoding _actualEncoding;
 

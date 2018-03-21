@@ -30,7 +30,19 @@ namespace Ionic.Zip
             {
 
             }
-#if !WINDOWS_PHONE_APP
+#if NETCOREAPP2_0 || NETSTANDARD2_0
+            if (ibm437 == null)
+            {
+                try
+                {
+                    ibm437 = System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252);
+                }
+                catch (Exception /*e*/)
+                {
+
+                }
+            }
+#elif !WINDOWS_PHONE_APP
             if (ibm437 == null)
             {
                 try
