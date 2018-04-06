@@ -65,8 +65,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zip.iOS", "Zip.iOS\Zip.iOS.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zip.WP", "Zip.WP\Zip.WP.csproj", "{DDFAFEB7-52C7-4E85-A48D-CA410E94C22F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Zip.NetCore", "Zip.Shared\Zip.NetCore.xproj", "{D5F9E76C-0601-4D76-A4D1-774F025A4F65}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zip NetStandard", "Zip NetStandard\Zip NetStandard.csproj", "{C609AB31-BFBA-47BF-B0C4-CF0FE381C938}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListContents", "ListContents\ListContents.csproj", "{D269BAF7-02BD-4E29-93E9-81E4CBB0BD59}"
