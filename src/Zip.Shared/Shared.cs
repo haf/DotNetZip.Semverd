@@ -157,6 +157,46 @@ namespace Ionic.Zip
             return SimplifyFwdSlashPath(pathName);
         }
 
+        /// <summary>
+        /// Sanitize paths in zip files. This means making sure that relative paths in a zip file don't go outside
+        /// the top directory. Entries like something/../../../../Temp/evil.txt get sanitized to Temp/evil.txt
+        /// when extracting
+        /// </summary>
+        /// <param name="path">A path with forward slashes as directory separator</param>
+        /// <returns>sanitized path</returns>
+        public static string SanitizePath(string path)
+        {
+            System.Collections.Generic.List<string> dirs = new System.Collections.Generic.List<string>();
+            int level = 0;
+            foreach (string dir in path.Split('/'))
+            {
+                if (dir == "..")
+                {
+                    if (level == 0)
+                        continue;
+                    level--;
+                }
+                else
+                {
+                    if (dirs.Count - 1 < level)
+                        dirs.Add(dir);
+                    else
+                        dirs[level] = dir;
+                    level++;
+                }
+            }
+
+            path = "";
+            for (int i = 0; i < level; i++)
+            {
+                if (i > 0)
+                    path += "/";
+                path += dirs[i];
+            }
+
+            return path;
+        }
+
 
         //static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("IBM437");
         static System.Text.Encoding utf8 = System.Text.Encoding.GetEncoding("UTF-8");

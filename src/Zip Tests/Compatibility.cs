@@ -2581,6 +2581,30 @@ namespace Ionic.Zip.Tests
         }
 
 
+        [TestMethod]
+        public void Extract_ZipWithRelativePathsOutside()
+        {
+            _Extract_ZipFile("relative-paths-outside.zip");
+            Assert.IsTrue(File.Exists(@"extract\good.txt"));
+            Assert.IsTrue(File.Exists(@"extract\Temp\evil.txt"));
+        }
+
+        [TestMethod]
+        public void Extract_ZipWithRelativePathsInSubdir()
+        {
+            _Extract_ZipFile("relative-paths-in-subdir.zip");
+            Assert.IsTrue(File.Exists(@"extract\good.txt"));
+            Assert.IsTrue(File.Exists(@"extract\Temp\evil.txt"));
+        }
+
+        [TestMethod]
+        public void Extract_ZipWithRelativePathsInSubdirOutside()
+        {
+            _Extract_ZipFile("relative-paths-in-subdir-outside.zip");
+            Assert.IsTrue(File.Exists(@"extract\good.txt"));
+            Assert.IsTrue(File.Exists(@"extract\Temp\evil.txt"));
+        }
+
         private void _Extract_ZipFile(string fileName)
         {
             TestContext.WriteLine("Current Dir: {0}", CurrentDir);
