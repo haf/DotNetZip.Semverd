@@ -1,5 +1,7 @@
 -
   version: 1.0.{build}
+  image: Visual Studio 2017
+  clone_depth: 1
   branches:
     except:
       - master
@@ -15,13 +17,13 @@
 -
   version: 1.0.{build}
   image: Visual Studio 2017
+  clone_depth: 1
   branches:
     only:
       - master
   install:
   - gem install bundler --no-ri --no-rdoc
   - bundle install
-  - msbuild /t:restore src\DotNetZip.sln
   build_script:
   - rake
   test: off

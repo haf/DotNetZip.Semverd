@@ -6,9 +6,8 @@ require 'albacore/ext/teamcity'
 
 Albacore::Tasks::Versionizer.new :versioning
 
-nugets_restore :restore do |p|
-  p.out = 'packages'
-  p.exe = 'buildsupport/nuget.exe'
+task :restore do
+   sh 'msbuild /t:restore src/DotNetZip.sln'
 end
 
 desc "Perform full build"
