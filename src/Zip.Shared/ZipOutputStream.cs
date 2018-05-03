@@ -1021,7 +1021,11 @@ namespace Ionic.Zip
         {
             get
             {
+#if NETCOREAPP2_0 || NETSTANDARD2_0
+                return System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252);
+#else
                 return System.Text.Encoding.GetEncoding("IBM437");
+#endif
             }
         }
 

@@ -158,7 +158,7 @@ namespace Ionic.Zip
         }
 
 
-        static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("IBM437");
+        //static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("IBM437");
         static System.Text.Encoding utf8 = System.Text.Encoding.GetEncoding("UTF-8");
 
         internal static byte[] StringToByteArray(string value, System.Text.Encoding encoding)
@@ -168,6 +168,41 @@ namespace Ionic.Zip
         }
         internal static byte[] StringToByteArray(string value)
         {
+            System.Text.Encoding ibm437 = null;
+            try
+            {
+                ibm437 = System.Text.Encoding.GetEncoding("IBM437");
+            }
+            catch (Exception /*e*/)
+            {
+
+            }
+#if NETCOREAPP2_0 || NETSTANDARD2_0
+            if (ibm437 == null)
+            {
+                try
+                {
+                    ibm437 = System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252);
+                }
+                catch (Exception /*e*/)
+                {
+
+                }
+            }
+#elif !WINDOWS_PHONE_APP
+            if (ibm437 == null)
+            {
+                try
+                {
+                    ibm437 = System.Text.Encoding.GetEncoding(1252);
+                }
+                catch (Exception /*e*/)
+                {
+
+                }
+            }
+#endif
+
             return StringToByteArray(value, ibm437);
         }
 

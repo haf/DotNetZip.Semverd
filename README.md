@@ -1,6 +1,8 @@
 Introducing the DotNetZip Library and Tools
 -------------------------------------------
 
+## Maintainers wanted – ping @haf to talk
+
 DotNetZip is the name of an open-source project that delivers a .NET
 library for handling ZIP files, and some associated tools.
 

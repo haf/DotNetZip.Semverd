@@ -5,3 +5,7 @@ _ReSharper*
 *.resharper
 *.suo
 build/
+/.vs
+/src/.vs
+/src/UpgradeLog.htm
+/src/UpgradeLog2.htm
