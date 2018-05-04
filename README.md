@@ -68,7 +68,7 @@ the .NET Framework.
     passwords, comments, AES encryption, ZIP64, Unicode, and so on.
 
   - You can also create and read zip files with the J# runtime. This
-    also has ita drawbacks.  First, J# is going out of support, or may
+    also has its drawbacks.  First, J# is going out of support, or may
     be out of support now.  Second, the J# runtime is huge, and you have
     to swallow the whole thing, even if all you want is zip file
     capability.  Also, the J# runtime is based on the java.util.zip
