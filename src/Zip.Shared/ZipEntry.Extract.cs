@@ -1422,6 +1422,8 @@ namespace Ionic.Zip
             if (f.StartsWith("/"))
                 f = f.Substring(1);
 
+            f = SharedUtilities.SanitizePath(f);
+
             // String.Contains is not available on .NET CF 2.0
             outFileName = _container.ZipFile.FlattenFoldersOnExtract
                 ? Path.Combine(baseDir, f.IndexOf('/') != -1 ? Path.GetFileName(f) : f)
