@@ -120,7 +120,7 @@ namespace Ionic.Zip
         /// </exception>
         ///
         /// <exception cref="System.OverflowException">
-        ///   Thrown if <see cref="MaxOutputSegmentSize"/> is non-zero, and the number
+        ///   Thrown if <see cref="MaxOutputSegmentSize"/> or <see cref="MaxOutputSegmentSize64"/> is non-zero, and the number
         ///   of segments that would be generated for the spanned zip file during the
         ///   save operation exceeds 99.  If this happens, you need to increase the
         ///   segment size.
