@@ -88,6 +88,10 @@ namespace Ionic.Zip
             return zss;
         }
 
+        public static ZipSegmentedStream ForWriting(string name, int maxSegmentSize)
+        {
+            return ForWriting(name, (long)maxSegmentSize);
+        }
 
         public static ZipSegmentedStream ForWriting(string name, long maxSegmentSize)
         {
