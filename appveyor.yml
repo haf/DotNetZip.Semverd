@@ -6,8 +6,9 @@
     except:
       - master
   install:
-  - C:\Ruby24-x64\bin\gem install bundler --no-ri --no-rdoc
-  - C:\Ruby24-x64\bin\bundle install
+  - set PATH=C:\Ruby25\bin;%PATH%
+  - gem install bundler --no-ri --no-rdoc
+  - bundle install
   build_script:
   - rake
   test: off
@@ -22,10 +23,11 @@
     only:
       - master
   install:
-  - C:\Ruby24-x64\bin\gem install bundler --no-ri --no-rdoc
-  - C:\Ruby24-x64\bin\bundle install
+  - set PATH=C:\Ruby25\bin;%PATH%
+  - gem install bundler --no-ri --no-rdoc
+  - bundle install
   build_script:
-  - C:\Ruby24-x64\bin\rake
+  - rake
   test: off
   artifacts:
   - path: build\pkg\*.nupkg
