@@ -10,7 +10,7 @@
   - gem install bundler --no-ri --no-rdoc
   - bundle install
   build_script:
-  - rake
+  - bundle exec rake
   test: off
   artifacts:
   - path: build\pkg\DotNetZip.*.nupkg
@@ -27,7 +27,7 @@
   - gem install bundler --no-ri --no-rdoc
   - bundle install
   build_script:
-  - rake
+  - bundle exec rake
   test: off
   artifacts:
   - path: build\pkg\*.nupkg
