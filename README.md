@@ -684,8 +684,8 @@ For size comparisons...these approximate figures are for v1.9.1.6 of the
 library:
 
 
-Desktop Framework:
-
+#### Desktop Framework:
+```
   assembly              ~size   comment
   -------------------------------------------------------
   Ionic.Zlib.dll         100k   {Deflate,GZip,Zlib}Stream and ZlibCodec
@@ -699,11 +699,11 @@ Desktop Framework:
   Ionic.Zip.Reduced.dll  250k   includes everything in the main ZIP
                                 library except SFX. (ability to save
                                 Self-extracting archives)
+```
 
 
-
-Compact Framework:
-
+#### Compact Framework:
+```
   assembly              ~size   comment
   -------------------------------------------------------
   Ionic.Zlib.CF.dll       74k   {Deflate,GZip,Zlib}Stream and ZlibCodec
@@ -712,10 +712,10 @@ Compact Framework:
 
   Ionic.Zip.CF.dll       204k   includes ZLIB and BZIP2 compression, but
                                 no SFX.
+```
 
-
-Silverlight:
-
+#### Silverlight:
+```
   assembly              ~size   comment
   -------------------------------------------------------
   Ionic.Zlib.dll          80k   {Deflate,GZip,Zlib}Stream and ZlibCodec
@@ -724,6 +724,7 @@ Silverlight:
 
   Ionic.Zip.dll          226k   includes ZLIB and BZIP2 compression, and
                                 the selector logic.  No SFX, no WinZIP AES.
+```
 
 
 
