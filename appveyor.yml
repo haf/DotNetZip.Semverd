@@ -7,7 +7,7 @@
       - master
   install:
   - ps: |
-      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls
+      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
   - set PATH=C:\Ruby25\bin;%PATH%
   - gem install bundler --no-ri --no-rdoc
   - bundle install
