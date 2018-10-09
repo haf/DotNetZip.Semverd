@@ -6,6 +6,7 @@
     except:
       - master
   install:
+  - set PATH=C:\Ruby25\bin;%PATH%
   - gem install bundler --no-ri --no-rdoc
   - bundle install
   build_script:
