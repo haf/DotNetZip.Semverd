@@ -104,9 +104,9 @@ end
 #end
 
 task :default do
-	Rake::Task["create_nuget_net20"].invoke
-#  %w|net20 MonoAndroid10 Xamarin.iOS10|.each do |fw|
-#	Rake::Task["create_nuget_#{fw}"].invoke
-#  end
+  %w|net20|.each do |fw|
+  #%w|net20 MonoAndroid10 Xamarin.iOS10|.each do |fw|
+	Rake::Task["create_nuget_#{fw}"].invoke
+  end
 end
 
