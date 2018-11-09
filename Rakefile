@@ -34,8 +34,7 @@ directory 'build/pkg'
 #I'm sorry
 
 desc "Pack the standard Zip library"
-nugets_pack 'create_nuget_net20' => ['build/pkg', :versioning, :build] do |p|
-  p.target = 'net20'
+nugets_pack 'create_nuget_main' => ['build/pkg', :versioning, :build] do |p|
   p.configuration = 'Release'
   p.files         = FileList['src/Zip/*.csproj']
   p.out           = 'build/pkg'
@@ -53,6 +52,12 @@ nugets_pack 'create_nuget_net20' => ['build/pkg', :versioning, :build] do |p|
     m.release_notes = "Full version: #{ENV['BUILD_VERSION']}."
     m.license_url   = "https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE"
     m.project_url   = "https://github.com/haf/DotNetZip.Semverd"
+  end
+
+  p.with_package do |p|
+    p.add_file 'src/Zip/bin/Release/DotNetZip.dll', 'lib/net20'
+    p.add_file 'src/Zip/bin/Release/DotNetZip.xml', 'lib/net20'
+    p.add_file 'src/Zip NetStandard/bin/Release/netstandard2.0/DotNetZip.NetStandard.dll', 'lib/netstandard20'
   end
   
   p.no_project_dependencies
@@ -110,7 +115,7 @@ nugets_pack 'create_nuget_Xamarin.iOS10' => ['build/pkg', :versioning, :build] d
 end
 
 task :default do
-  %w|net20 MonoAndroid10 Xamarin.iOS10|.each do |fw|
+  %w|main MonoAndroid10 Xamarin.iOS10|.each do |fw|
 	Rake::Task["create_nuget_#{fw}"].invoke
   end
 end
