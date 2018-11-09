@@ -55,9 +55,7 @@ nugets_pack 'create_nuget_main' => ['build/pkg', :versioning, :build] do |p|
   end
 
   p.with_package do |p|
-    p.add_file 'src/Zip/bin/Release/DotNetZip.dll', 'lib/net20'
-    p.add_file 'src/Zip/bin/Release/DotNetZip.xml', 'lib/net20'
-    p.add_file 'src/Zip NetStandard/bin/Release/netstandard2.0/DotNetZip.NetStandard.dll', 'lib/netstandard20'
+    p.add_file '../Zip NetStandard/bin/Release/netstandard2.0/DotNetZip.NetStandard.dll', 'lib/netstandard20'
   end
   
   p.no_project_dependencies
