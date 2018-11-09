@@ -35,6 +35,7 @@ directory 'build/pkg'
 
 desc "Pack the standard Zip library"
 nugets_pack 'create_nuget_main' => ['build/pkg', :versioning, :build] do |p|
+  p.target = 'net20'
   p.configuration = 'Release'
   p.files         = FileList['src/Zip/*.csproj']
   p.out           = 'build/pkg'
