@@ -45,7 +45,7 @@ nugets_pack 'create_nuget_net20' => ['build/pkg', :versioning, :build] do |p|
   p.copyright          = 'Dino Chiesa'
   p.release_notes      = "Full version: #{ENV['BUILD_VERSION']}."
 
-  #p.target_framework   = 'net20'
+  p.target_framework   = 'net20'
   p.configuration      = 'Release'
   p.files              = FileList['src/Zip/*.csproj']
   p.output             = 'build/pkg'
