@@ -255,9 +255,43 @@ namespace Ionic.Zip.Tests.Split
 
 
         [TestMethod]
-        [Timeout(90 * 60*1000)]
+        [Timeout(90 * 60 * 1000)]
         public void Create_LargeSegmentedArchive()
         {
+            Test_LargeSegmentedArchive(
+                minFileSize: 420 * 1024 * 1024,
+                minFilesCount: 5,
+                // segmentSize32Bit: 4 * 1024 * 1024);
+                // segmentSize32Bit: 80 * 1024 * 1024);
+                segmentSize32Bit: 120 * 1024 * 1024);
+        }
+
+
+
+        [TestMethod]
+        [Timeout(90 * 60 * 1000)]
+        public void Create_LargeSegmentedArchiveWithOver32bitSegmentSize()
+        {
+            Test_LargeSegmentedArchive(
+                minFileSize: 420 * 1024 * 1024,
+                minFilesCount: 10,
+                segmentSize64Bit: 3L * 1024 * 1024 * 1024);
+        }
+
+
+
+        public void Test_LargeSegmentedArchive(
+            int minFileSize,
+            int minFilesCount,
+            int? segmentSize32Bit = null,
+            long? segmentSize64Bit = null)
+        {
+            if ((segmentSize32Bit.HasValue && segmentSize64Bit.HasValue)
+                || (!segmentSize32Bit.HasValue && !segmentSize64Bit.HasValue))
+            {
+                Assert.Fail("A single variable, either segmentSize32Bit or segmentSize64Bit has to specified.");
+            }
+
             // There was a claim that large archives (around or above
             // 1gb) did not work well with archive splitting.  This test
             // covers that case.
@@ -269,7 +303,7 @@ namespace Ionic.Zip.Tests.Split
             string zipFileToCreate = Path.Combine(parentDir,
                                                   "Create_LargeSegmentedArchive.zip");
 #else
-            string zipFileToCreate = Path.Combine(TopLevelDir, "Create_LargeSegmentedArchive.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "Test_LargeSegmentedArchive.zip");
 #endif
             TestContext.WriteLine("Creating file {0}", zipFileToCreate);
 
@@ -278,20 +312,16 @@ namespace Ionic.Zip.Tests.Split
             // speed.
             string cacheFile = Path.Combine(TopLevelDir, "cacheFile.txt");
 
-            // int maxSegSize = 4*1024*1024;
             // int sizeBase =   20 * 1024 * 1024;
             // int sizeRandom = 1 * 1024 * 1024;
             // int numFiles = 3;
 
-            // int maxSegSize = 80*1024*1024;
             // int sizeBase =   320 * 1024 * 1024;
             // int sizeRandom = 20 * 1024 * 1024 ;
             // int numFiles = 5;
 
-            int maxSegSize = 120*1024*1024;
-            int sizeBase =   420 * 1024 * 1024;
             int sizeRandom = 20 * 1024 * 1024;
-            int numFiles = _rnd.Next(5) + 11;
+            int numFiles = _rnd.Next(5) + minFilesCount;
 
             TestContext.WriteLine("The zip will contain {0} files", numFiles);
 
@@ -339,9 +369,10 @@ namespace Ionic.Zip.Tests.Split
                         }
                         else
                         {
-                            sz = sizeBase + _rnd.Next(sizeRandom);
-                            input = new Ionic.Zip.Tests.Utilities.RandomTextInputStream((int)sz);
-                            cache = File.Create(cacheFile);
+                            sz = minFileSize + _rnd.Next(sizeRandom);
+                            // input = new Ionic.Zip.Tests.Utilities.RandomTextInputStream((int)sz);
+                            input = new Ionic.Zip.Tests.Utilities.RandomBytesInputStream((int)sz);
+                            // cache = File.Create(cacheFile);
                         }
                         _txrx.Send(String.Format("pb 2 max {0}", sz));
                         _txrx.Send("pb 2 value 0");
@@ -430,7 +461,15 @@ namespace Ionic.Zip.Tests.Split
                 zip.StatusMessageTextWriter = sw;
                 zip.BufferSize = 256 * 1024;
                 zip.CodecBufferSize = 128 * 1024;
-                zip.MaxOutputSegmentSize = maxSegSize;
+                if (segmentSize32Bit.HasValue)
+                {
+                    zip.MaxOutputSegmentSize = segmentSize32Bit.Value;
+                }
+                else
+                {
+                    zip.MaxOutputSegmentSize64 = segmentSize64Bit.Value;
+                }
+
                 zip.SaveProgress += sp;
 
                 for (int i = 0; i < numFiles; i++)
@@ -445,7 +484,7 @@ namespace Ionic.Zip.Tests.Split
             }
 
 #if REMOTE_FILESYSTEM
-            if (((long)numSegs*maxSegSize) < (long)(1024*1024*1024L))
+            if (((long)numSegs*zip.MaxOutputSegmentSize64) < (long)(1024*1024*1024L))
             {
                 _FilesToRemove.Remove(parentDir);
                 Assert.IsTrue(false, "There were not enough segments in that zip.  numsegs({0}) maxsize({1}).", numSegs, maxSegSize);

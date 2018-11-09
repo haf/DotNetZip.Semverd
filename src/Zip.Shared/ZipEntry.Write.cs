@@ -189,7 +189,7 @@ namespace Ionic.Zip
 
             // Disk number start
             bool segmented = (this._container.ZipFile != null) &&
-                (this._container.ZipFile.MaxOutputSegmentSize != 0);
+                (this._container.ZipFile.MaxOutputSegmentSize64 != 0);
             if (segmented) // workitem 13915
             {
                 // Emit nonzero disknumber only if saving segmented archive.

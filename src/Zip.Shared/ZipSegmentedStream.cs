@@ -49,7 +49,7 @@ namespace Ionic.Zip
         private string _currentTempName;
         private uint _currentDiskNumber;
         private uint _maxDiskNumber;
-        private int _maxSegmentSize;
+        private long _maxSegmentSize;
         private System.IO.Stream _innerStream;
 
         // **Note regarding exceptions:
@@ -88,8 +88,12 @@ namespace Ionic.Zip
             return zss;
         }
 
-
         public static ZipSegmentedStream ForWriting(string name, int maxSegmentSize)
+        {
+            return ForWriting(name, (long)maxSegmentSize);
+        }
+
+        public static ZipSegmentedStream ForWriting(string name, long maxSegmentSize)
         {
             ZipSegmentedStream zss = new ZipSegmentedStream()
                 {
@@ -357,11 +361,22 @@ namespace Ionic.Zip
             {
                 while (_innerStream.Position + count > _maxSegmentSize)
                 {
-                    int c = unchecked(_maxSegmentSize - (int)_innerStream.Position);
-                    _innerStream.Write(buffer, offset, c);
+                    long c = _maxSegmentSize - _innerStream.Position;
+                    int cnt;
+                    if (c > buffer.Length)
+                    {
+                        cnt = buffer.Length;
+                    }
+                    else
+                    {
+                        cnt = (int)c;
+                    }
+
+                    _innerStream.Write(buffer, offset, cnt);
+
                     _SetWriteStream(1);
-                    count -= c;
-                    offset += c;
+                    count -= cnt;
+                    offset += cnt;
                 }
             }
 

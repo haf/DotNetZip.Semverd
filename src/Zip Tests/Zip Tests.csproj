@@ -72,8 +72,7 @@
     <Reference Include="Ionic.IO.JunctionPoint, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Zip.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\GAC\GAC_MSIL\Microsoft.VisualStudio.Zip.9.0\9.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.Zip.9.0.dll</HintPath>
+      <HintPath>..\packages\Microsoft.VisualStudio.Zip.9.0.9.0\lib\Microsoft.VisualStudio.Zip.9.0.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -85,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Compatibility.cs" />
     <Compile Include="ErrorTests.cs" />
+    <Compile Include="RandomBytesInputStream.cs" />
     <Compile Include="SplitArchives.cs" />
     <Compile Include="ExtendedTests.cs" />
     <Compile Include="LongRunning.cs" />
@@ -138,6 +138,7 @@
     <Content Include="Resources\Ionic.CopyData.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config" />
     <None Include="Resources\Ionic.IO.JunctionPoint.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
