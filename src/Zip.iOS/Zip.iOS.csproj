@@ -11,6 +11,8 @@
     <RootNamespace>Ionic.Zip</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>DotNetZip</AssemblyName>
+    <Id>DotNetZip.iOS</Id>
+    <TargetFramework>Xamarin.iOS10</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

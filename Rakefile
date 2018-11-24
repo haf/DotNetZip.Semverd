@@ -31,18 +31,22 @@ end
 
 directory 'build/pkg'
 
+paket = 'buildsupport/paket.exe'
+file paket do
+  dir = File.dirname(paket)
+  sh "dotnet tool install Paket --version 5.190.0 --tool-path #{dir}"
+end
+
 #I'm sorry
 
 desc "Pack the standard Zip library"
-nugets_pack 'create_nuget_netfx' => ['build/pkg', :versioning, :build] do |p|
-  p.target = 'net40'
+nugets_pack 'create_nuget_netfx' => ['build/pkg', :versioning, :build, paket] do |p|
   p.configuration = 'Release'
   p.files         = FileList['src/Zip/*.csproj']
-  p.out           = 'build/pkg'
-  p.exe           = 'buildsupport/NuGet.exe'
-  
-  p.with_metadata do |m|
-    m.id            = 'DotNetZip'
+  p.output        = 'build/pkg'
+  p.exe           = paket
+
+  p.metadata.instance_eval do |m|
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
     m.authors       = 'Henrik/Dino Chisa'
@@ -54,20 +58,16 @@ nugets_pack 'create_nuget_netfx' => ['build/pkg', :versioning, :build] do |p|
     m.license_url   = "https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE"
     m.project_url   = "https://github.com/haf/DotNetZip.Semverd"
   end
-  
-  p.no_project_dependencies
 end
 
 desc "Pack the Android library"
-nugets_pack 'create_nuget_MonoAndroid10' => ['build/pkg', :versioning, :build] do |p|
-  p.target = 'MonoAndroid10'
+nugets_pack 'create_nuget_MonoAndroid10' => ['build/pkg', :versioning, :build, paket] do |p|
   p.configuration = 'Release'
   p.files         = FileList['src/Zip.Android/*.csproj']
-  p.out           = 'build/pkg'
-  p.exe           = 'buildsupport/NuGet.exe'
-  
-  p.with_metadata do |m|
-    m.id            = 'DotNetZip.Android'
+  p.output        = 'build/pkg'
+  p.exe           = paket
+
+  p.metadata.instance_eval do |m|
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
     m.authors       = 'Henrik/Dino Chisa'
@@ -79,20 +79,16 @@ nugets_pack 'create_nuget_MonoAndroid10' => ['build/pkg', :versioning, :build] d
     m.license_url   = "https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE"
     m.project_url   = "https://github.com/haf/DotNetZip.Semverd"
   end
-  
-  p.no_project_dependencies
 end
 
 desc "Pack the iOS library"
-nugets_pack 'create_nuget_Xamarin.iOS10' => ['build/pkg', :versioning, :build] do |p|
-  p.target = 'Xamarin.iOS10'
+nugets_pack 'create_nuget_Xamarin.iOS10' => ['build/pkg', :versioning, :build, paket] do |p|
   p.configuration = 'Release'
   p.files         = FileList['src/Zip.iOS/*.csproj']
-  p.out           = 'build/pkg'
-  p.exe           = 'buildsupport/NuGet.exe'
+  p.output        = 'build/pkg'
+  p.exe           = paket
   
-  p.with_metadata do |m|
-    m.id            = 'DotNetZip.iOS'
+  p.metadata.instance_eval do |m|
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
     m.authors       = 'Henrik/Dino Chisa'
@@ -104,8 +100,6 @@ nugets_pack 'create_nuget_Xamarin.iOS10' => ['build/pkg', :versioning, :build] d
     m.license_url   = "https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE"
     m.project_url   = "https://github.com/haf/DotNetZip.Semverd"
   end
-  
-  p.no_project_dependencies
 end
 
 task :default do
