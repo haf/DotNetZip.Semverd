@@ -353,9 +353,7 @@ namespace Ionic.Zip
             _leaveUnderlyingStreamOpen = leaveOpen;
             Strategy = Ionic.Zlib.CompressionStrategy.Default;
             _name = name ?? "(stream)";
-#if !NETCF
             ParallelDeflateThreshold = -1L;
-#endif
         }
 
 
@@ -1030,7 +1028,6 @@ namespace Ionic.Zip
         }
 
 
-#if !NETCF
         /// <summary>
         ///   The size threshold for an entry, above which a parallel deflate is used.
         /// </summary>
@@ -1195,7 +1192,6 @@ namespace Ionic.Zip
                 _maxBufferPairs = value;
             }
         }
-#endif
 
 
         private void InsureUniqueEntry(ZipEntry ze1)
@@ -1513,11 +1509,7 @@ namespace Ionic.Zip
                     if (cs != null)
                     {
                         wrappedStream = cs.WrappedStream;
-#if NETCF
-                    cs.Close();
-#else
                         cs.Dispose();
-#endif
                     }
                     else
                     {
@@ -1526,11 +1518,7 @@ namespace Ionic.Zip
 
                     if (!_leaveUnderlyingStreamOpen)
                     {
-#if NETCF
-                    wrappedStream.Close();
-#else
                         wrappedStream.Dispose();
-#endif
                     }
                     _outputStream = null;
                 }
@@ -1632,11 +1620,9 @@ namespace Ionic.Zip
         private bool _needToWriteEntryHeader;
         private string _name;
         private bool _DontIgnoreCase;
-#if !NETCF
         internal Ionic.Zlib.ParallelDeflateOutputStream ParallelDeflater;
         private long _ParallelDeflateThreshold;
         private int _maxBufferPairs = 16;
-#endif
 
         // **Note regarding exceptions:
 
@@ -1718,7 +1704,6 @@ namespace Ionic.Zip
             }
         }
 
-#if !NETCF
         public Ionic.Zlib.ParallelDeflateOutputStream ParallelDeflater
         {
             get
@@ -1750,7 +1735,6 @@ namespace Ionic.Zip
                 return _zos.ParallelDeflateMaxBufferPairs;
             }
         }
-#endif
 
         public int CodecBufferSize
         {

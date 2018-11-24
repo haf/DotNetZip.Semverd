@@ -404,7 +404,7 @@ namespace Ionic.Zip
         /// <remarks>
         ///   It will show up, for example, while viewing properties of the file in
         ///   Windows Explorer.  You can use any arbitrary string, but typically you
-        ///   want something like "Copyright © Dino Chiesa 2011".
+        ///   want something like "Copyright ï¿½ Dino Chiesa 2011".
         /// </remarks>
         ///
         public String Copyright
@@ -579,8 +579,7 @@ namespace Ionic.Zip
         /// </para>
         ///
         /// <para>
-        /// NB: This method is not available in the version of DotNetZip build for
-        /// the .NET Compact Framework, nor in the "Reduced" DotNetZip library.
+        /// NB: This method is not available in the "Reduced" DotNetZip library.
         /// </para>
         ///
         /// </remarks>
@@ -908,7 +907,7 @@ namespace Ionic.Zip
                         // workitem
                         string copyright =
                             (String.IsNullOrEmpty(options.Copyright))
-                            ? "Extractor: Copyright © Dino Chiesa 2008-2011"
+                            ? "Extractor: Copyright ï¿½ Dino Chiesa 2008-2011"
                             : options.Copyright.Replace("\"", "");
 
                         if (!String.IsNullOrEmpty(options.ProductName))

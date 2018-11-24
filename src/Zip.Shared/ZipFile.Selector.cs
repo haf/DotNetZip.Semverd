@@ -1308,7 +1308,6 @@ namespace Ionic
         }
     }
 
-#if !SILVERLIGHT
     internal partial class AttributesCriterion : SelectionCriterion
     {
         internal override bool Evaluate(Ionic.Zip.ZipEntry entry)
@@ -1317,7 +1316,6 @@ namespace Ionic
             return _Evaluate(fileAttrs);
         }
     }
-#endif
 
     internal partial class CompoundCriterion : SelectionCriterion
     {

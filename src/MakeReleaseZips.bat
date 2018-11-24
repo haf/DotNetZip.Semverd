@@ -62,8 +62,6 @@ if ERRORLEVEL 1 (
 
  call :MakeRuntimeRedist
 
- call :MakeSilverlightRedist
-
  call :MakeZipUtils
 
  call :MakeUtilsMsi
@@ -222,57 +220,15 @@ goto :EOF
 
   @REM --------------------------------------------
 
-  %zipit% %rzipfile%  -d zip-v%version%-CompactFramework  -s Readme.txt  "DotNetZip CF Library v%version% packed %stamp%. This assembly is built for the Compact Framework v2.0 or later, and includes all the classes in the Ionic.Zip namespace, as well as all the classes in the Ionic.Zlib namespace. Use this library if you want to manipulate ZIP files in smart-device applications, and if you want to use ZLIB compression directly, or if you want to use the compressing stream classes like GZipStream, DeflateStream, or ZlibStream."
-
-  %zipit% %rzipfile%  -d zip-v%version%-CompactFramework\Debug    -D "Zip CF\bin\Debug"   Ionic.Zip.CF.dll Ionic.Zip.CF.pdb
-  %zipit% %rzipfile%  -d zip-v%version%-CompactFramework\Release  -D "Zip CF\bin\Release" Ionic.Zip.CF.dll
-
-  @REM --------------------------------------------
-
-  %zipit% %rzipfile%  -d zip-v%version%-Silverlight  -s Readme.txt  "Ionic.Zip Silverlight v%version% packed %stamp%. This is the Ionic.Zip library packaged for Silverlight 3.0 or later.  Use this library if you want to manipulate ZIP files from within Silverlight applications."
-
-  %zipit% %rzipfile%  -d zip-v%version%-Silverlight\Debug    -D "Zip SL\bin\Debug"    Ionic.Zip.dll Ionic.Zip.pdb Ionic.Zip.XML
-  %zipit% %rzipfile%  -d zip-v%version%-Silverlight\Release  -D "Zip SL\bin\Release"  Ionic.Zip.dll
-
-  @REM --------------------------------------------
-
   %zipit% %rzipfile%  -d zlib-v%version%  -s Readme.txt  "Ionic.Zlib v%version% packed %stamp%.  This is the Ionic.Zlib assembly; it includes only the classes in the Ionic.Zlib namespace. Use this library if you want to take advantage of ZLIB compression directly, or if you want to use the compressing stream classes like GZipStream, DeflateStream, or ZlibStream."
   %zipit% %rzipfile%  -d zlib-v%version%\Debug    -D Zlib\bin\Debug    Ionic.Zlib.dll Ionic.Zlib.pdb Ionic.Zlib.XML
   %zipit% %rzipfile%  -d zlib-v%version%\Release  -D Zlib\bin\Release  Ionic.Zlib.dll
 
   @REM --------------------------------------------
 
-  %zipit% %rzipfile%  -d zlib-v%version%-CompactFramework  -s Readme.txt  "Ionic.Zlib CF v%version% packed %stamp%. This is the Ionic.Zlib library packaged for the .NET Compact Framework v2.0 or later.  Use this library if you want to take advantage of ZLIB compression directly from within Smart device applications, using the compressing stream classes like GZipStream, DeflateStream, or ZlibStream."
-
-  %zipit% %rzipfile%  -d zlib-v%version%-CompactFramework\Debug    -D "Zlib CF\bin\Debug"    Ionic.Zlib.CF.dll Ionic.Zlib.CF.pdb Ionic.Zlib.CF.XML
-  %zipit% %rzipfile%  -d zlib-v%version%-CompactFramework\Release  -D "Zlib CF\bin\Release"  Ionic.Zlib.CF.dll
-
-  @REM --------------------------------------------
-
-  %zipit% %rzipfile%  -d zlib-v%version%-Silverlight  -s Readme.txt  "Ionic.Zlib Silverlight v%version% packed %stamp%. This is the Ionic.Zlib library packaged for Silverlight 3.0 or later.  Use this library if you want to take advantage of ZLIB compression directly from within Silverlight applications, using the compressing stream classes like GZipStream, DeflateStream, or ZlibStream."
-
-  %zipit% %rzipfile%  -d zlib-v%version%-Silverlight\Debug    -D "Zlib SL DLL\bin\Debug"    Ionic.Zlib.dll Ionic.Zlib.pdb Ionic.Zlib.XML
-  %zipit% %rzipfile%  -d zlib-v%version%-Silverlight\Release  -D "Zlib SL DLL\bin\Release"  Ionic.Zlib.dll
-
-  @REM --------------------------------------------
-
   %zipit% %rzipfile%  -d bzip2-v%version%  -s Readme.txt  "Ionic.BZip2 v%version% packed %stamp%.  This is the Ionic.BZip2 assembly; it includes only the classes in the Ionic.BZip2 namespace. Use this library if you want to take advantage of BZip2 compression directly, via the compressing stream classes like BZip2OutputStream, or BZip2InputStream."
   %zipit% %rzipfile%  -d bzip2-v%version%\Debug    -D "BZip2\bin\Debug"    Ionic.BZip2.dll Ionic.BZip2.pdb Ionic.BZip2.XML
   %zipit% %rzipfile%  -d bzip2-v%version%\Release  -D "BZip2\bin\Release"  Ionic.BZip2.dll
-
-  @REM --------------------------------------------
-
-  %zipit% %rzipfile%  -d bzip2-v%version%-CompactFramework  -s Readme.txt  "Ionic.BZip2 CF v%version% packed %stamp%. This is the Ionic.BZip2 library packaged for the .NET Compact Framework v2.0 or later.  Use this library if you want to compress or decompress using BZip2, via the stream classes  BZip2InputStream and BZip2OutputStream."
-
-  %zipit% %rzipfile%  -d bzip2-v%version%-CompactFramework\Debug    -D "BZip2 CF\bin\Debug"    Ionic.BZip2.CF.dll Ionic.BZip2.CF.pdb Ionic.BZip2.CF.XML
-  %zipit% %rzipfile%  -d bzip2-v%version%-CompactFramework\Release  -D "BZip2 CF\bin\Release"  Ionic.BZip2.CF.dll
-
-  @REM --------------------------------------------
-
-  %zipit% %rzipfile%  -d bzip2-v%version%-Silverlight  -s Readme.txt  "Ionic.BZip2 Silverlight v%version% packed %stamp%. This is the Ionic.BZip2 library packaged for Silverlight 3.0 or later.  Use this library if you want to take advantage of BZip2 compression directly from within Silverlight applications, using the stream classes like BZip2InputStream, or BZip2OutputStream."
-
-  %zipit% %rzipfile%  -d bzip2-v%version%-Silverlight\Debug    -D "BZip2 SL DLL\bin\Debug"    Ionic.BZip2.dll Ionic.BZip2.pdb Ionic.BZip2.XML
-  %zipit% %rzipfile%  -d bzip2-v%version%-Silverlight\Release  -D "BZip2 SL DLL\bin\Release"  Ionic.BZip2.dll
 
   @REM --------------------------------------------
 
@@ -324,46 +280,12 @@ goto :EOF
 
   %zipit% %rzipfile% -d zip-v%version%-Reduced  -s Readme.txt  "DotNetZip Reduced Redistributable Library v%version% packed %stamp%"   "Zip Reduced\bin\Release\Ionic.Zip.Reduced.dll"
 
-  %zipit% %rzipfile% -d zip-v%version%-CompactFramework -s Readme.txt "DotNetZip Library for .NET Compact Framework v%version% packed %stamp%"   "Zip CF\bin\Release\Ionic.Zip.CF.dll"
-
   %zipit% %rzipfile% -d zlib-v%version% -s Readme.txt  "Ionic.Zlib Redistributable Library v%version% packed %stamp%"  Zlib\bin\Release\Ionic.Zlib.dll
-
-  %zipit% %rzipfile% -d zlib-v%version%-CompactFramework -s Readme.txt  "Ionic.Zlib Library for .NET Compact Framework v%version% packed %stamp%"  "Zlib CF\bin\Release\Ionic.Zlib.CF.dll"
 
   %zipit% %rzipfile% -d bzip2-v%version% -s Readme.txt  "Ionic.BZip2 Redistributable Library v%version% packed %stamp%"  BZip2\bin\Release\Ionic.BZip2.dll
 
-  %zipit% %rzipfile% -d bzip2-v%version%-CompactFramework -s Readme.txt "Ionic.BZip2 Library for .NET Compact Framework v%version% packed %stamp%" "BZip2 CF\bin\Release\Ionic.BZip2.CF.dll"
-
 goto :EOF
 --------------------------------------------
-
-
-
---------------------------------------------
-:MakeSilverlightRedist
-
-  @REM example output zipfile name:  DotNetZipLib-Silverlight-v1.9.zip
-
-  echo.
-  echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  echo.
-  echo Making the silverlight redistributable zip...
-  echo.
-
-  set zipfile=DotNetZipLib-Silverlight-v%version%.zip
-  set rzipfile=%releaseDir%\%zipfile%
-
-  echo zipfile is %rzipfile%
-
-  %zipit% %rzipfile%    -s Contents.txt "This is the Silverlight redistributable package for DotNetZip v%version%.  Packed %stamp%.  There is an assembly for BZip2, one for ZLIB/Deflate/GZIP, and one for Zip, in the Release folder, and debug builds of the same in the Debug folder, for a total of 6 DLLs.  You need to reference exactly one of those DLLs; which one depends on your application requirements. If you have any questions, please check the forums on http://dotnetzip.codeplex.com/discussions "   -s DotNetZip-is-DonationWare.txt  "DotNetZip is donationware. Consider donating. It's for a good cause. http://cheeso.members.winisp.net/DotNetZipDonate.aspx"   License.txt License.zlib.txt License.bzip2.txt
-
-  %zipit% %rzipfile%  -d Release   "Zip SL\bin\Release\Ionic.Zip.dll"  "Zlib SL DLL\bin\Release\Ionic.Zlib.dll"  "BZip2 SL DLL\bin\Release\Ionic.BZip2.dll"
-
-  %zipit% %rzipfile%  -d Debug  -D "Zip SL\bin\Debug"  Ionic.Zip.dll  Ionic.Zip.xml Ionic.Zip.pdb -D "Zlib SL DLL\bin\Debug"  Ionic.Zlib.dll Ionic.Zlib.xml Ionic.Zlib.pdb -D "BZip2 SL DLL\bin\Debug"  Ionic.BZip2.dll  Ionic.BZip2.xml  Ionic.BZip2.pdb
-
-goto :EOF
---------------------------------------------
-
 
 
 

@@ -246,11 +246,7 @@ namespace Ionic.Zip
         {
             if (_innerStream != null)
             {
-#if NETCF
-                _innerStream.Close();
-#else
                 _innerStream.Dispose();
-#endif
             }
 
             if (CurrentSegment + 1 == _maxDiskNumber)
@@ -309,11 +305,7 @@ namespace Ionic.Zip
         {
             if (_innerStream != null)
             {
-#if NETCF
-                _innerStream.Close();
-#else
                 _innerStream.Dispose();
-#endif
                 if (File.Exists(CurrentName))
                     File.Delete(CurrentName);
                 File.Move(_currentTempName, CurrentName);
@@ -401,8 +393,6 @@ namespace Ionic.Zip
             if (diskNumber == CurrentSegment)
             {
                 var x =_innerStream.Seek(offset, SeekOrigin.Begin);
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_innerStream);
                 return x;
             }
 
@@ -411,11 +401,7 @@ namespace Ionic.Zip
             // First, close the current segment, and then remove it.
             if (_innerStream != null)
             {
-#if NETCF
-                _innerStream.Close();
-#else
                 _innerStream.Dispose();
-#endif
                 if (File.Exists(_currentTempName))
                     File.Delete(_currentTempName);
             }
@@ -453,9 +439,6 @@ namespace Ionic.Zip
             _innerStream = new FileStream(_currentTempName, FileMode.Open);
 
             var r =  _innerStream.Seek(offset, SeekOrigin.Begin);
-
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_innerStream);
 
             return r;
         }
@@ -515,8 +498,6 @@ namespace Ionic.Zip
         public override long Seek(long offset, System.IO.SeekOrigin origin)
         {
             var x = _innerStream.Seek(offset, origin);
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_innerStream);
             return x;
         }
 
@@ -543,11 +524,7 @@ namespace Ionic.Zip
             {
                 if (_innerStream != null)
                 {
-#if NETCF
-                    _innerStream.Close();
-#else
                     _innerStream.Dispose();
-#endif
                     //_innerStream = null;
                     if (rwMode == RwMode.Write)
                     {

@@ -39,8 +39,6 @@ namespace Ionic.Zip
             // workitem 8098: ok (restore)
             long posn = this.ArchiveStream.Position;
             this.ArchiveStream.Seek(this._RelativeOffsetOfLocalHeader, SeekOrigin.Begin);
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(this.ArchiveStream);
 
             byte[] block = new byte[30];
             this.ArchiveStream.Read(block, 0, block.Length);
@@ -50,15 +48,11 @@ namespace Ionic.Zip
 
             // workitem 8098: ok (relative)
             this.ArchiveStream.Seek(filenameLength, SeekOrigin.Current);
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(this.ArchiveStream);
 
             ProcessExtraField(this.ArchiveStream, extraFieldLength);
 
             // workitem 8098: ok (restore)
             this.ArchiveStream.Seek(posn, SeekOrigin.Begin);
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(this.ArchiveStream);
             _readExtraDepth--;
         }
 
@@ -85,8 +79,6 @@ namespace Ionic.Zip
                 // Anything else is a surprise.
 
                 ze.ArchiveStream.Seek(-4, SeekOrigin.Current); // unread the signature
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(ze.ArchiveStream);
                 if (ZipEntry.IsNotValidZipDirEntrySig(signature) && (signature != ZipConstants.EndOfCentralDirectorySignature))
                 {
                     throw new BadReadException(String.Format("  Bad signature (0x{0:X8}) at position  0x{1:X8}", signature, ze.ArchiveStream.Position));
@@ -146,8 +138,7 @@ namespace Ionic.Zip
                 ze.AlternateEncodingUsage = ZipOption.Always;
             }
 
-            // need to use this form of GetString() for .NET CF
-            ze._FileNameInArchive = ze.AlternateEncoding.GetString(block, 0, block.Length);
+            ze._FileNameInArchive = ze.AlternateEncoding.GetString(block);
 
             // workitem 6898
             if (ze._FileNameInArchive.EndsWith("/")) ze.MarkAsDirectory();
@@ -242,8 +233,6 @@ namespace Ionic.Zip
                         // the ZipEntryDataDescriptorSignature.
                         // (12 bytes for the CRC, Comp and Uncomp size.)
                         ze.ArchiveStream.Seek(-12, SeekOrigin.Current);
-                        // workitem 10178
-                        Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(ze.ArchiveStream);
 
                         // Adjust the size to account for the false signature read in
                         // FindSignature().
@@ -254,8 +243,6 @@ namespace Ionic.Zip
                 // seek back to previous position, to prepare to read file data
                 // workitem 8098: ok (restore)
                 ze.ArchiveStream.Seek(posn, SeekOrigin.Begin);
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(ze.ArchiveStream);
 
                 ze._LengthOfTrailer += ze._InputUsesZip64 ? 24 : 16;  // bytes including sig, CRC, Comp and Uncomp sizes
             }
@@ -370,8 +357,6 @@ namespace Ionic.Zip
 
             // seek past the data without reading it. We will read on Extract()
             s.Seek(entry._CompressedFileDataSize + entry._LengthOfTrailer, SeekOrigin.Current);
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(s);
 
             // ReadHeader moves the file pointer to the end of the entry header,
             // as well as any encryption header.
@@ -403,8 +388,6 @@ namespace Ionic.Zip
             if (datum != ZipConstants.PackedToRemovableMedia)
             {
                 s.Seek(-4, SeekOrigin.Current); // unread the block
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(s);
             }
         }
 
@@ -433,25 +416,16 @@ namespace Ionic.Zip
                     else
                     {
                         s.Seek(-12, SeekOrigin.Current); // unread the three blocks
-
-                        // workitem 10178
-                        Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(s);
                     }
                 }
                 else
                 {
                     s.Seek(-8, SeekOrigin.Current); // unread the two blocks
-
-                    // workitem 10178
-                    Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(s);
                 }
             }
             else
             {
                 s.Seek(-4, SeekOrigin.Current); // unread the block
-
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(s);
             }
         }
 

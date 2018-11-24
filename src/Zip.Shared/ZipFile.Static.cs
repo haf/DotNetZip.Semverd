@@ -42,7 +42,7 @@ namespace Ionic.Zip
 
                 }
             }
-#elif !WINDOWS_PHONE_APP
+#else
             if (ibm437 == null)
             {
                 try

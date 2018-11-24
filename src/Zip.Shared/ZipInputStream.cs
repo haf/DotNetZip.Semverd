@@ -578,8 +578,6 @@ namespace  Ionic.Zip
                 int CrcResult = _crcStream.Crc;
                 _currentEntry.VerifyCrcAfterExtract(CrcResult, _currentEntry.Encryption, _currentEntry._Crc32, _currentEntry.ArchiveStream, _currentEntry.UncompressedSize);
                 _inputStream.Seek(_endOfEntry, SeekOrigin.Begin);
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_inputStream);
             }
 
             return n;
@@ -630,8 +628,6 @@ namespace  Ionic.Zip
                 if (d == -1) return null;
                 // back up 4 bytes: ReadEntry assumes the file pointer is positioned before the entry signature
                 _inputStream.Seek(-4, SeekOrigin.Current);
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_inputStream);
             }
             // workitem 10923
             else if (_firstEntry)
@@ -639,7 +635,6 @@ namespace  Ionic.Zip
                 // we've already read one entry.
                 // Seek to the end of it.
                 _inputStream.Seek(_endOfEntry, SeekOrigin.Begin);
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_inputStream);
             }
 
             _currentEntry = ZipEntry.ReadEntry(_container, !_firstEntry);
@@ -699,11 +694,7 @@ namespace  Ionic.Zip
 
                 if (!_leaveUnderlyingStreamOpen)
                 {
-#if NETCF
-                    _inputStream.Close();
-#else
                     _inputStream.Dispose();
-#endif
                 }
             }
             _closed= true;
@@ -788,10 +779,7 @@ namespace  Ionic.Zip
         public override long Seek(long offset, SeekOrigin origin)
         {
             _findRequired= true;
-            var x = _inputStream.Seek(offset, origin);
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_inputStream);
-            return x;
+            return _inputStream.Seek(offset, origin);
         }
 
         /// <summary>

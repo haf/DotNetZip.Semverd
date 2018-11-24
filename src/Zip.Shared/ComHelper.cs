@@ -35,9 +35,7 @@ namespace Ionic.Zip
     /// </summary>
     [System.Runtime.InteropServices.GuidAttribute("ebc25cf6-9120-4283-b972-0e5520d0000F")]
     [System.Runtime.InteropServices.ComVisible(true)]
-#if !NETCF
     [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDispatch)]
-#endif
 
     public class ComHelper
     {
@@ -65,7 +63,6 @@ namespace Ionic.Zip
             return ZipFile.IsZipFile(filename, true);
         }
 
-#if !NETCF
         /// <summary>
         ///  A wrapper for <see cref="ZipFile.CheckZip(string)">ZipFile.CheckZip(string)</see>
         /// </summary>
@@ -99,7 +96,6 @@ namespace Ionic.Zip
         {
             ZipFile.FixZipDirectory(filename);
         }
-#endif
 
         /// <summary>
         ///  A wrapper for <see cref="ZipFile.LibraryVersion">ZipFile.LibraryVersion</see>

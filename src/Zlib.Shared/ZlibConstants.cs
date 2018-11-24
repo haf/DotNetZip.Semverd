@@ -113,11 +113,8 @@ namespace Ionic.Zlib
         /// <summary>
         /// The size of the working buffer used in the ZlibCodec class.
         /// </summary>
-#if NETCF        
-        public const int WorkingBufferSizeDefault = 8192;
-#else
         public const int WorkingBufferSizeDefault = 16384; 
-#endif
+
         /// <summary>
         /// The minimum size of the working buffer used in the ZlibCodec class.
         /// </summary>

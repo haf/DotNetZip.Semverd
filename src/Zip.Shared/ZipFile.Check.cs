@@ -20,8 +20,8 @@
 // ------------------------------------------------------------------
 //
 // This module defines the methods for doing Checks on zip files.
-// These are not necessary to include in the Reduced or CF
-// version of the library.
+// These are not necessary to include in the Reduced version
+// of the library.
 //
 // ------------------------------------------------------------------
 //
@@ -50,8 +50,7 @@ namespace Ionic.Zip
         /// <para> This method may take a long time to run for large zip files.  </para>
         ///
         /// <para>
-        ///   This method is not supported in the Reduced or Compact Framework
-        ///   versions of DotNetZip.
+        ///   This method is not supported in the Reduced version of DotNetZip.
         /// </para>
         ///
         /// <para>
@@ -95,8 +94,7 @@ namespace Ionic.Zip
         /// </para>
         ///
         /// <para>
-        ///   This method is not supported in the Reduced or Compact
-        ///   Framework versions of DotNetZip.
+        ///   This method is not supported in the Reduced version of DotNetZip.
         /// </para>
         ///
         /// </remarks>

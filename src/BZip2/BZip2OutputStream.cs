@@ -512,14 +512,10 @@ namespace Ionic.BZip2
                 //lock(outputLock)
                 {
                     int tid = System.Threading.Thread.CurrentThread.GetHashCode();
-#if !SILVERLIGHT && !NETCF
                     Console.ForegroundColor = (ConsoleColor) (tid % 8 + 10);
-#endif
                     Console.Write("{0:000} PBOS ", tid);
                     Console.WriteLine(format, varParams);
-#if !SILVERLIGHT && !NETCF
                     Console.ResetColor();
-#endif
                 }
             }
         }
