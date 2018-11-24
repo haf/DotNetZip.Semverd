@@ -60,6 +60,27 @@ nugets_pack 'create_nuget_netfx' => ['build/pkg', :versioning, :build, paket] do
   end
 end
 
+desc "Pack the .NET Standard library"
+nugets_pack 'create_nuget_netstandard' => ['build/pkg', :versioning, :build, paket] do |p|
+  p.configuration = 'Release'
+  p.files         = FileList['src/Zip NetStandard/*.csproj']
+  p.output        = 'build/pkg'
+  p.exe           = paket
+
+  p.metadata.instance_eval do |m|
+    m.version       = ENV['NUGET_VERSION']
+    # of the nuget at least
+    m.authors       = 'Henrik/Dino Chisa'
+    m.description   = 'A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to follow semver to avoid versioning conflicts. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.'
+    m.summary       = 'A library for dealing with zip, bzip and zlib from .Net'
+    m.language      = 'en-GB'
+    m.copyright     = 'Dino Chiesa'
+    m.release_notes = "Full version: #{ENV['BUILD_VERSION']}."
+    m.license_url   = "https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE"
+    m.project_url   = "https://github.com/haf/DotNetZip.Semverd"
+  end
+end
+
 desc "Pack the Android library"
 nugets_pack 'create_nuget_MonoAndroid10' => ['build/pkg', :versioning, :build, paket] do |p|
   p.configuration = 'Release'
@@ -103,7 +124,7 @@ nugets_pack 'create_nuget_Xamarin.iOS10' => ['build/pkg', :versioning, :build, p
 end
 
 task :default do
-  %w|netfx MonoAndroid10 Xamarin.iOS10|.each do |fw|
+  %w|netfx netstandard MonoAndroid10 Xamarin.iOS10|.each do |fw|
     Rake::Task["create_nuget_#{fw}"].invoke
   end
 end
