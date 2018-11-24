@@ -73,9 +73,7 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Zip.9.0.9.0\lib\Microsoft.VisualStudio.Zip.9.0.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>

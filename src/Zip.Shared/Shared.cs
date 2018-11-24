@@ -70,8 +70,8 @@ namespace Ionic.Zip
         /// </para>
         /// <para>
         /// This is most nautrally an extension method for the DateTime class but this
-        /// library is built for .NET 2.0, not for .NET 3.5; This means extension methods
-        /// are a no-no.
+        /// library used to be built for .NET 2.0; This meant extension methods were
+        /// a no-no.
         /// </para>
         /// </remarks>
         /// <param name="source">The DateTime value to round</param>
@@ -576,7 +576,8 @@ namespace Ionic.Zip
         /// </summary>
         /// <remarks>
         /// This could be gracefully handled with an extension attribute, but
-        /// This assembly is built for .NET 2.0, so I cannot use them.
+        /// This assembly used to be built for .NET 2.0, so could not use
+        /// extension methods.
         /// </remarks>
         internal static int ReadWithRetry(System.IO.Stream s, byte[] buffer, int offset, int count, string FileName)
         {

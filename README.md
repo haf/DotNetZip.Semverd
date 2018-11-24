@@ -365,11 +365,7 @@ Pre-requisites to run Applications that use DotNetZip
 -----------------------------------------------------
 
 To run desktop applications that depend on DotNetZip:
- .NET Framework 2.0 or later
-
-
-To run smart device applications that depend on DotNetZip:
-  .NET Compact Framework 2.0 or later
+ .NET Framework 4.0 or later
 
 
 
@@ -798,22 +794,12 @@ You can get it here:
 Building DotNetZip with the .NET SDK
 -------------------------------------
 
-To build the library using the .NET Framework SDK v3.5,
+To build the library using the .NET Framework SDK v4.0,
 
 1. extract the contents of the source zip into a new directory.
 
-2. be sure the .NET 2.0 SDK, .NET 3.5 runtime, and .NET 2.0 runtime
-   directories are on your path.  These are typically
-
-     C:\Program Files\Microsoft.NET\SDK\v2.0\bin
-     c:\windows\Microsoft.NET\Framework\v3.5
-       and
-     c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727
-
-   The .NET 3.5 runtime is necessary because building DotNetZip requires
-   the csc.exe compiler from NET 3.5. (Using DotNetZip from within C#
-   requires the v2.0 csc compiler.)
-
+2. be sure the .NET 4.0 SDK and runtime directories are on your
+   path.
 
 3. Modify the .csproj files in Zip and ZLIB and BZip2 to eliminate
    mention of the Ionic.pfx and Ionic.snk files.

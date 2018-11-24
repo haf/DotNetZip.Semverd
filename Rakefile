@@ -34,8 +34,8 @@ directory 'build/pkg'
 #I'm sorry
 
 desc "Pack the standard Zip library"
-nugets_pack 'create_nuget_net20' => ['build/pkg', :versioning, :build] do |p|
-  p.target = 'net20'
+nugets_pack 'create_nuget_netfx' => ['build/pkg', :versioning, :build] do |p|
+  p.target = 'net40'
   p.configuration = 'Release'
   p.files         = FileList['src/Zip/*.csproj']
   p.out           = 'build/pkg'
@@ -110,7 +110,7 @@ nugets_pack 'create_nuget_Xamarin.iOS10' => ['build/pkg', :versioning, :build] d
 end
 
 task :default do
-  %w|net20 MonoAndroid10 Xamarin.iOS10|.each do |fw|
+  %w|netfx MonoAndroid10 Xamarin.iOS10|.each do |fw|
     Rake::Task["create_nuget_#{fw}"].invoke
   end
 end

@@ -3,7 +3,7 @@
 //
 // This is a command-line tool that creates a self-extracting Zip archive, given a
 // standard zip archive.
-// It requires the .NET Framework 2.0 on the target machine in order to run.
+// It requires the .NET Framework 4.0 on the target machine in order to run.
 //
 //
 // The Visual Studio Project is a little weird.  There are code files that ARE NOT compiled

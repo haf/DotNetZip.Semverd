@@ -356,12 +356,7 @@ namespace Ionic.Zip
 
         internal HMACSHA1 _mac;
 
-        // Use RijndaelManaged from .NET 2.0.
-        // AesManaged came in .NET 3.5, but we want to limit
-        // dependency to .NET 2.0.  AES is just a restricted form
-        // of Rijndael (fixed block size of 128, some crypto modes not supported).
-
-        internal RijndaelManaged _aesCipher;
+        internal AesManaged _aesCipher;
         internal ICryptoTransform _xform;
 
         private const int BLOCK_SIZE_IN_BYTES = 16;
@@ -433,7 +428,7 @@ namespace Ionic.Zip
 
             _mac = new HMACSHA1(_params.MacIv);
 
-            _aesCipher = new System.Security.Cryptography.RijndaelManaged();
+            _aesCipher = new System.Security.Cryptography.AesManaged();
             _aesCipher.BlockSize = 128;
             _aesCipher.KeySize = keySizeInBits;  // 128, 192, 256
             _aesCipher.Mode = CipherMode.ECB;

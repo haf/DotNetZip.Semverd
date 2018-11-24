@@ -23,8 +23,8 @@
 //   some people don't want to incur the cost.
 //
 // This alternative implementation is **not** GPL licensed. It is free of cost, and
-// does not require J#. It does require .NET 2.0.  It balances a good set of
-// features, with ease of use and speed of performance.
+// does not require J#. It balances a good set of features, with ease of use and
+// speed of performance.
 //
 // This code is released under the Microsoft Public License .
 // See the License.txt for details.
