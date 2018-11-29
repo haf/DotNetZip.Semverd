@@ -128,56 +128,58 @@ namespace Ionic.Zip
 
                 zip2 = ZipFile.Read(zipFileName);
 
-                foreach (var e1 in zip1)
+                foreach (var e2 in zip2)
                 {
-                    foreach (var e2 in zip2)
+                    try
                     {
-                        if (e1.FileName == e2.FileName)
+                        var e1 = zip1._entries[e2.FileName];
+                        if (e1._RelativeOffsetOfLocalHeader != e2._RelativeOffsetOfLocalHeader)
                         {
-                            if (e1._RelativeOffsetOfLocalHeader != e2._RelativeOffsetOfLocalHeader)
-                            {
-                                isOk = false;
-                                if (writer != null)
+                            isOk = false;
+                            if (writer != null)
                                 writer.WriteLine("{0}: mismatch in RelativeOffsetOfLocalHeader  (0x{1:X16} != 0x{2:X16})",
                                                         e1.FileName, e1._RelativeOffsetOfLocalHeader,
                                                         e2._RelativeOffsetOfLocalHeader);
-                            }
-                            if (e1._CompressedSize != e2._CompressedSize)
-                            {
-                                isOk = false;
-                                if (writer != null)
+                        }
+                        if (e1._CompressedSize != e2._CompressedSize)
+                        {
+                            isOk = false;
+                            if (writer != null)
                                 writer.WriteLine("{0}: mismatch in CompressedSize  (0x{1:X16} != 0x{2:X16})",
                                                         e1.FileName, e1._CompressedSize,
                                                         e2._CompressedSize);
-                            }
-                            if (e1._UncompressedSize != e2._UncompressedSize)
-                            {
-                                isOk = false;
-                                if (writer != null)
+                        }
+                        if (e1._UncompressedSize != e2._UncompressedSize)
+                        {
+                            isOk = false;
+                            if (writer != null)
                                 writer.WriteLine("{0}: mismatch in UncompressedSize  (0x{1:X16} != 0x{2:X16})",
                                                         e1.FileName, e1._UncompressedSize,
                                                         e2._UncompressedSize);
-                            }
-                            if (e1.CompressionMethod != e2.CompressionMethod)
-                            {
-                                isOk = false;
-                                if (writer != null)
+                        }
+                        if (e1.CompressionMethod != e2.CompressionMethod)
+                        {
+                            isOk = false;
+                            if (writer != null)
                                 writer.WriteLine("{0}: mismatch in CompressionMethod  (0x{1:X4} != 0x{2:X4})",
                                                         e1.FileName, e1.CompressionMethod,
                                                         e2.CompressionMethod);
-                            }
-                            if (e1.Crc != e2.Crc)
-                            {
-                                isOk = false;
-                                if (writer != null)
+                        }
+                        if (e1.Crc != e2.Crc)
+                        {
+                            isOk = false;
+                            if (writer != null)
                                 writer.WriteLine("{0}: mismatch in Crc32  (0x{1:X4} != 0x{2:X4})",
                                                         e1.FileName, e1.Crc,
                                                         e2.Crc);
-                            }
-
-                            // found a match, so stop the inside loop
-                            break;
                         }
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        isOk = false;
+                        if (writer != null)
+                            writer.WriteLine("{0}: not found in compressed file",
+                                                    e2.FileName);
                     }
                 }
 
