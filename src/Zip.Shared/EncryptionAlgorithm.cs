@@ -93,11 +93,6 @@ namespace Ionic.Zip
     ///   article.</see>
     /// </para>
     ///
-    /// <para>
-    ///   The WinZip AES algorithms are not supported with the version of DotNetZip that
-    ///   runs on the .NET Compact Framework.  This is because .NET CF lacks the
-    ///   HMACSHA1 class that is required for producing the archive.
-    /// </para>
     /// </remarks>
     public enum EncryptionAlgorithm
     {

@@ -219,11 +219,7 @@ namespace Ionic.Zip
                 {
                     var zss1 = e._archiveStream as ZipSegmentedStream;
                     if (zss1 != null)
-#if NETCF
-                        zss1.Close();
-#else
                         zss1.Dispose();
-#endif
                     e._archiveStream = null;
                 }
 
@@ -233,11 +229,7 @@ namespace Ionic.Zip
                 {
                     // _temporaryFileName may remain null if we are writing to a stream.
                     // only close the stream if there is a file behind it.
-#if NETCF
-                    WriteStream.Close();
-#else
                     WriteStream.Dispose();
-#endif
 
                     if (_saveOperationCanceled)
                         return;
@@ -280,11 +272,7 @@ namespace Ionic.Zip
                         //
                         //File.Delete(_name);
                         // workitem 10447
-#if NETCF || SILVERLIGHT
-                        tmpName = _name + "." + SharedUtilities.GenerateRandomStringImpl(8,0) + ".tmp";
-#else
                         tmpName = _name + "." + Path.GetRandomFileName();
-#endif
                         if (File.Exists(tmpName))
                             DeleteFileWithRetry(tmpName);
                         File.Move(_name, tmpName);
@@ -366,11 +354,7 @@ namespace Ionic.Zip
                     try
                     {
                         // workitem 7704
-#if NETCF
-                        _writestream.Close();
-#else
                         _writestream.Dispose();
-#endif
                     }
                     catch (System.IO.IOException) { }
                 }
@@ -669,16 +653,11 @@ namespace Ionic.Zip
             {
                 if (zip64 == Zip64Option.Never)
                 {
-#if NETCF
-                    throw new ZipException("The archive requires a ZIP64 Central Directory. Consider enabling ZIP64 extensions.");
-#else
                     System.Diagnostics.StackFrame sf = new System.Diagnostics.StackFrame(1);
                     if (sf.GetMethod().DeclaringType == typeof(ZipFile))
                         throw new ZipException("The archive requires a ZIP64 Central Directory. Consider setting the ZipFile.UseZip64WhenSaving property.");
                     else
                         throw new ZipException("The archive requires a ZIP64 Central Directory. Consider setting the ZipOutputStream.EnableZip64 property.");
-#endif
-
                 }
 
                 var a = GenZip64EndOfCentralDirectory(Start, Finish, countOfEntries, numSegments);

@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4AD2A092-2C90-4C76-A8D5-4B56F718626F}</ProjectGuid>
@@ -11,6 +11,8 @@
     <RootNamespace>Ionic.Zip</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>DotNetZip</AssemblyName>
+    <Id>DotNetZip.iOS</Id>
+    <TargetFramework>Xamarin.iOS10</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +27,7 @@
     <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhone\Release</OutputPath>

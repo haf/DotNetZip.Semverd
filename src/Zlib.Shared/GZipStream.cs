@@ -853,11 +853,7 @@ namespace Ionic.Zlib
 
 
         internal static readonly System.DateTime _unixEpoch = new System.DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-#if !PCL && (SILVERLIGHT || NETCF)
-        internal static readonly System.Text.Encoding iso8859dash1 = new Ionic.Encoding.Iso8859Dash1Encoding();
-#else
         internal static readonly System.Text.Encoding iso8859dash1 = System.Text.Encoding.GetEncoding("iso-8859-1");
-#endif
 
 
         private int EmitHeader()

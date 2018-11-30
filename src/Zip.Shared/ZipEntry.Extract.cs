@@ -583,8 +583,6 @@ namespace Ionic.Zip
                 : UncompressedSize;
 
             this.ArchiveStream.Seek(this.FileDataPosition, SeekOrigin.Begin);
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(this.ArchiveStream);
 
             _inputDecryptorStream = GetExtractDecryptor(ArchiveStream);
             var input3 = GetExtractDecompressor(_inputDecryptorStream);
@@ -629,14 +627,8 @@ namespace Ionic.Zip
         {
             // workitem 7881
             // reset ReadOnly bit if necessary
-#if NETCF
-            if ( (NetCfFile.GetAttributes(fileName) & (uint)FileAttributes.ReadOnly) == (uint)FileAttributes.ReadOnly)
-                NetCfFile.SetAttributes(fileName, (uint)FileAttributes.Normal);
-#elif SILVERLIGHT
-#else
             if ((File.GetAttributes(fileName) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                 File.SetAttributes(fileName, FileAttributes.Normal);
-#endif
             File.Delete(fileName);
         }
 
@@ -842,12 +834,8 @@ namespace Ionic.Zip
                 var zss = archiveStream as ZipSegmentedStream;
                 if (zss != null)
                 {
-#if NETCF
-                    zss.Close();
-#else
                     // need to dispose it
                     zss.Dispose();
-#endif
                     _archiveStream = null;
                 }
             }
@@ -895,8 +883,7 @@ namespace Ionic.Zip
                 // to have times that reflect the actual time on the entry in
                 // the zip archive.
 
-                // String.Contains is not available on .NET CF 2.0
-                if (FileName.IndexOf('/') != -1)
+                if (FileName.Contains("/"))
                 {
                     var dirname = Path.GetDirectoryName(FileName);
                     if (_container.ZipFile[dirname] == null)
@@ -904,12 +891,6 @@ namespace Ionic.Zip
                 }
             }
 
-#if NETCF
-            // workitem 7926 - version made by OS can be zero or 10
-            if ((_VersionMadeBy & 0xFF00) == 0x0a00 || (_VersionMadeBy & 0xFF00) == 0x0000)
-                NetCfFile.SetAttributes(targetFileName, (uint)_ExternalFileAttrs);
-
-#else
             // workitem 7071
             //
             // We can only apply attributes if they are relevant to the NTFS
@@ -920,7 +901,6 @@ namespace Ionic.Zip
             // (NTFS)
             if ((_VersionMadeBy & 0xFF00) == 0x0a00 || (_VersionMadeBy & 0xFF00) == 0x0000)
                 File.SetAttributes(targetFileName, (FileAttributes) _ExternalFileAttrs);
-#endif
         }
 
         void EnsurePassword(string password)
@@ -1062,8 +1042,6 @@ namespace Ionic.Zip
 
             // change for workitem 8098
             input.Seek(FileDataPosition, SeekOrigin.Begin);
-            // workitem 10178
-            Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(input);
 
             var bytes = new byte[BufferSize];
 
@@ -1162,9 +1140,6 @@ namespace Ionic.Zip
 
         internal void _SetTimes(string fileOrDirectory, bool isFile)
         {
-#if SILVERLIGHT
-                    // punt on setting file times
-#else
             // workitem 8807:
             // Because setting the time is not considered to be a fatal error,
             // and because other applications can interfere with the setting
@@ -1175,15 +1150,6 @@ namespace Ionic.Zip
             {
                 if (_ntfsTimesAreSet)
                 {
-#if NETCF
-                    // workitem 7944: set time should not be a fatal error on CF
-                    int rc = NetCfFile.SetTimes(fileOrDirectory, _Ctime, _Atime, _Mtime);
-                    if ( rc != 0)
-                    {
-                        WriteStatus("Warning: SetTimes failed.  entry({0})  file({1})  rc({2})",
-                                    FileName, fileOrDirectory, rc);
-                    }
-#else
                     if (isFile)
                     {
                         // It's possible that the extract was cancelled, in which case,
@@ -1206,34 +1172,22 @@ namespace Ionic.Zip
                             Directory.SetLastWriteTimeUtc(fileOrDirectory, _Mtime);
                         }
                     }
-#endif
                 }
                 else
                 {
                     // workitem 6191
                     DateTime AdjustedLastModified = Ionic.Zip.SharedUtilities.AdjustTime_Reverse(LastModified);
 
-#if NETCF
-                    int rc = NetCfFile.SetLastWriteTime(fileOrDirectory, AdjustedLastModified);
-
-                    if ( rc != 0)
-                    {
-                        WriteStatus("Warning: SetLastWriteTime failed.  entry({0})  file({1})  rc({2})",
-                                    FileName, fileOrDirectory, rc);
-                    }
-#else
                     if (isFile)
                         File.SetLastWriteTime(fileOrDirectory, AdjustedLastModified);
                     else
                         Directory.SetLastWriteTime(fileOrDirectory, AdjustedLastModified);
-#endif
                 }
             }
             catch (System.IO.IOException ioexc1)
             {
                 WriteStatus("failed to set time on {0}: {1}", fileOrDirectory, ioexc1.Message);
             }
-#endif
         }
 
 
@@ -1370,8 +1324,6 @@ namespace Ionic.Zip
                     throw new ZipException("Missing password.");
 
                 this.ArchiveStream.Seek(this.FileDataPosition - 12, SeekOrigin.Begin);
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(this.ArchiveStream);
                 _zipCrypto_forExtract = ZipCrypto.ForRead(password, this);
             }
 
@@ -1392,8 +1344,6 @@ namespace Ionic.Zip
                 {
                     int sizeOfSaltAndPv = GetLengthOfCryptoHeaderBytes(_Encryption_FromZipFile);
                     this.ArchiveStream.Seek(this.FileDataPosition - sizeOfSaltAndPv, SeekOrigin.Begin);
-                    // workitem 10178
-                    Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(this.ArchiveStream);
                     int keystrength = GetKeyStrengthInBits(_Encryption_FromZipFile);
                     _aesCrypto_forExtract = WinZipAesCrypto.ReadFromStream(password, keystrength, this.ArchiveStream);
                 }
@@ -1424,9 +1374,8 @@ namespace Ionic.Zip
 
             f = SharedUtilities.SanitizePath(f);
 
-            // String.Contains is not available on .NET CF 2.0
             outFileName = _container.ZipFile.FlattenFoldersOnExtract
-                ? Path.Combine(baseDir, f.IndexOf('/') != -1 ? Path.GetFileName(f) : f)
+                ? Path.Combine(baseDir, f.Contains("/") ? Path.GetFileName(f) : f)
                 : Path.Combine(baseDir, f);
 
             // workitem 10639

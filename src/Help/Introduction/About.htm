@@ -31,18 +31,17 @@ h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2
 
 
 <p>
-  DotNetZip works on Windows-powered PCs with the full .NET Framework, and also runs
-  on Windows Mobile devices that use the .NET Compact Framework. Create and read zip
-  files in VB, C#, or any .NET language. The library can also be used from COM
-  enironments, like PHP, Classivc ASP, or VBSCript.   DotNetZip supports these
-  scenarios:
+  DotNetZip works on Windows-powered PCs with the full .NET Framework. Create
+  and read zip files in VB, C#, or any .NET language. The library can also be
+  used from COM enironments, like PHP, Classivc ASP, or VBSCript.   DotNetZip
+  supports these scenarios:
 </p>
 <ul>
 <li>creating a zip archive, adding files or directories into the archive</li>
 <li> listing files in an archive, extracting files from an archive</li>
 <li>modifying an existing archive - renaming entries, removing entries from an archive, or adding new entries to an archive</li>
 <li>creating zip files from stream content, saving to a stream, extracting to a stream, reading from a stream</li>
-<li>dynamically creating ZIP files from ASP.NET or Silverlight applications</li>
+<li>dynamically creating ZIP files from ASP.NET applications</li>
 </ul>
 
 
@@ -117,12 +116,12 @@ Extracting.
 
 
 <p><b>What do I need, in order to be able to create and read zip files from within my application using this library?</b><br/>
-To use the zip capability in your applications, you need to be using the .NET Framework 2.0 or later, and you need the DotNetZip assembly. You can use the Zip library from any application, whether a console application, a Windows-Forms application, a server-based application like an ASP.NET page, or something else. You can use C#, VB.NET, COBOL.NET, IronPython, IronRuby, F#, or any other .NET language. </p>
+To use the zip capability in your applications, you need to be using the .NET Framework 4.0 or later, and you need the DotNetZip assembly. You can use the Zip library from any application, whether a console application, a Windows-Forms application, a server-based application like an ASP.NET page, or something else. You can use C#, VB.NET, COBOL.NET, IronPython, IronRuby, F#, or any other .NET language. </p>
 
 <p><b>What do I need to build this library from the source?</b><br/>
 
 To use the zip capability in your applications, you need to be using the
-.NET Framework 2.0 or later, and you need the DotNetZip assembly. You
+.NET Framework 4.0 or later, and you need the DotNetZip assembly. You
 can use the Zip library from any application, whether a console
 application, a Windows-Forms application, a server-based application
 like an ASP.NET page, a smart-device app, a Windows Service, or
@@ -148,14 +147,7 @@ Code Pages, Unicode, zip comments, file and entry selection, and more.
 
 <p><b>What do I need to _build_ this library from the source?f</b><br/>
 
-You need the .NET Framework SDK v3.5, or later; or, Visual Studio 2008
-or later.  While the library is usable by .NET 2.0 and later, to build
-it you need .NET 3.5 or later.  This is because the source code uses
-features that were introduced in the C# v3.0 compiler, vars and array
-initializers and so on.  The .NET 3.5 SDK is available
-<A href="http://www.microsoft.com/downloads/details.aspx?FamilyID=e6e1c3df-a74f-4207-8586-711ebe331cdc&DisplayLang=en">here</a>.
-I don&apos;t know if the library will _build_ in Visual C# Express 2008; I
-never tried it.  It should.
+You need the .NET Framework SDK v4.0, or later.
 
 </p>
 
@@ -165,9 +157,8 @@ never tried it.  It should.
 
 As of version 1.9, the Ionic zip DLL is about 420k in size.  The
 self-extracting capability comprises about 200k of that.  There is a "Reduced" build of the
-library in the Developer&apos;s Kit, that eliminates the SFX capability and results in a DLL of about half the size.  The
-Compact-Framework version of the library is about 130k.  There is just
-one DLL.  There is no other pre-requisite.
+library in the Developer&apos;s Kit, that eliminates the SFX capability and results in a DLL of about half the size.
+There is just one DLL.  There is no other pre-requisite.
 </p>
 
 
@@ -193,7 +184,7 @@ DotNetZip is that option.  It&apos;s fast, it&apos;s simple, it&apos;s free.
 
 Yes.  It can make self-extracting zip files or standard zip files.  The
 self-extracting archives can either be Windows (GUI) apps or
-command-line applications. The self-extractors require .NET 2.0 on the
+command-line applications. The self-extractors require .NET 4.0 on the
 computer doing the extraction.  </p>
 
 
@@ -242,13 +233,6 @@ Yes. This library reads compliant zip files.
 <p><b>Can I use Windows Explorer to open the zip files that this library creates, and vice versa?</b><br/>
 
 Yes. This library reads and writes standard zip files. If you use extensions to the ZIP spec not supported by Windows, like ZIP64 or AES encryption, Windows Explorer will not be able to extract the files.
-
-</p>
-
-
-<p><b>Does the library work with applications that depend on the .NET Compact Framework?</b><br/>
-
-Yes. DotNetZip is built for the .NET Compact Framework (v2.0 or later) as well as for the regular .NET Framework (v2.0 or later). This means you can build a Smart Device application in Visual Studio 2008, that uses the capabilities of DotNetZip.
 
 </p>
 

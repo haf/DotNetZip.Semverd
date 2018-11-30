@@ -43,26 +43,12 @@ namespace Ionic.Zip
                 throw new FileNotFoundException(String.Format("Could not find file '{0}'.", fileName), fileName);
 
             long fileLength;
-            FileShare fs = FileShare.ReadWrite;
-#if !NETCF
-            // FileShare.Delete is not defined for the Compact Framework
-            fs |= FileShare.Delete;
-#endif
+            FileShare fs = FileShare.ReadWrite | FileShare.Delete;
             using (var s = File.Open(fileName, FileMode.Open, FileAccess.Read, fs))
             {
                 fileLength = s.Length;
             }
             return fileLength;
-        }
-
-
-        [System.Diagnostics.Conditional("NETCF")]
-        public static void Workaround_Ladybug318918(Stream s)
-        {
-            // This is a workaround for this issue:
-            // https://connect.microsoft.com/VisualStudio/feedback/details/318918
-            // It's required only on NETCF.
-            s.Flush();
         }
 
 
@@ -84,8 +70,8 @@ namespace Ionic.Zip
         /// </para>
         /// <para>
         /// This is most nautrally an extension method for the DateTime class but this
-        /// library is built for .NET 2.0, not for .NET 3.5; This means extension methods
-        /// are a no-no.
+        /// library used to be built for .NET 2.0; This meant extension methods were
+        /// a no-no.
         /// </para>
         /// </remarks>
         /// <param name="source">The DateTime value to round</param>
@@ -229,7 +215,7 @@ namespace Ionic.Zip
 
                 }
             }
-#elif !WINDOWS_PHONE_APP
+#else
             if (ibm437 == null)
             {
                 try
@@ -263,8 +249,7 @@ namespace Ionic.Zip
 
         internal static string StringFromBuffer(byte[] buf, System.Text.Encoding encoding)
         {
-            // this form of the GetString() method is required for .NET CF compatibility
-            string s = encoding.GetString(buf, 0, buf.Length);
+            string s = encoding.GetString(buf);
             return s;
         }
 
@@ -290,23 +275,17 @@ namespace Ionic.Zip
                 {
                     // advance past data descriptor - 12 bytes if not zip64
                     s.Seek(12, SeekOrigin.Current);
-                    // workitem 10178
-                    Workaround_Ladybug318918(s);
                     x = _ReadFourBytes(s, "n/a");
                     if (x != ZipConstants.ZipEntrySignature)
                     {
                         // Maybe zip64 was in use for the prior entry.
                         // Therefore, skip another 8 bytes.
                         s.Seek(8, SeekOrigin.Current);
-                        // workitem 10178
-                        Workaround_Ladybug318918(s);
                         x = _ReadFourBytes(s, "n/a");
                         if (x != ZipConstants.ZipEntrySignature)
                         {
                             // seek back to the first spot
                             s.Seek(-24, SeekOrigin.Current);
-                            // workitem 10178
-                            Workaround_Ladybug318918(s);
                             x = _ReadFourBytes(s, "n/a");
                         }
                     }
@@ -326,29 +305,7 @@ namespace Ionic.Zip
         {
             int n = 0;
             byte[] block = new byte[4];
-#if NETCF
-            // workitem 9181
-            // Reading here in NETCF sometimes reads "backwards". Seems to happen for
-            // larger files.  Not sure why. Maybe an error in caching.  If the data is:
-            //
-            // 00100210: 9efa 0f00 7072 6f6a 6563 742e 6963 7750  ....project.icwP
-            // 00100220: 4b05 0600 0000 0006 0006 0091 0100 008e  K...............
-            // 00100230: 0010 0000 00                             .....
-            //
-            // ...and the stream Position is 10021F, then a Read of 4 bytes is returning
-            // 50776369, instead of 06054b50. This seems to happen the 2nd time Read()
-            // is called from that Position..
-            //
-            // submitted to connect.microsoft.com
-            // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=318918#tabs
-            //
-            for (int i = 0; i < block.Length; i++)
-            {
-                n+= s.Read(block, i, 1);
-            }
-#else
             n = s.Read(block, 0, block.Length);
-#endif
             if (n != block.Length) throw new BadReadException(String.Format(message, s.Position));
             int data = unchecked((((block[3] * 256 + block[2]) * 256) + block[1]) * 256 + block[0]);
             return data;
@@ -401,8 +358,6 @@ namespace Ionic.Zip
                         {
                             long curPosition = stream.Position;
                             stream.Seek(i - n, System.IO.SeekOrigin.Current);
-                            // workitem 10178
-                            Workaround_Ladybug318918(stream);
 
                             // workitem 7711
                             int sig = ReadSignature(stream);
@@ -411,8 +366,6 @@ namespace Ionic.Zip
                             if (!success)
                             {
                                 stream.Seek(curPosition, System.IO.SeekOrigin.Begin);
-                                // workitem 10178
-                                Workaround_Ladybug318918(stream);
                             }
                             else
                                 break; // out of for loop
@@ -427,8 +380,6 @@ namespace Ionic.Zip
             if (!success)
             {
                 stream.Seek(startingPosition, System.IO.SeekOrigin.Begin);
-                // workitem 10178
-                Workaround_Ladybug318918(stream);
                 return -1;  // or throw?
             }
 
@@ -585,11 +536,6 @@ namespace Ionic.Zip
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   The System.IO.Path.GetRandomFileName() method is not available on
-        ///   the Compact Framework, so this library provides its own substitute
-        ///   on NETCF.
-        /// </para>
-        /// <para>
         ///   This method produces a filename of the form
         ///   DotNetZip-xxxxxxxx.tmp, where xxxxxxxx is replaced by randomly
         ///   chosen characters, and creates that file.
@@ -618,39 +564,11 @@ namespace Ionic.Zip
             throw new IOException();
         }
 
-#if NETCF || SILVERLIGHT
-        public static string InternalGetTempFileName()
-        {
-            return "DotNetZip-" + GenerateRandomStringImpl(8,0) + ".tmp";
-        }
-
-        internal static string GenerateRandomStringImpl(int length, int delta)
-        {
-            bool WantMixedCase = (delta == 0);
-            System.Random rnd = new System.Random();
-
-            string result = "";
-            char[] a = new char[length];
-
-            for (int i = 0; i < length; i++)
-            {
-               // delta == 65 means uppercase
-               // delta == 97 means lowercase
-                if (WantMixedCase)
-                    delta = (rnd.Next(2) == 0) ? 65 : 97;
-                a[i] = (char)(rnd.Next(26) + delta);
-            }
-
-            result = new System.String(a);
-            return result;
-        }
-#else
         public static string InternalGetTempFileName()
         {
             return "DotNetZip-" + Path.GetRandomFileName().Substring(0, 8) + ".tmp";
         }
 
-#endif
 
 
         /// <summary>
@@ -658,15 +576,15 @@ namespace Ionic.Zip
         /// </summary>
         /// <remarks>
         /// This could be gracefully handled with an extension attribute, but
-        /// This assembly is built for .NET 2.0, so I cannot use them.
+        /// This assembly used to be built for .NET 2.0, so could not use
+        /// extension methods.
         /// </remarks>
         internal static int ReadWithRetry(System.IO.Stream s, byte[] buffer, int offset, int count, string FileName)
         {
             int n = 0;
             bool done = false;
-#if !NETCF && !SILVERLIGHT
             int retries = 0;
-#endif
+
             do
             {
                 try
@@ -674,12 +592,6 @@ namespace Ionic.Zip
                     n = s.Read(buffer, offset, count);
                     done = true;
                 }
-#if NETCF || SILVERLIGHT
-                catch (System.IO.IOException)
-                {
-                    throw;
-                }
-#else
                 catch (System.IO.IOException ioexc1)
                 {
                     // Check if we can call GetHRForException,
@@ -707,7 +619,6 @@ namespace Ionic.Zip
                         throw;
                     }
                 }
-#endif
             }
             while (!done);
 
@@ -715,7 +626,6 @@ namespace Ionic.Zip
         }
 
 
-#if !NETCF
         // workitem 8009
         //
         // This method must remain separate.
@@ -734,7 +644,6 @@ namespace Ionic.Zip
         // JIT-compiles this method when UnmanagedCode is disallowed, and thus never
         // generates the JIT-compile time exception.
         //
-#endif
         private static uint _HRForException(System.Exception ex1)
         {
 #if IOS
@@ -949,8 +858,6 @@ namespace Ionic.Zip
             set
             {
                 _s.Seek(value, System.IO.SeekOrigin.Begin);
-                // workitem 10178
-                Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(_s);
             }
         }
 

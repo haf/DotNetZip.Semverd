@@ -546,8 +546,7 @@ namespace Ionic.Zip
         //             return ibm437;
         //     }
         //     var cb = ibm437.GetBytes(_Comment);
-        //     // need to use this form of GetString() for .NET CF
-        //     string s1 = ibm437.GetString(cb, 0, cb.Length);
+        //     string s1 = ibm437.GetString(cb);
         //     if (s1 == _Comment)
         //         return ibm437;
         //     return AlternateEncoding;
@@ -636,8 +635,7 @@ namespace Ionic.Zip
             // during Read), and when ibm437 will not do.
 
             byte[] result = ibm437.GetBytes(s1);
-            // need to use this form of GetString() for .NET CF
-            string s2 = ibm437.GetString(result, 0, result.Length);
+            string s2 = ibm437.GetString(result);
             _CommentBytes = null;
             if (s2 != s1)
             {
@@ -926,11 +924,7 @@ namespace Ionic.Zip
             //                 _BitField |= 0x0020;
 
             // set the UTF8 bit if necessary
-#if SILVERLIGHT
-            if (_actualEncoding.WebName == "utf-8")
-#else
             if (_actualEncoding.CodePage == System.Text.Encoding.UTF8.CodePage)
-#endif
                 _BitField |= 0x0800;
 
             // The PKZIP spec says that if bit 3 is set (0x0008) in the General
@@ -1211,11 +1205,7 @@ namespace Ionic.Zip
 
                     if (_sourceStream == null)
                     {
-#if NETCF
-                        input.Close();
-#else
                         input.Dispose();
-#endif
                     }
                 }
                 _crcCalculated = true;
@@ -1431,11 +1421,7 @@ namespace Ionic.Zip
                 }
                 else if ((input as FileStream) != null)
                 {
-#if NETCF
-                    input.Close();
-#else
                     input.Dispose();
-#endif
                 }
             }
 
@@ -1488,11 +1474,7 @@ namespace Ionic.Zip
             else if (this._Source == ZipEntrySource.FileSystem)
             {
                 // workitem 7145
-                FileShare fs = FileShare.ReadWrite;
-#if !NETCF
-                // FileShare.Delete is not defined for the Compact Framework
-                fs |= FileShare.Delete;
-#endif
+                FileShare fs = FileShare.ReadWrite | FileShare.Delete;
                 // workitem 8423
                 input = File.Open(LocalFileName, FileMode.Open, FileAccess.Read, fs);
                 fileLength = input.Length;
@@ -1519,16 +1501,11 @@ namespace Ionic.Zip
 #if BZIP
             else if ((compressor as Ionic.BZip2.BZip2OutputStream) != null)
                 compressor.Close();
-#if !NETCF
             else if ((compressor as Ionic.BZip2.ParallelBZip2OutputStream) != null)
                 compressor.Close();
 #endif
-#endif
-
-#if !NETCF
             else if ((compressor as Ionic.Zlib.ParallelDeflateOutputStream) != null)
                 compressor.Close();
-#endif
 
             encryptor.Flush();
             encryptor.Close();
@@ -1589,8 +1566,6 @@ namespace Ionic.Zip
                         // seek back in the stream to un-output the security metadata
                         s.Seek(-1 * headerBytesToRetract, SeekOrigin.Current);
                         s.SetLength(s.Position);
-                        // workitem 10178
-                        Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(s);
 
                         // workitem 11131
                         // adjust the count on the CountingStream as necessary
@@ -1948,7 +1923,6 @@ namespace Ionic.Zip
         {
             if (_CompressionMethod == 0x08 && CompressionLevel != Ionic.Zlib.CompressionLevel.None)
             {
-#if !NETCF
                 // ParallelDeflateThreshold == 0    means ALWAYS use parallel deflate
                 // ParallelDeflateThreshold == -1L  means NEVER use parallel deflate
                 // Other values specify the actual threshold.
@@ -1994,7 +1968,6 @@ namespace Ionic.Zip
                     o1.Reset(s);
                     return o1;
                 }
-#endif
                 var o = new Ionic.Zlib.DeflateStream(s, Ionic.Zlib.CompressionMode.Compress,
                                                      CompressionLevel,
                                                      true);
@@ -2008,7 +1981,6 @@ namespace Ionic.Zip
 #if BZIP
             if (_CompressionMethod == 0x0c)
             {
-#if !NETCF
                 if (_container.ParallelDeflateThreshold == 0L ||
                     (streamLength > _container.ParallelDeflateThreshold &&
                      _container.ParallelDeflateThreshold > 0L))
@@ -2017,7 +1989,6 @@ namespace Ionic.Zip
                     var o1 = new Ionic.BZip2.ParallelBZip2OutputStream(s, true);
                     return o1;
                 }
-#endif
                 var o = new Ionic.BZip2.BZip2OutputStream(s, true);
                 return o;
             }
@@ -2585,12 +2556,12 @@ namespace Ionic.Zip
             lock (_outputLock)
             {
                 int tid = System.Threading.Thread.CurrentThread.GetHashCode();
-#if ! (NETCF || SILVERLIGHT || IOS || ANDROID)
+#if ! (IOS || ANDROID)
                 Console.ForegroundColor = (ConsoleColor)(tid % 8 + 8);
 #endif
                 Console.Write("{0:000} ZipEntry.Write ", tid);
                 Console.WriteLine(format, varParams);
-#if ! (NETCF || SILVERLIGHT || IOS || ANDROID)
+#if ! (IOS || ANDROID)
                 Console.ResetColor();
 #endif
             }

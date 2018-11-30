@@ -206,8 +206,6 @@ namespace Ionic.Zip
                 if (IsNotValidZipDirEntrySig(signature))
                 {
                     s.Seek(-4, System.IO.SeekOrigin.Current);
-                    // workitem 10178
-                    Ionic.Zip.SharedUtilities.Workaround_Ladybug318918(s);
 
                     // Getting "not a ZipDirEntry signature" here is not always wrong or an
                     // error.  This can happen when walking through a zipfile.  After the

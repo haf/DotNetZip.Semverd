@@ -23,8 +23,8 @@
 //   some people don't want to incur the cost.
 //
 // This alternative implementation is **not** GPL licensed. It is free of cost, and
-// does not require J#. It does require .NET 2.0.  It balances a good set of
-// features, with ease of use and speed of performance.
+// does not require J#. It balances a good set of features, with ease of use and
+// speed of performance.
 //
 // This code is released under the Microsoft Public License .
 // See the License.txt for details.
@@ -124,9 +124,7 @@ namespace Ionic.Zip
     /// </remarks>
     [Interop.GuidAttribute("ebc25cf6-9120-4283-b972-0e5520d00005")]
     [Interop.ComVisible(true)]
-#if !NETCF
     [Interop.ClassInterface(Interop.ClassInterfaceType.AutoDispatch)]
-#endif
     public partial class ZipFile :
     System.Collections.IEnumerable,
     System.Collections.Generic.IEnumerable<ZipEntry>,
@@ -1280,7 +1278,7 @@ namespace Ionic.Zip
         ///   zipfile correctly, you have to specify the same codepage at the time you
         ///   read it. If try to read that zip file with Windows Explorer or another
         ///   application that is not flexible with respect to the codepage used to
-        ///   decode filenames in zipfiles, you will get a filename like "Inf°.txt".
+        ///   decode filenames in zipfiles, you will get a filename like "Infï¿½.txt".
         /// </para>
         ///
         /// <para>
@@ -2243,7 +2241,6 @@ namespace Ionic.Zip
         }
 
 
-#if !NETCF
         /// <summary>
         ///   The size threshold for an entry, above which a parallel deflate is used.
         /// </summary>
@@ -2405,7 +2402,6 @@ namespace Ionic.Zip
                 _maxBufferPairs = value;
             }
         }
-#endif
 
 
         /// <summary>Provides a string representation of the instance.</summary>
@@ -2983,9 +2979,7 @@ namespace Ionic.Zip
             _contentsChanged = true;
             AddDirectoryWillTraverseReparsePoints = true;  // workitem 8617
             CompressionLevel = Ionic.Zlib.CompressionLevel.Default;
-#if !NETCF
             ParallelDeflateThreshold = 512 * 1024;
-#endif
             // workitem 7685, 9868
             _entries = new Dictionary<string, ZipEntry>(StringComparer.Ordinal);
             _entriesInsensitive = new Dictionary<string, ZipEntry>(StringComparer.OrdinalIgnoreCase);
@@ -3663,11 +3657,7 @@ namespace Ionic.Zip
                         if (_readstream != null)
                         {
                             // workitem 7704
-#if NETCF
-                            _readstream.Close();
-#else
                             _readstream.Dispose();
-#endif
                             _readstream = null;
                         }
                     }
@@ -3676,22 +3666,16 @@ namespace Ionic.Zip
                         if (_writestream != null)
                         {
                             // workitem 7704
-#if NETCF
-                            _writestream.Close();
-#else
                             _writestream.Dispose();
-#endif
                             _writestream = null;
                         }
 
-#if !NETCF
                     // workitem 10030
                     if (this.ParallelDeflater != null)
                     {
                         this.ParallelDeflater.Dispose();
                         this.ParallelDeflater = null;
                     }
-#endif
                 }
                 this._disposed = true;
             }
@@ -3798,11 +3782,9 @@ namespace Ionic.Zip
 
         private int _BufferSize = BufferSizeDefault;
 
-#if !NETCF
         internal Ionic.Zlib.ParallelDeflateOutputStream ParallelDeflater;
         private long _ParallelDeflateThreshold;
         private int _maxBufferPairs = 16;
-#endif
 
         internal Zip64Option _zip64 = Zip64Option.Default;
 #pragma warning disable 649

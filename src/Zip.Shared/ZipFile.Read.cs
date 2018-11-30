@@ -596,6 +596,9 @@ namespace Ionic.Zip
                         // Weird: with NETCF, negative offsets from SeekOrigin.End DO
                         // NOT WORK. So rather than seek a negative offset, we seek
                         // from SeekOrigin.Begin using a smaller number.
+                        //
+                        // We no longer target NETCF, so somebody feeling brave could
+                        // restore the (very) old code.
                         posn -= (32 * (nTries + 1) * nTries);
                     }
                 }
@@ -648,11 +651,7 @@ namespace Ionic.Zip
                 {
                     try
                     {
-#if NETCF
-                        zf._readstream.Close();
-#else
                         zf._readstream.Dispose();
-#endif
                         zf._readstream = null;
                     }
                     finally { }
@@ -673,7 +672,6 @@ namespace Ionic.Zip
             byte[] block = new byte[16];
 
             // seek back to find the ZIP64 EoCD.
-            // I think this might not work for .NET CF ?
             s.Seek(-40, SeekOrigin.Current);
             s.Read(block, 0, 16);
 

@@ -6,8 +6,8 @@ Introducing the DotNetZip Library and Tools
 DotNetZip is the name of an open-source project that delivers a .NET
 library for handling ZIP files, and some associated tools.
 
- - The library allows .NET or Silverlight programmers to build
-   applications that read, create and modify ZIP files.
+ - The library allows .NET programmers to build applications
+   that read, create and modify ZIP files.
 
  - The tools are .NET programs that rely on the library, and can be used
    by anyone on any Windows machine to build or extract ZIP files.
@@ -365,11 +365,7 @@ Pre-requisites to run Applications that use DotNetZip
 -----------------------------------------------------
 
 To run desktop applications that depend on DotNetZip:
- .NET Framework 2.0 or later
-
-
-To run smart device applications that depend on DotNetZip:
-  .NET Compact Framework 2.0 or later
+ .NET Framework 4.0 or later
 
 
 
@@ -532,9 +528,6 @@ that version of zlib, there is also a DeflateStream class which is
 similar to the built-in System.IO.Compression.DeflateStream, but more
 flexible, and often more effective as well.
 
-As a result, this library depends only on the .NET Framework v2.0, or the
-.NET Compact Framework v2.0.
-
 
 
 
@@ -618,16 +611,6 @@ raw block or stream compression, BZIP2         Ionic.BZip2.dll
 both raw compression as well as reading        Ionic.Zip.dll
    or writing Zip files
 
-reading or writing Zip files on Compact        Ionic.Zip.CF.dll
-     Framework
-
-raw compression on Compact Framework           Ionic.Zlib.CF.dll
-                                                   -and/or-
-                                               Ionic.BZip2.CF.dll
-
-both raw compression as well as reading        Ionic.Zip.CF.dll
-   or writing Zip files on CF
-
 reading or writing Zip files, using desktop    Ionic.Zip.Reduced.dll
   .NET framework but never creating a
   self-extracting archive
@@ -699,31 +682,6 @@ library:
   Ionic.Zip.Reduced.dll  250k   includes everything in the main ZIP
                                 library except SFX. (ability to save
                                 Self-extracting archives)
-```
-
-
-#### Compact Framework:
-```
-  assembly              ~size   comment
-  -------------------------------------------------------
-  Ionic.Zlib.CF.dll       74k   {Deflate,GZip,Zlib}Stream and ZlibCodec
-
-  Ionic.BZip2.CF.dll      36k   BZip2{Input,Output}Stream
-
-  Ionic.Zip.CF.dll       204k   includes ZLIB and BZIP2 compression, but
-                                no SFX.
-```
-
-#### Silverlight:
-```
-  assembly              ~size   comment
-  -------------------------------------------------------
-  Ionic.Zlib.dll          80k   {Deflate,GZip,Zlib}Stream and ZlibCodec
-
-  Ionic.BZip2.dll         41k   BZip2{Input,Output}Stream
-
-  Ionic.Zip.dll          226k   includes ZLIB and BZIP2 compression, and
-                                the selector logic.  No SFX, no WinZIP AES.
 ```
 
 
@@ -836,22 +794,12 @@ You can get it here:
 Building DotNetZip with the .NET SDK
 -------------------------------------
 
-To build the library using the .NET Framework SDK v3.5,
+To build the library using the .NET Framework SDK v4.0,
 
 1. extract the contents of the source zip into a new directory.
 
-2. be sure the .NET 2.0 SDK, .NET 3.5 runtime, and .NET 2.0 runtime
-   directories are on your path.  These are typically
-
-     C:\Program Files\Microsoft.NET\SDK\v2.0\bin
-     c:\windows\Microsoft.NET\Framework\v3.5
-       and
-     c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727
-
-   The .NET 3.5 runtime is necessary because building DotNetZip requires
-   the csc.exe compiler from NET 3.5. (Using DotNetZip from within C#
-   requires the v2.0 csc compiler.)
-
+2. be sure the .NET 4.0 SDK and runtime directories are on your
+   path.
 
 3. Modify the .csproj files in Zip and ZLIB and BZip2 to eliminate
    mention of the Ionic.pfx and Ionic.snk files.
@@ -924,8 +872,7 @@ ZLIB/Deflate/GZIP, and BZip2.  The Zip group is a superset of the ZLIB
 and BZIP2 groups.
 
 Each group of functionality is packaged into various assemblies, one
-assembly per "platform".  The platforms supported are: .NET (Desktop),
-Compact Framework 2.0, and Silverlight.
+assembly per "platform".  The platforms supported are: .NET (Desktop).
 
 There is also a special "Zip Reduced" library, available only on the
 Desktop platform; it is a reduced-function version of the regular
@@ -938,7 +885,7 @@ distinct DLLs into a single package.  This is no longer the case.
 
 Because the ZIP projects include the ZLIB and BZIP2 function, the
 appropriate source modules for the ZLIB and Bzip2 are "linked" into each
-of the ZIP projects (Desktop, CF, and Silverlight).
+of the ZIP projects (Desktop).
 
 
 
@@ -996,8 +943,7 @@ As for those options above, here is some more detail:
   2. If you don't need a strong-named assembly, then remove all the
      signing from the various projects.
 
-In either case, you will need to modify the "Zip" and "Zip CF DLL"
-projects, the BZip and BZip CF projects, and the "Zlib" and "Zlib CF"
+In either case, you will need to modify the "Zip", BZip, and the "Zlib"
 projects.
 
 
