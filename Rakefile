@@ -67,7 +67,6 @@ nugets_pack 'create_nuget_MonoAndroid10' => ['build/pkg', :versioning, :build] d
   p.exe           = 'buildsupport/NuGet.exe'
   
   p.with_metadata do |m|
-    # Don't override id, let the assembly name from the project files provide this.
     m.id            = 'DotNetZip.Android'
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
