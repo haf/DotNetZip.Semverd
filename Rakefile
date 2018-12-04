@@ -1,6 +1,7 @@
 require 'bundler/setup'
 
 require 'albacore'
+require 'albacore/project'
 require 'albacore/tasks/versionizer'
 require 'albacore/ext/teamcity'
 
@@ -78,6 +79,34 @@ nugets_pack 'create_nuget_netstandard' => ['build/pkg', :versioning, :build, pak
     m.release_notes = "Full version: #{ENV['BUILD_VERSION']}."
     m.license_url   = "https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE"
     m.project_url   = "https://github.com/haf/DotNetZip.Semverd"
+  end
+end
+
+# We need to override Albacore for Xamarin.  We need the correct lib
+# subdirectories to be created, and for these to contain the right
+# output files.
+class Albacore::Project
+  alias_method :original_target_framework, :target_framework
+  # Used for lib directory:
+  def target_framework
+    if id == 'DotNetZip.Android' || id == 'DotNetZip.iOS'
+      read_property('TargetFramework')
+    else
+      original_target_framework
+    end
+  end
+  
+  alias_method :original_try_outputs, :try_outputs
+  def try_outputs conf, fw
+    # For iOS, a subdir to the Release build directory is created.  Not
+    # true for Android, so only Android is handled here.
+    if id == 'DotNetZip.Android'
+      outputs = []
+      outputs << Albacore::OutputArtifact.new("bin/#{conf}/#{asmname}#{output_file_ext}", output_type)
+      outputs
+    else
+      original_try_outputs(conf, fw)
+    end
   end
 end
 
