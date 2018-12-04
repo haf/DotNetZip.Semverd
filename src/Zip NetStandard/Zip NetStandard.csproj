@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>DotNetZip</AssemblyName>
-        <Id>DotNetZip.NetStandard</Id>
+        <Id>DotNetZip</Id>
         <RootNamespace>Ionic.Zip</RootNamespace>
         <OutputType>Library</OutputType>
     </PropertyGroup>
