@@ -1,1 +1,24 @@
-
+STORAGE: NONE
+RESTRICTION: == netstandard2.0
+NUGET
+  remote: https://www.nuget.org/api/v2
+    Microsoft.NETCore.Platforms (2.2)
+    Microsoft.NETCore.Targets (2.1)
+    System.Runtime (4.3)
+      Microsoft.NETCore.Platforms (>= 1.1)
+      Microsoft.NETCore.Targets (>= 1.1)
+    System.Security.AccessControl (4.5)
+      System.Security.Principal.Windows (>= 4.5)
+    System.Security.Permissions (4.4.1)
+      System.Security.AccessControl (>= 4.4)
+    System.Security.Principal.Windows (4.5.1)
+    System.Text.Encoding (4.3)
+      Microsoft.NETCore.Platforms (>= 1.1)
+      Microsoft.NETCore.Targets (>= 1.1)
+      System.Runtime (>= 4.3)
+    System.Text.Encoding.CodePages (4.4)
+    System.Text.Encoding.Extensions (4.3)
+      Microsoft.NETCore.Platforms (>= 1.1)
+      Microsoft.NETCore.Targets (>= 1.1)
+      System.Runtime (>= 4.3)
+      System.Text.Encoding (>= 4.3)

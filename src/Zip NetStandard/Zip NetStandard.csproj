@@ -22,17 +22,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Security.Permissions" Version="4.4.1" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
-        <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Folder Include="BZip2\" />
     </ItemGroup>
 
     <Import Project="..\Zlib.Shared\Zlib.Shared.projitems" Label="Shared" />
 
     <Import Project="..\Zip.Shared\Zip.Shared.projitems" Label="Shared" />
+
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
 
 </Project>

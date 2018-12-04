@@ -7,7 +7,13 @@ require 'albacore/ext/teamcity'
 
 Albacore::Tasks::Versionizer.new :versioning
 
-task :restore do
+paket = '.paket/paket.exe'
+file paket do
+  dir = File.dirname(paket)
+  sh "dotnet tool install Paket --version 5.190.0 --tool-path #{dir}"
+end
+
+task :restore => [paket] do
    sh 'msbuild /t:restore src/DotNetZip.sln'
 end
 
@@ -31,12 +37,6 @@ build :build_quick do |b|
 end
 
 directory 'build/pkg'
-
-paket = '.paket/paket.exe'
-file paket do
-  dir = File.dirname(paket)
-  sh "dotnet tool install Paket --version 5.190.0 --tool-path #{dir}"
-end
 
 #I'm sorry
 
