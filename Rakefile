@@ -32,7 +32,7 @@ end
 
 directory 'build/pkg'
 
-paket = 'buildsupport/paket.exe'
+paket = '.paket/paket.exe'
 file paket do
   dir = File.dirname(paket)
   sh "dotnet tool install Paket --version 5.190.0 --tool-path #{dir}"
