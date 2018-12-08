@@ -44,17 +44,28 @@ directory 'build/pkg'
 
 # This class is a glorious hack.  It adds the netfx assembly to the
 # netstandard NuGet package.  The explanation of why is later.
+#
+# We also add .pdbs, for easier debugging.
 class Albacore::NugetModel::Package
   singleton_class.send :alias_method, :orig_from_xxproj, :from_xxproj
   def self.from_xxproj proj, **opts
     package = self.orig_from_xxproj proj, opts
-    if package.metadata.id == 'DotNetZip'
+
+    netstandard_identifier = "netstandard2.0"
+    netstandard_target_dir = "lib/#{netstandard_identifier}"
+    # Use File.split because the Windows native directory separator (\)
+    # is different from Ruby and Unix's (/).
+    is_netstandard_pkg = (File.split(package.files.first&.target) == File.split(netstandard_target_dir))
+    if is_netstandard_pkg
+      package.add_file "bin/Release/#{netstandard_identifier}/DotNetZip.pdb", netstandard_target_dir
+
       netfx_identifier = "net40"
-      target_dir = "lib/#{netfx_identifier}/"
-      package.add_file "../Zip/bin/Release/DotNetZip.dll", target_dir
-      package.add_file "../Zip/bin/Release/DotNetZip.pdb", target_dir
-      package.add_file "../Zip/bin/Release/DotNetZip.xml", target_dir
+      netfx_target_dir = "lib/#{netfx_identifier}/"
+      package.add_file "../Zip/bin/Release/DotNetZip.dll", netfx_target_dir
+      package.add_file "../Zip/bin/Release/DotNetZip.pdb", netfx_target_dir
+      package.add_file "../Zip/bin/Release/DotNetZip.xml", netfx_target_dir
     end
+
     package
   end
 
