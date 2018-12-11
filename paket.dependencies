@@ -2,6 +2,6 @@ framework: auto-detect
 storage: none
 
 source https://www.nuget.org/api/v2
-nuget System.Security.Permissions 4.4.1
-nuget System.Text.Encoding.CodePages 4.4.0
-nuget System.Text.Encoding.Extensions 4.3.0
+nuget System.Security.Permissions
+nuget System.Text.Encoding.CodePages
+nuget System.Text.Encoding.Extensions
