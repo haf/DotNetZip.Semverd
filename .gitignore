@@ -5,9 +5,8 @@ _ReSharper*
 *.resharper
 *.suo
 build/
-/buildsupport/paket.exe
-# Next entry is also for paket, because we install with "dotnet tool".
-/buildsupport/.store
+/.paket/paket.exe
+/.paket/.store
 /.vs
 /src/.vs
 /src/UpgradeLog.htm
