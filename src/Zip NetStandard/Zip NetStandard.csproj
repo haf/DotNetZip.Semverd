@@ -12,6 +12,10 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
 
+    <PropertyGroup>
+      <DefineConstants>AESCRYPTO;BZIP</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
         <Compile Include="..\BZip2\BitWriter.cs" Link="BZip2\BitWriter.cs" />
         <Compile Include="..\BZip2\BZip2Compressor.cs" Link="BZip2\BZip2Compressor.cs" />
