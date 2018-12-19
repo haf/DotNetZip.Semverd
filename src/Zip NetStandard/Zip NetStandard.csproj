@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -23,6 +23,10 @@
 
     <ItemGroup>
         <Folder Include="BZip2\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
     </ItemGroup>
 
     <Import Project="..\Zlib.Shared\Zlib.Shared.projitems" Label="Shared" />
