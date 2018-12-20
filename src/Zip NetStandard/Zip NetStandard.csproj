@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,6 +12,10 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
 
+    <PropertyGroup>
+      <DefineConstants>AESCRYPTO;BZIP</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
         <Compile Include="..\BZip2\BitWriter.cs" Link="BZip2\BitWriter.cs" />
         <Compile Include="..\BZip2\BZip2Compressor.cs" Link="BZip2\BZip2Compressor.cs" />
@@ -23,6 +27,10 @@
 
     <ItemGroup>
         <Folder Include="BZip2\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
     </ItemGroup>
 
     <Import Project="..\Zlib.Shared\Zlib.Shared.projitems" Label="Shared" />
