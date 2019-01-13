@@ -78,7 +78,7 @@ namespace Ionic.Zip.Tests
             for (int i = 0; i < 3; i++)
                 SourceDir = Path.GetDirectoryName(SourceDir);
 
-            IonicZipDll = Path.Combine(SourceDir, "Zip\\bin\\Debug\\Ionic.Zip.dll");
+            IonicZipDll = Path.Combine(SourceDir, "Zip\\bin\\Debug\\DotNetZip.dll");
 
             Assert.IsTrue(File.Exists(IonicZipDll), "DLL ({0}) does not exist", IonicZipDll);
 

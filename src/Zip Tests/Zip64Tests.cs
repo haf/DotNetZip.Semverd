@@ -951,7 +951,7 @@ namespace Ionic.Zip.Tests.Zip64
         public void Zip64_Winzip_Unzip_OneFile()
         {
             string testBin = TestUtilities.GetTestBinDir(CurrentDir);
-            string fileToZip = Path.Combine(testBin, "Ionic.Zip.dll");
+            string fileToZip = Path.Combine(testBin, "DotNetZip.dll");
 
             Directory.SetCurrentDirectory(TopLevelDir);
 
