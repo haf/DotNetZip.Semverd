@@ -120,7 +120,7 @@ nugets_pack 'create_nuget_netfx_netstandard' => ['build/pkg', :versioning, :buil
   p.metadata.instance_eval do |m|
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
-    m.authors       = 'Henrik/Dino Chisa'
+    m.authors       = 'Henrik/Dino Chiesa'
     m.description   = 'A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to follow semver to avoid versioning conflicts. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.'
     m.summary       = 'A library for dealing with zip, bzip and zlib from .Net'
     m.language      = 'en-GB'
@@ -169,7 +169,7 @@ nugets_pack 'create_nuget_MonoAndroid10' => ['build/pkg', :versioning, :build, p
   p.metadata.instance_eval do |m|
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
-    m.authors       = 'Henrik/Dino Chisa'
+    m.authors       = 'Henrik/Dino Chiesa'
     m.description   = 'A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to follow semver to avoid versioning conflicts. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.'
     m.summary       = 'A library for dealing with zip, bzip and zlib from .Net'
     m.language      = 'en-GB'
@@ -190,7 +190,7 @@ nugets_pack 'create_nuget_Xamarin.iOS10' => ['build/pkg', :versioning, :build, p
   p.metadata.instance_eval do |m|
     m.version       = ENV['NUGET_VERSION']
     # of the nuget at least
-    m.authors       = 'Henrik/Dino Chisa'
+    m.authors       = 'Henrik/Dino Chiesa'
     m.description   = 'A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to follow semver to avoid versioning conflicts. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.'
     m.summary       = 'A library for dealing with zip, bzip and zlib from .Net'
     m.language      = 'en-GB'
