@@ -278,7 +278,7 @@ namespace Ionic.Zip.Tests.Error
             string[] fileNames =
                 {
                     Path.Combine(sourceDir, "Tools\\Zipit\\bin\\Debug\\Zipit.exe"),
-                    Path.Combine(sourceDir, "Zip\\bin\\Debug\\Ionic.Zip.xml"),
+                    Path.Combine(sourceDir, "Zip\\bin\\Debug\\DotNetZip.xml"),
                     Path.Combine(sourceDir, "Tools\\WinFormsApp\\Icon2.res"),
                 };
 
@@ -620,7 +620,7 @@ namespace Ionic.Zip.Tests.Error
             string[] filenames =
             {
                 Path.Combine(sourceDir, "Tools\\Zipit\\bin\\Debug\\Zipit.exe"),
-                Path.Combine(sourceDir, "Zip\\bin\\Debug\\Ionic.Zip.xml"),
+                Path.Combine(sourceDir, "Zip\\bin\\Debug\\DotNetZip.xml"),
                 Path.Combine(sourceDir, "Tools\\WinFormsApp\\Icon2.res"),
             };
 
@@ -683,7 +683,7 @@ namespace Ionic.Zip.Tests.Error
             {
                 Path.Combine(sourceDir, "Tools\\Zipit\\bin\\Debug\\Zipit.exe"),
                 Path.Combine(sourceDir, "Tools\\Unzip\\bin\\Debug\\Unzip.exe"),
-                Path.Combine(sourceDir, "Zip\\bin\\Debug\\Ionic.Zip.xml"),
+                Path.Combine(sourceDir, "Zip\\bin\\Debug\\DotNetZip.xml"),
                 Path.Combine(sourceDir, "Tools\\WinFormsApp\\Icon2.res"),
             };
 

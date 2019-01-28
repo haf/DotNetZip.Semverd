@@ -1411,9 +1411,9 @@ namespace Ionic.Zip.Tests.Extended
             string[] filenames =
                 {
                     Path.Combine(sourceDir, "Tools\\Zipit\\bin\\Debug\\Zipit.exe"),
-                    Path.Combine(sourceDir, "Zip\\bin\\Debug\\Ionic.Zip.dll"),
-                    Path.Combine(sourceDir, "Zip\\bin\\Debug\\Ionic.Zip.pdb"),
-                    Path.Combine(sourceDir, "Zip\\bin\\Debug\\Ionic.Zip.xml"),
+                    Path.Combine(sourceDir, "Zip\\bin\\Debug\\DotNetZip.dll"),
+                    Path.Combine(sourceDir, "Zip\\bin\\Debug\\DotNetZip.pdb"),
+                    Path.Combine(sourceDir, "Zip\\bin\\Debug\\DotNetZip.xml"),
                     //Path.Combine(SourceDir, "AppNote.txt")
                 };
 
@@ -1592,7 +1592,7 @@ namespace Ionic.Zip.Tests.Extended
                 "testing a zip library so challenging. " ;
 
             string testBin = TestUtilities.GetTestBinDir(CurrentDir);
-            string fileToZip = Path.Combine(testBin, "Ionic.Zip.dll");
+            string fileToZip = Path.Combine(testBin, "DotNetZip.dll");
 
             for (int i = 0; i < crypto.Length; i++)
             {

@@ -1867,7 +1867,7 @@ namespace Ionic.Zip.Tests.Streams
             string aspxPage = Path.Combine(resourceDir, "GenerateZip-cs.aspx");
             Assert.IsTrue(File.Exists(aspxPage));
 
-            string ionicZipDll = Path.Combine(testBin, "Ionic.Zip.dll");
+            string ionicZipDll = Path.Combine(testBin, "DotNetZip.dll");
             string loremFile = "LoremIpsum.txt";
 
             Action<String> copyToBin = (x) =>
