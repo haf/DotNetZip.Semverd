@@ -356,7 +356,7 @@ namespace Ionic.Zip
 
         internal HMACSHA1 _mac;
 
-        internal AesManaged _aesCipher;
+        internal Aes _aesCipher;
         internal ICryptoTransform _xform;
 
         private const int BLOCK_SIZE_IN_BYTES = 16;
@@ -428,7 +428,7 @@ namespace Ionic.Zip
 
             _mac = new HMACSHA1(_params.MacIv);
 
-            _aesCipher = new System.Security.Cryptography.AesManaged();
+            _aesCipher = System.Security.Cryptography.Aes.Create();
             _aesCipher.BlockSize = 128;
             _aesCipher.KeySize = keySizeInBits;  // 128, 192, 256
             _aesCipher.Mode = CipherMode.ECB;
@@ -834,6 +834,9 @@ namespace Ionic.Zip
                 _pendingCount = 0;
             }
             _s.Close();
+
+            _xform.Dispose();
+            _aesCipher.Dispose();
 
 #if WANT_TRACE
             untransformed.Close();
