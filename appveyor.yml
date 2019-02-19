@@ -7,7 +7,7 @@
       - master
   install:
   - set PATH=C:\Ruby25\bin;%PATH%
-  - gem install bundler --no-ri --no-rdoc
+  - gem install bundler --no-document
   - bundle install
   build_script:
   - bundle exec rake
@@ -24,7 +24,7 @@
       - master
   install:
   - set PATH=C:\Ruby25\bin;%PATH%
-  - gem install bundler --no-ri --no-rdoc
+  - gem install bundler --no-document
   - bundle install
   build_script:
   - bundle exec rake
