@@ -783,9 +783,12 @@ namespace Ionic.Zip
                 if (zf.Verbose)
                     zf.StatusMessageTextWriter.WriteLine("  {0}", e.FileName);
 
-                zf._entries.Add(e.FileName,e);
-                if (!zf._entriesInsensitive.ContainsKey(e.FileName))
-                    zf._entriesInsensitive.Add(e.FileName,e);
+                if (!(zf.IgnoreDuplicateFiles && zf._entries.ContainsKey(e.FileName)))
+                {
+                    zf._entries.Add(e.FileName,e);
+                    if (!zf._entriesInsensitive.ContainsKey(e.FileName))
+                        zf._entriesInsensitive.Add(e.FileName,e);
+                }
                 firstEntry = false;
             }
 
