@@ -480,6 +480,16 @@ namespace Ionic.Zip
         {
             get; set;
         }
+
+        /// <summary>
+        ///   Version of the csc.exe compiler, if not specified then the default version
+        ///   will be used.
+        /// </summary>
+        /// <exclude/>
+        public string CompilerVersion
+        {
+            get; set;
+        }
     }
 
 
@@ -757,9 +767,14 @@ namespace Ionic.Zip
                 // get the Ionic.Zip assembly
                 Assembly a1 = typeof(ZipFile).Assembly;
 
-                using (var csharp = new Microsoft.CSharp.CSharpCodeProvider
-                       (new Dictionary<string,string>() { { "CompilerVersion", "v2.0" } })) {
+                var providerOptions = new Dictionary<string, string>();
+                if (!string.IsNullOrEmpty(options.CompilerVersion))
+                {
+                    providerOptions.Add("CompilerVersion", options.CompilerVersion);
+                }
 
+                using (var csharp = new Microsoft.CSharp.CSharpCodeProvider(providerOptions))
+                {
                     ExtractorSettings settings =
                         (from x in SettingsList
                          where x.Flavor == options.Flavor
