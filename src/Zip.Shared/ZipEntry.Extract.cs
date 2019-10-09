@@ -1105,6 +1105,8 @@ namespace Ionic.Zip
                     return input2;
                 case (short)CompressionMethod.Deflate:
                     return new Zlib.DeflateStream(input2, Zlib.CompressionMode.Decompress, true);
+                case (short)CompressionMethod.Deflate64:
+                    return new Deflate64.Deflate64Stream(input2);
 #if BZIP
                 case (short)CompressionMethod.BZip2:
                     return new BZip2.BZip2InputStream(input2, true);
@@ -1303,7 +1305,8 @@ namespace Ionic.Zip
         static void ValidateCompression(short compressionMethod, string fileName, string compressionMethodName)
         {
             if ((compressionMethod != (short)CompressionMethod.None) &&
-                (compressionMethod != (short)CompressionMethod.Deflate)
+                (compressionMethod != (short)CompressionMethod.Deflate) &&
+                (compressionMethod != (short)CompressionMethod.Deflate64)
 #if BZIP
                 && (compressionMethod != (short)CompressionMethod.BZip2)
 #endif
