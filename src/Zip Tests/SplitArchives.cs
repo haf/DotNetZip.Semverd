@@ -722,6 +722,36 @@ namespace Ionic.Zip.Tests.Split
             }
         }
 
+        [TestMethod]
+        [Timeout(5 * 60 * 1000)]
+        public void Spanned_Zip64_WinZip_Unzip()
+        {
+            if (!WinZipIsPresent)
+                throw new Exception("winzip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility((zipFilePath, extractDir) =>
+            {
+                var args = string.Format("-d -yx {0} \"{1}\"",
+                               zipFilePath, extractDir);
+                Exec(wzunzip, args);
+            });
+        }
+
+        [TestMethod]
+        [Timeout(5 * 60 * 1000)]
+        public void Spanned_Zip64_7Zip_Unzip()
+        {
+            if (!SevenZipIsPresent)
+                throw new Exception("7-zip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility((zipFilePath, extractDir) =>
+            {
+                var args = string.Format("x {0} -o\"{1}\"",
+                               zipFilePath, extractDir);
+                Exec(sevenZip, args);
+            });
+        }
+
 
 #if INFOZIP_UNZIP_SUPPORTS_SPLIT_ARCHIVES
 
@@ -881,10 +911,45 @@ namespace Ionic.Zip.Tests.Split
                 Assert.AreEqual<int>(filesToAdd.Count, filesUnzipped.Length,
                                      "Incorrect number of files extracted, trail {0}", k);
             }
-
         }
 
+        private void Test_SpannedZip64_Unzip_Compatibility(Action<string, string> unzipAction)
+        {
+            TestContext.WriteLine("Creating fodder files... {0}",
+                                  DateTime.Now.ToString("G"));
+            CreateSomeFiles();
+            var filesToAdd = new List<String>(Directory.GetFiles(_fodderDir));
+            int[] segSizes = { 128, 256, 512 };
 
+            for (int k = 0; k < segSizes.Length; k++)
+            {
+                string trialDir = String.Format("trial.{0}", k);
+                Directory.CreateDirectory(trialDir);
+                string zipFile1 = Path.Combine(trialDir, "InitialSave." + k + ".zip");
+                TestContext.WriteLine("");
+                TestContext.WriteLine("Creating zip... T({0})...{1}",
+                                      k, DateTime.Now.ToString("G"));
+
+                using (var zip1 = new ZipFile())
+                {
+                    zip1.UseZip64WhenSaving = Zip64Option.Always;
+
+                    zip1.AddFiles(filesToAdd, "");
+                    zip1.MaxOutputSegmentSize = segSizes[k] * 1024;
+                    zip1.Save(zipFile1);
+                }
+
+                TestContext.WriteLine("");
+                TestContext.WriteLine("Extracting...");
+                string extractDir = Path.Combine(trialDir, "extract");
+                Directory.CreateDirectory(extractDir);
+
+                unzipAction(zipFile1, extractDir);
+
+                string[] filesUnzipped = Directory.GetFiles(extractDir);
+                Assert.AreEqual<int>(filesToAdd.Count, filesUnzipped.Length,
+                                     "Incorrect number of files extracted, trail {0}", k);
+            }
+        }
     }
-
 }

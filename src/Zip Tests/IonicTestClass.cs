@@ -304,15 +304,23 @@ namespace Ionic.Zip.Tests.Utilities
             {
                 if (_WinZipIsPresent == null)
                 {
-                    string progfiles = null;
-                    if (_wzunzip == null || _wzzip == null)
+                    var programFilesRoots = new[]
                     {
-                        progfiles = System.Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-                        _wzunzip = Path.Combine(progfiles, "winzip\\wzunzip.exe");
-                        _wzzip = Path.Combine(progfiles, "winzip\\wzzip.exe");
+                        System.Environment.GetEnvironmentVariable("ProgramFiles(x86)"),
+                        System.Environment.GetEnvironmentVariable("ProgramW6432")
+                    };
+                    foreach (var programFiles in programFilesRoots)
+                    {
+                        _wzunzip = Path.Combine(programFiles, "winzip\\wzunzip.exe");
+                        _wzzip = Path.Combine(programFiles, "winzip\\wzzip.exe");
+                        _WinZipIsPresent = File.Exists(_wzunzip) && File.Exists(_wzzip);
+                        if (_WinZipIsPresent.Value)
+                        {
+                            break;
+                        }
                     }
-                    _WinZipIsPresent = new Nullable<bool>(File.Exists(_wzunzip) && File.Exists(_wzzip));
                 }
+
                 return _WinZipIsPresent.Value;
             }
         }
