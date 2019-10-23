@@ -723,7 +723,7 @@ namespace Ionic.Zip.Tests.Split
         }
 
         [TestMethod]
-        [Timeout(5 * 60 * 1000)]
+        [Timeout(15 * 60 * 1000)]
         public void Spanned_Zip64_WinZip_Unzip()
         {
             if (!WinZipIsPresent)
@@ -738,7 +738,7 @@ namespace Ionic.Zip.Tests.Split
         }
 
         [TestMethod]
-        [Timeout(5 * 60 * 1000)]
+        [Timeout(15 * 60 * 1000)]
         public void Spanned_Zip64_7Zip_Unzip()
         {
             if (!SevenZipIsPresent)
@@ -748,7 +748,8 @@ namespace Ionic.Zip.Tests.Split
             {
                 var args = string.Format("x {0} -o\"{1}\"",
                                zipFilePath, extractDir);
-                Exec(sevenZip, args);
+                var output = Exec(sevenZip, args);
+                Assert.IsTrue(output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1);
             });
         }
 
@@ -918,38 +919,44 @@ namespace Ionic.Zip.Tests.Split
             TestContext.WriteLine("Creating fodder files... {0}",
                                   DateTime.Now.ToString("G"));
             CreateSomeFiles();
-            var filesToAdd = new List<String>(Directory.GetFiles(_fodderDir));
-            int[] segSizes = { 128, 256, 512 };
 
-            for (int k = 0; k < segSizes.Length; k++)
+            var file1Path = Path.Combine(_fodderDir, "1.dat");
+            var file2Path = Path.Combine(_fodderDir, "2.dat");
+
+            foreach (var filePath in new[] { file1Path, file2Path })
             {
-                string trialDir = String.Format("trial.{0}", k);
-                Directory.CreateDirectory(trialDir);
-                string zipFile1 = Path.Combine(trialDir, "InitialSave." + k + ".zip");
-                TestContext.WriteLine("");
-                TestContext.WriteLine("Creating zip... T({0})...{1}",
-                                      k, DateTime.Now.ToString("G"));
-
-                using (var zip1 = new ZipFile())
+                using (var file = File.Create(filePath))
                 {
-                    zip1.UseZip64WhenSaving = Zip64Option.Always;
-
-                    zip1.AddFiles(filesToAdd, "");
-                    zip1.MaxOutputSegmentSize = segSizes[k] * 1024;
-                    zip1.Save(zipFile1);
+                    // 6GB files (over default non-Zip64 '4GB' limit)
+                    file.Seek(6 * 1024 * 1024 * 1024L, SeekOrigin.Begin);
+                    file.Write(new byte[] { 1 }, 0, 1);
                 }
-
-                TestContext.WriteLine("");
-                TestContext.WriteLine("Extracting...");
-                string extractDir = Path.Combine(trialDir, "extract");
-                Directory.CreateDirectory(extractDir);
-
-                unzipAction(zipFile1, extractDir);
-
-                string[] filesUnzipped = Directory.GetFiles(extractDir);
-                Assert.AreEqual<int>(filesToAdd.Count, filesUnzipped.Length,
-                                     "Incorrect number of files extracted, trail {0}", k);
             }
+
+            Directory.CreateDirectory("zip-output");
+            var zipFilePath = Path.Combine("zip-output", "archive.zip");
+
+            using (var zipFile = new ZipFile())
+            {
+                zipFile.UseZip64WhenSaving = Zip64Option.Always;
+                // disable compression to make sure out 0-filled files would keep their size
+                zipFile.CompressionLevel = Zlib.CompressionLevel.None;
+                // 5GB span (over default non-Zip64 '4GB' limit)
+                zipFile.MaxOutputSegmentSize64 = 5 * 1024 * 1024 * 1024L;
+
+                zipFile.AddFile(file1Path, "");
+                zipFile.AddFile(file2Path, "");
+
+                zipFile.Save(zipFilePath);
+            }
+
+            var extractDir = "extract";
+            Directory.CreateDirectory(extractDir);
+
+            unzipAction(zipFilePath, extractDir);
+
+            string[] filesUnzipped = Directory.GetFiles(extractDir);
+            Assert.AreEqual(2, filesUnzipped.Length, "Incorrect number of files extracted");
         }
     }
 }
