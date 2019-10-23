@@ -652,6 +652,24 @@ namespace Ionic.Zlib
             throw new ZlibException("No Inflate or Deflate state!");
         }
 
+        /// <summary>
+        /// Set the dictionary to be used for either Inflation or Deflation unconditionally.
+        /// </summary>
+        /// <remarks>Decoding a MSZip file requires the dictionary state to be set unconditionally
+        /// at the end of each block to the previous decoded data</remarks>
+        /// <param name="dictionary">The dictionary bytes to use.</param>
+        /// <returns>Z_OK if all goes well.</returns>
+        public int SetDictionaryUnconditionally(byte[] dictionary)
+        {
+            if (istate != null)
+                return istate.SetDictionary(dictionary, true);
+
+            if (dstate != null)
+                return dstate.SetDictionary(dictionary);
+
+            throw new ZlibException("No Inflate or Deflate state!");
+        }
+
         // Flush as much pending output as possible. All deflate() output goes
         // through this function so some applications may wish to modify it
         // to avoid allocating a large strm->next_out buffer and copying into it.

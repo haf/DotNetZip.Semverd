@@ -1698,16 +1698,22 @@ namespace Ionic.Zlib
 
 
 
-        internal int SetDictionary(byte[] dictionary)
+        internal int SetDictionary(byte[] dictionary, bool unconditional = false)
         {
             int index = 0;
             int length = dictionary.Length;
-            if (mode != InflateManagerMode.DICT0)
-                throw new ZlibException("Stream error.");
-
-            if (Adler.Adler32(1, dictionary, 0, dictionary.Length) != _codec._Adler32)
+            //MSZip requires the dictionary to be set unconditionally
+            if (unconditional == false)
             {
-                return ZlibConstants.Z_DATA_ERROR;
+                if (mode != InflateManagerMode.DICT0)
+                {
+                    throw new ZlibException("Stream error.");
+                }
+
+                if (Adler.Adler32(1, dictionary, 0, dictionary.Length) != _codec._Adler32)
+                {
+                    return ZlibConstants.Z_DATA_ERROR;
+                }
             }
 
             _codec._Adler32 = Adler.Adler32(0, null, 0, 0);
