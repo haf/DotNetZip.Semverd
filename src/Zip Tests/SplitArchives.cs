@@ -779,7 +779,9 @@ namespace Ionic.Zip.Tests.Split
                     var args = string.Format("x {0} -o\"{1}\"",
                                    zipFilePath, extractDir);
                     var output = Exec(sevenZip, args);
-                    Assert.IsTrue(output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1);
+                    Assert.IsTrue(
+                        output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1,
+                        "Output contains errors: " + output);
                 });
         }
 
@@ -800,7 +802,9 @@ namespace Ionic.Zip.Tests.Split
                     var args = string.Format("x {0} -o\"{1}\"",
                                    zipFilePath, extractDir);
                     var output = Exec(sevenZip, args);
-                    Assert.IsTrue(output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1);
+                    Assert.IsTrue(
+                        output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1,
+                        "Output contains errors: " + output);
                 });
         }
 
