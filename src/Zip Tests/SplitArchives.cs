@@ -724,33 +724,84 @@ namespace Ionic.Zip.Tests.Split
 
         [TestMethod]
         [Timeout(15 * 60 * 1000)]
-        public void Spanned_Zip64_WinZip_Unzip()
+        public void Spanned_Zip64_HugeFiles_WinZip_Unzip()
         {
             if (!WinZipIsPresent)
                 throw new Exception("winzip is not present");
 
-            Test_SpannedZip64_Unzip_Compatibility((zipFilePath, extractDir) =>
-            {
-                var args = string.Format("-d -yx {0} \"{1}\"",
-                               zipFilePath, extractDir);
-                Exec(wzunzip, args);
-            });
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 6GB files (over default non-Zip64 '4GB' limit)
+                6 * 1024 * 1024 * 1024L,
+                // 5GB span (over default non-Zip64 '4GB' limit)
+                5 * 1024 * 1024 * 1024L,
+                (zipFilePath, extractDir) =>
+                {
+                    var args = string.Format("-d -yx {0} \"{1}\"",
+                                   zipFilePath, extractDir);
+                    Exec(wzunzip, args);
+                });
         }
 
         [TestMethod]
         [Timeout(15 * 60 * 1000)]
-        public void Spanned_Zip64_7Zip_Unzip()
+        public void Spanned_Zip64_SmallFiles_WinZip_Unzip()
+        {
+            if (!WinZipIsPresent)
+                throw new Exception("winzip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 2MB files
+                2 * 1024 * 1024L,
+                // 1MB span
+                1 * 1024 * 1024L,
+                (zipFilePath, extractDir) =>
+                {
+                    var args = string.Format("-d -yx {0} \"{1}\"",
+                                   zipFilePath, extractDir);
+                    Exec(wzunzip, args);
+                });
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64_HugeFiles_7Zip_Unzip()
         {
             if (!SevenZipIsPresent)
                 throw new Exception("7-zip is not present");
 
-            Test_SpannedZip64_Unzip_Compatibility((zipFilePath, extractDir) =>
-            {
-                var args = string.Format("x {0} -o\"{1}\"",
-                               zipFilePath, extractDir);
-                var output = Exec(sevenZip, args);
-                Assert.IsTrue(output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1);
-            });
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 6GB files (over default non-Zip64 '4GB' limit)
+                6 * 1024 * 1024 * 1024L,
+                // 5GB span (over default non-Zip64 '4GB' limit)
+                5 * 1024 * 1024 * 1024L,
+                (zipFilePath, extractDir) =>
+                {
+                    var args = string.Format("x {0} -o\"{1}\"",
+                                   zipFilePath, extractDir);
+                    var output = Exec(sevenZip, args);
+                    Assert.IsTrue(output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1);
+                });
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64_SmallFiles_7Zip_Unzip()
+        {
+            if (!SevenZipIsPresent)
+                throw new Exception("7-zip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 2MB files
+                2 * 1024 * 1024L,
+                // 1MB span
+                1 * 1024 * 1024L,
+                (zipFilePath, extractDir) =>
+                {
+                    var args = string.Format("x {0} -o\"{1}\"",
+                                   zipFilePath, extractDir);
+                    var output = Exec(sevenZip, args);
+                    Assert.IsTrue(output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1);
+                });
         }
 
 
@@ -914,7 +965,10 @@ namespace Ionic.Zip.Tests.Split
             }
         }
 
-        private void Test_SpannedZip64_Unzip_Compatibility(Action<string, string> unzipAction)
+        private void Test_SpannedZip64_Unzip_Compatibility(
+            long fileSize,
+            long spanSize,
+            Action<string, string> unzipAction)
         {
             TestContext.WriteLine("Creating fodder files... {0}",
                                   DateTime.Now.ToString("G"));
@@ -927,8 +981,7 @@ namespace Ionic.Zip.Tests.Split
             {
                 using (var file = File.Create(filePath))
                 {
-                    // 6GB files (over default non-Zip64 '4GB' limit)
-                    file.Seek(6 * 1024 * 1024 * 1024L, SeekOrigin.Begin);
+                    file.Seek(fileSize, SeekOrigin.Begin);
                     file.Write(new byte[] { 1 }, 0, 1);
                 }
             }
@@ -941,8 +994,7 @@ namespace Ionic.Zip.Tests.Split
                 zipFile.UseZip64WhenSaving = Zip64Option.Always;
                 // disable compression to make sure out 0-filled files would keep their size
                 zipFile.CompressionLevel = Zlib.CompressionLevel.None;
-                // 5GB span (over default non-Zip64 '4GB' limit)
-                zipFile.MaxOutputSegmentSize64 = 5 * 1024 * 1024 * 1024L;
+                zipFile.MaxOutputSegmentSize64 = spanSize;
 
                 zipFile.AddFile(file1Path, "");
                 zipFile.AddFile(file2Path, "");
