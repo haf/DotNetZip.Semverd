@@ -2485,10 +2485,10 @@ namespace Ionic.Zip
                     // cannot just replace the entries - the app may be holding them
                     foreach (ZipEntry e1 in x)
                     {
-						var e2 = this[e1.FileName];
-						if (e2 != null && !e2.IsChanged)
+                        var e2 = this[e1.FileName];
+                        if (e2 != null && !e2.IsChanged)
                         {
-							e2.CopyMetaData(e1);
+                            e2.CopyMetaData(e1);
                         }
                     }
                 }
