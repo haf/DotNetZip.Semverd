@@ -722,6 +722,150 @@ namespace Ionic.Zip.Tests.Split
             }
         }
 
+        public void WinZip_Unzip(string zipFilePath, string extractDir)
+        {
+            var args = string.Format("-d -yx {0} \"{1}\"",
+                                   zipFilePath, extractDir);
+            Exec(wzunzip, args);
+        }
+
+        public void SevenZip_Unzip(string zipFilePath, string extractDir)
+        {
+            var args = string.Format("x {0} -o\"{1}\"",
+                           zipFilePath, extractDir);
+            var output = Exec(sevenZip, args);
+            Assert.IsTrue(
+                output.IndexOf("error", StringComparison.OrdinalIgnoreCase) == -1,
+                "Output contains errors: " + output);
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64Always_HugeFiles_WinZip_Unzip()
+        {
+            if (!WinZipIsPresent)
+                throw new Exception("winzip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 6GB files (over default non-Zip64 '4GB' limit)
+                6 * 1024 * 1024 * 1024L,
+                // 5GB span (over default non-Zip64 '4GB' limit)
+                5 * 1024 * 1024 * 1024L,
+                Zip64Option.Always,
+                WinZip_Unzip);
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64Always_SmallFiles_WinZip_Unzip()
+        {
+            if (!WinZipIsPresent)
+                throw new Exception("winzip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 2MB files
+                2 * 1024 * 1024L,
+                // 1MB span
+                1 * 1024 * 1024L,
+                Zip64Option.Always,
+                WinZip_Unzip);
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64AsNecessary_SmallFiles_WinZip_Unzip()
+        {
+            if (!WinZipIsPresent)
+                throw new Exception("winzip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 2MB files
+                2 * 1024 * 1024L,
+                // 1MB span
+                1 * 1024 * 1024L,
+                Zip64Option.AsNecessary,
+                WinZip_Unzip);
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64Never_SmallFiles_WinZip_Unzip()
+        {
+            if (!WinZipIsPresent)
+                throw new Exception("winzip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 2MB files
+                2 * 1024 * 1024L,
+                // 1MB span
+                1 * 1024 * 1024L,
+                Zip64Option.Never,
+                WinZip_Unzip);
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64Always_HugeFiles_7Zip_Unzip()
+        {
+            if (!SevenZipIsPresent)
+                throw new Exception("7-zip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 6GB files (over default non-Zip64 '4GB' limit)
+                6 * 1024 * 1024 * 1024L,
+                // 5GB span (over default non-Zip64 '4GB' limit)
+                5 * 1024 * 1024 * 1024L,
+                Zip64Option.Always,
+                SevenZip_Unzip);
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64Always_SmallFiles_7Zip_Unzip()
+        {
+            if (!SevenZipIsPresent)
+                throw new Exception("7-zip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 2MB files
+                2 * 1024 * 1024L,
+                // 1MB span
+                1 * 1024 * 1024L,
+                Zip64Option.Always,
+                SevenZip_Unzip);
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64AsNecessary_SmallFiles_7Zip_Unzip()
+        {
+            if (!SevenZipIsPresent)
+                throw new Exception("7-zip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 2MB files
+                2 * 1024 * 1024L,
+                // 1MB span
+                1 * 1024 * 1024L,
+                Zip64Option.AsNecessary,
+                SevenZip_Unzip);
+        }
+
+        [TestMethod]
+        [Timeout(15 * 60 * 1000)]
+        public void Spanned_Zip64Never_SmallFiles_7Zip_Unzip()
+        {
+            if (!SevenZipIsPresent)
+                throw new Exception("7-zip is not present");
+
+            Test_SpannedZip64_Unzip_Compatibility(
+                // 2MB files
+                2 * 1024 * 1024L,
+                // 1MB span
+                1 * 1024 * 1024L,
+                Zip64Option.Never,
+                SevenZip_Unzip);
+        }
 
 #if INFOZIP_UNZIP_SUPPORTS_SPLIT_ARCHIVES
 
@@ -881,10 +1025,53 @@ namespace Ionic.Zip.Tests.Split
                 Assert.AreEqual<int>(filesToAdd.Count, filesUnzipped.Length,
                                      "Incorrect number of files extracted, trail {0}", k);
             }
-
         }
 
+        private void Test_SpannedZip64_Unzip_Compatibility(
+            long fileSize,
+            long spanSize,
+            Zip64Option zip64Option,
+            Action<string, string> unzipAction)
+        {
+            TestContext.WriteLine("Creating fodder files... {0}",
+                                  DateTime.Now.ToString("G"));
+            CreateSomeFiles();
 
+            var file1Path = Path.Combine(_fodderDir, "1.dat");
+            var file2Path = Path.Combine(_fodderDir, "2.dat");
+
+            foreach (var filePath in new[] { file1Path, file2Path })
+            {
+                using (var file = File.Create(filePath))
+                {
+                    file.Seek(fileSize, SeekOrigin.Begin);
+                    file.Write(new byte[] { 1 }, 0, 1);
+                }
+            }
+
+            Directory.CreateDirectory("zip-output");
+            var zipFilePath = Path.Combine("zip-output", "archive.zip");
+
+            using (var zipFile = new ZipFile())
+            {
+                zipFile.UseZip64WhenSaving = zip64Option;
+                // disable compression to make sure out 0-filled files would keep their size
+                zipFile.CompressionLevel = Zlib.CompressionLevel.None;
+                zipFile.MaxOutputSegmentSize64 = spanSize;
+
+                zipFile.AddFile(file1Path, "");
+                zipFile.AddFile(file2Path, "");
+
+                zipFile.Save(zipFilePath);
+            }
+
+            var extractDir = "extract";
+            Directory.CreateDirectory(extractDir);
+
+            unzipAction(zipFilePath, extractDir);
+
+            string[] filesUnzipped = Directory.GetFiles(extractDir);
+            Assert.AreEqual(2, filesUnzipped.Length, "Incorrect number of files extracted");
+        }
     }
-
 }

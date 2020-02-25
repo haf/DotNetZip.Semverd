@@ -192,9 +192,59 @@ namespace Ionic.Zip
                 (this._container.ZipFile.MaxOutputSegmentSize64 != 0);
             if (segmented) // workitem 13915
             {
-                // Emit nonzero disknumber only if saving segmented archive.
-                bytes[i++] = (byte)(_diskNumber & 0x00FF);
-                bytes[i++] = (byte)((_diskNumber & 0xFF00) >> 8);
+                if (_presumeZip64 || _diskNumber > 0xFFFF)
+                {
+                    /*
+                     * From spec:
+                       4.5.3 -Zip64 Extended Information Extra Field (0x0001):
+
+                          The following is the layout of the zip64 extended 
+                          information "extra" block. If one of the size or
+                          offset fields in the Local or Central directory
+                          record is too small to hold the required data,
+                          a Zip64 extended information record is created.
+                          The order of the fields in the zip64 extended 
+                          information record is fixed, but the fields MUST
+                          only appear if the corresponding Local or Central
+                          directory record field is set to 0xFFFF or 0xFFFFFFFF.
+
+                          Note: all fields stored in Intel low-byte/high-byte order.
+
+                            Value      Size       Description
+                            -----      ----       -----------
+                    (ZIP64) 0x0001     2 bytes    Tag for this "extra" block type
+                            Size       2 bytes    Size of this "extra" block
+                            Original 
+                            Size       8 bytes    Original uncompressed file size
+                            Compressed
+                            Size       8 bytes    Size of compressed data
+                            Relative Header
+                            Offset     8 bytes    Offset of local header record
+                            Disk Start
+                            Number     4 bytes    Number of the disk on which
+                                                  this file starts
+
+                    *
+                    * As of 2019, major tools actually enforce this constraint and
+                    * would display warnings (7-Zip) or even not unzip archives (WinZip)
+                    * that have a header set in Zip64, but doesn't have -1 value in
+                    * appropriate fields of the record itself.
+                    * 
+                    * Currently we always set 'Relative Header' and 'Disk Start' inside
+                    * the Extra block for Zip64, meaning that we also need to make sure
+                    * that their non-Zip64 counterparts would be -1 (0xFFFFFFFF
+                    * and 0xFFFF respectively), regardless of the fact if the value fits
+                    * into uint32/uint16 range or not.
+                    */
+                    bytes[i++] = 0xFF;
+                    bytes[i++] = 0xFF;
+                }
+                else
+                {
+                    // Emit nonzero disknumber only if saving segmented archive.
+                    bytes[i++] = (byte)(_diskNumber & 0x00FF);
+                    bytes[i++] = (byte)((_diskNumber & 0xFF00) >> 8);
+                }
             }
             else
             {
@@ -220,14 +270,19 @@ namespace Ionic.Zip
             // workitem 11131
             // relative offset of local header.
             //
-            // If necessary to go to 64-bit value, then emit 0xFFFFFFFF,
-            // else write out the value.
-            //
-            // Even if zip64 is required for other reasons - number of the entry
-            // > 65534, or uncompressed size of the entry > MAX_INT32, the ROLH
-            // need not be stored in a 64-bit field .
-            if (_RelativeOffsetOfLocalHeader > 0xFFFFFFFFL) // _OutputUsesZip64.Value
+            // If necessary to go to 64-bit value or when Zip64 is required, then
+            // emit 0xFFFFFFFF, else write out the value.
+            if (_presumeZip64 || _RelativeOffsetOfLocalHeader > 0xFFFFFFFFL)
             {
+                /*
+                 * See spec & more details above in _diskNumber section
+                 * 
+                 * Currently we always set 'Relative Header' and 'Disk Start' inside
+                 * the Extra block for Zip64, meaning that we also need to make sure
+                 * that their non-Zip64 counterparts would be -1 (0xFFFFFFFF
+                 * and 0xFFFF respectively), regardless of the fact if the value fits
+                 * into uint32/uint16 range or not.
+                 */
                 bytes[i++] = 0xFF;
                 bytes[i++] = 0xFF;
                 bytes[i++] = 0xFF;
@@ -369,8 +424,9 @@ namespace Ionic.Zip
                     i += 8;
 
                     // starting disk number
-                    Array.Copy(BitConverter.GetBytes(0), 0, block, i, 4);
+                    Array.Copy(BitConverter.GetBytes(_diskNumber), 0, block, i, 4);
                 }
+
                 listOfBlocks.Add(block);
             }
 
