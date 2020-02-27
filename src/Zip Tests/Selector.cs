@@ -53,7 +53,7 @@ namespace Ionic.Zip.Tests
             tomorrow = todayAtMidnight + new TimeSpan(1, 0, 0, 0);
             threeDaysAgo = todayAtMidnight - new TimeSpan(3, 0, 0, 0);
             twoDaysAgo = todayAtMidnight - new TimeSpan(2, 0, 0, 0);
-            threeYearsAgo = new DateTime(DateTime.Now.Year - 3, DateTime.Now.Month, DateTime.Now.Day);
+            threeYearsAgo = todayAtMidnight.AddYears(-3);
 
             oneDay = new TimeSpan(1,0,0,0);
             yesterdayAtMidnight = todayAtMidnight - oneDay;
@@ -967,9 +967,7 @@ namespace Ionic.Zip.Tests
 
                 // None of the files should have been created
                 // more than 20 years ago
-                var twentyYearsAgo = new DateTime(DateTime.Now.Year - 20,
-                                                  DateTime.Now.Month,
-                                                  DateTime.Now.Day);
+                var twentyYearsAgo = todayAtMidnight.AddYears(-20);
                 crit = String.Format("ctime < {0}",
                                      twentyYearsAgo.ToString("yyyy-MM-dd"));
                 var selected5 = zip1.SelectEntries(crit);
