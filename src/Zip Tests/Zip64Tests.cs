@@ -1251,7 +1251,24 @@ namespace Ionic.Zip.Tests.Zip64
             System.Threading.Thread.Sleep(120);
         }
 
+        [TestMethod]
+        public void Zip64_ExtractZip64Archives()
+        {
+            File.Delete(@"C:\tmp\test.zip");
+            File.WriteAllText(@"C:\tmp\content.txt", "someContent");
 
+            using (ZipFile zipFile = new ZipFile(@"C:\tmp\test.zip"))
+            {
+                zipFile.AddFile(@"C:\tmp\content.txt");
+
+                zipFile.UseZip64WhenSaving = Zip64Option.Always;
+                zipFile.MaxOutputSegmentSize = 700 * 984540;
+                zipFile.Save();
+            }
+
+            var extractedZipFile = ZipFile.Read(@"C:\tmp\test.zip");
+            extractedZipFile.ExtractAll(@"C:\tmp\extracted", ExtractExistingFileAction.OverwriteSilently);
+        }
 
         [TestMethod, Timeout((int)(2 * 60*60*1000))] // 60*60*1000 = 1 hr
         public void Zip64_Winzip_Setup()
