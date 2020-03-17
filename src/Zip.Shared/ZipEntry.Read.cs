@@ -615,14 +615,14 @@ namespace Ionic.Zip
                                                          dataSize, posn));
             int remainingData = dataSize;
 
-            var slurp = new Func<Int64>( () => {
-                    if (remainingData < 8)
-                        throw new BadReadException(String.Format("  Missing data for ZIP64 extra field, position 0x{0:X16}", posn));
-                    var x = BitConverter.ToInt64(buffer, j);
-                    j+= 8;
-                    remainingData -= 8;
-                    return x;
-                });
+            var slurp = new Func<Int64>(() => {
+                if (remainingData < 8)
+                    throw new BadReadException(String.Format("  Missing data for ZIP64 extra field, position 0x{0:X16}", posn));
+                var x = BitConverter.ToInt64(buffer, j);
+                j += 8;
+                remainingData -= 8;
+                return x;
+            });
 
             if (this._UncompressedSize == 0xFFFFFFFF)
                 this._UncompressedSize = slurp();
@@ -633,9 +633,27 @@ namespace Ionic.Zip
             if (this._RelativeOffsetOfLocalHeader == 0xFFFFFFFF)
                 this._RelativeOffsetOfLocalHeader = slurp();
 
-            // Ignore anything else. Potentially there are 4 more bytes for the
-            // disk start number.  DotNetZip currently doesn't handle multi-disk
-            // archives.
+            // From PKWare docs:
+            // the fields MUST
+            // only appear if the corresponding Local or Central
+            // directory record field is set to 0xFFFF or 0xFFFFFFFF.
+            //
+            // Even though spec prescribes that it'll always be there
+            // if disk number in Local/Central entry header has a value
+            // of 65535 (0xFFFF), but let's only do so if the data is
+            // actually available in Zip64 header and tolerate a missing
+            // value here to offer more interopability with other
+            // less common tools.
+            //
+            // Note: this can happen even with non-spanning zips if
+            // Zip64 header is emmited (ex: file size over int32 range)
+            if (this._diskNumber == 0xFFFF && remainingData >= 4)
+            {
+                this._diskNumber = BitConverter.ToUInt32(buffer, j);
+                j += 4;
+                remainingData -= 4;
+            }
+
             return j;
         }
 
