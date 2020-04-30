@@ -982,6 +982,74 @@ namespace Ionic.Zip.Tests.WinZipAes
 
         }
 
+        [TestMethod]
+        public void WZA_InMemory_MultiplesOf16KBlockSize()
+        {
+
+            string fname = "BadFile";
+            string password = "a";
+
+            int redundancy = 175; // something less than 256 to introduce redundancy for deflate to compress out
+
+            EncryptionAlgorithm ea = EncryptionAlgorithm.WinZipAes256;
+
+            for (int fileLen = 17383; fileLen <= 17388; ++fileLen) // WinZip AES256
+            {
+
+                // ARRANGE: generate a compressed zip file
+
+                // File of pseudo-random bytes
+                int m = 65537;
+                int a = 75;
+                int randSeed = 231;
+
+                var dat = new byte[fileLen];
+                for (int i = 0; i < fileLen; ++i)
+                {
+                    // generate predicatable pseudo-random numbers for test:
+                    randSeed = (randSeed * a) % m;
+                    dat[i] = (byte)((randSeed * redundancy) / m);
+                }
+
+                // generate the zip file
+                var zipStream = new MemoryStream();
+                byte[] zipData;
+                using (ZipFile zip = new ZipFile())
+                {
+                    zip.Password = password;
+                    zip.Encryption = ea;
+                    zip.ParallelDeflateThreshold = -1;
+                    zip.AddEntry(fname, dat);
+
+                    zip.Save(zipStream);
+
+                    zipData = zipStream.ToArray();
+                }
+
+                // ACT:
+
+                // now attempt to extract
+                byte[] reBuilt;
+                using (var decryptedStream = new MemoryStream())
+                {
+                    using (var ms = new MemoryStream(zipData))
+                    {
+                        using (ZipFile zip = ZipFile.Read(ms))
+                        {
+                            zip.Password = password;
+                            zip[fname].Extract(decryptedStream);
+                        }
+                    }
+                    // get the rebuilt stream
+                    reBuilt = decryptedStream.ToArray();
+                }
+
+                // ASSERT:
+
+                CollectionAssert.AreEqual(dat, reBuilt);
+            }
+        }
+
 
     }
 }

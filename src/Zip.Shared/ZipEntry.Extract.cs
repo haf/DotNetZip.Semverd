@@ -974,6 +974,12 @@ namespace Ionic.Zip
                     encryptionAlgorithm == EncryptionAlgorithm.WinZipAes256)
                 {
                     var wzs = _inputDecryptorStream as WinZipAesCipherStream;
+                    
+                    // sometimes there are extra bytes in the WinZipAES stream that were not required to generate
+                    // the decryption output. Read and ignore these bytes, so that the CRC can be calculated:
+                    byte[] throwAwayBuffer = new byte[256];
+                    wzs.Read(throwAwayBuffer, 0, 256);
+
                     _aesCrypto_forExtract.CalculatedMac = wzs.FinalAuthentication;
 
                     _aesCrypto_forExtract.ReadAndVerifyMac(archiveStream); // throws if MAC is bad
