@@ -1600,7 +1600,17 @@ namespace Ionic.Zip
             return _InternalAddEntry(ze);
         }
 
+        public void AddEntry(ZipEntry ze)
+        {
+            if (ze._container != null)
+            {
+                throw new InvalidOperationException("Entry already belongs to a zip file");
+            }
 
+            ze._container = new ZipContainer(this);
+            InternalAddEntry(ze.FileName, ze);
+            AfterAddEntry(ze);
+        }
 
         private ZipEntry _InternalAddEntry(ZipEntry ze)
         {
