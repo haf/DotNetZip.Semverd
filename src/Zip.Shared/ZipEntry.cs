@@ -869,7 +869,7 @@ namespace Ionic.Zip
             get { return _FileNameInArchive; }
             set
             {
-                if (_container.ZipFile == null)
+                if (_container != null && _container.ZipFile == null)
                     throw new ZipException("Cannot rename; this is not supported in ZipOutputStream/ZipInputStream.");
 
                 // rename the entry!
@@ -879,12 +879,19 @@ namespace Ionic.Zip
                 // workitem 8180
                 if (_FileNameInArchive == filename) return; // nothing to do
 
-                // workitem 8047 - when renaming, must remove old and then add a new entry
-                this._container.ZipFile.RemoveEntry(this);
-                this._container.ZipFile.InternalAddEntry(filename, this);
+                if (_container != null)
+                {
+                    // workitem 8047 - when renaming, must remove old and then add a new entry
+                    this._container.ZipFile.RemoveEntry(this);
+                    this._container.ZipFile.InternalAddEntry(filename, this);
+                }
 
                 _FileNameInArchive = filename;
-                _container.ZipFile.NotifyEntryChanged();
+                if (_container != null)
+                {
+                    _container.ZipFile.NotifyEntryChanged();
+                }
+
                 _metadataChanged = true;
             }
         }
@@ -2422,7 +2429,76 @@ namespace Ionic.Zip
         }
 
 
+        public ZipEntry CloneForNewZipFile(ZipFile newZipFile)
+        {
+            if (this.Source != ZipEntrySource.ZipFile)
+            {
+                throw new InvalidOperationException("The entry you are trying to add wasn't loaded from a zip file.");
+            }
 
+            if (this.IsChanged)
+            {
+                throw new InvalidOperationException("The entry you are trying to add was modified.");
+            }
+
+            if (this.IsDirectory)
+            {
+                throw new InvalidOperationException("The entry you are trying to add is a directory.");
+            }
+
+            if (!this.CompressionMethod.Equals(newZipFile.CompressionMethod))
+            {
+                throw new InvalidOperationException("The entry you are trying to add uses another compression method.");
+            }
+
+            if (this.ArchiveStream is ZipSegmentedStream)
+            {
+                throw new InvalidOperationException("The entry you are trying to add is from a multi-part zip.");
+            }
+
+            var clone = new ZipEntry
+            {
+                __FileDataPosition = this.__FileDataPosition,
+                _actualEncoding = this._actualEncoding,
+                _archiveStream = this._archiveStream,
+                _Atime = this._Atime,
+                _Comment = this._Comment,
+                _CompressedSize = this._CompressedSize,
+                _CompressionLevel = this._CompressionLevel,
+                _CompressionMethod = this._CompressionMethod,
+                _Crc32 = this._Crc32,
+                _Ctime = this._Ctime,
+                _emitNtfsTimes = this._emitNtfsTimes,
+                _emitUnixTimes = this._emitUnixTimes,
+                _Encryption = this._Encryption,
+                _Encryption_FromZipFile = this._Encryption_FromZipFile,
+                _entryRequiresZip64 = this._entryRequiresZip64,
+                _FileNameInArchive = this._FileNameInArchive,
+                _LastModified = this._LastModified,
+                _LengthOfHeader = this._LengthOfHeader,
+                _metadataChanged = this._metadataChanged,
+                _Mtime = this._Mtime,
+                _ntfsTimesAreSet = this._ntfsTimesAreSet,
+                _Password = this._Password,
+                _presumeZip64 = this._presumeZip64,
+                _RelativeOffsetOfLocalHeader = this._RelativeOffsetOfLocalHeader,
+                _restreamRequiredOnSave = this._restreamRequiredOnSave,
+                _sourceIsEncrypted = this._sourceIsEncrypted,
+                _TimeBlob = this._TimeBlob,
+                _timestamp = this._timestamp,
+                _UncompressedSize = this._UncompressedSize,
+                _VersionMadeBy = this._VersionMadeBy,
+                _VersionNeeded = this._VersionNeeded,
+                AlternateEncoding = this.AlternateEncoding,
+                AlternateEncodingUsage = this.AlternateEncodingUsage,
+                ExtractExistingFile = this.ExtractExistingFile,
+                SetCompression = this.SetCompression,
+                ZipErrorAction = this.ZipErrorAction,
+                _Source = this._Source
+            };
+
+            return clone;
+        }
 
         internal void MarkAsDirectory()
         {
