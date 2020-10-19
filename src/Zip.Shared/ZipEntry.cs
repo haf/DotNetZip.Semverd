@@ -869,7 +869,7 @@ namespace Ionic.Zip
             get { return _FileNameInArchive; }
             set
             {
-                if (_container.ZipFile == null)
+                if (_container != null && _container.ZipFile == null)
                     throw new ZipException("Cannot rename; this is not supported in ZipOutputStream/ZipInputStream.");
 
                 // rename the entry!
@@ -879,12 +879,19 @@ namespace Ionic.Zip
                 // workitem 8180
                 if (_FileNameInArchive == filename) return; // nothing to do
 
-                // workitem 8047 - when renaming, must remove old and then add a new entry
-                this._container.ZipFile.RemoveEntry(this);
-                this._container.ZipFile.InternalAddEntry(filename, this);
+                if (_container != null)
+                {
+                    // workitem 8047 - when renaming, must remove old and then add a new entry
+                    this._container.ZipFile.RemoveEntry(this);
+                    this._container.ZipFile.InternalAddEntry(filename, this);
+                }
 
                 _FileNameInArchive = filename;
-                _container.ZipFile.NotifyEntryChanged();
+                if (_container != null)
+                {
+                    _container.ZipFile.NotifyEntryChanged();
+                }
+
                 _metadataChanged = true;
             }
         }
