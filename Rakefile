@@ -11,7 +11,7 @@ Albacore::Tasks::Versionizer.new :versioning
 paket = '.paket/paket.exe'
 file paket do
   dir = File.dirname(paket)
-  sh "dotnet tool install Paket --version 5.190.0 --tool-path #{dir}"
+  sh "dotnet tool install Paket --version 5.252.0 --tool-path #{dir}"
 end
 
 task :restore => [paket] do
