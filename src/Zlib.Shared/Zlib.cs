@@ -507,23 +507,11 @@ namespace Ionic.Zlib
                 len -= k;
                 while (k >= 16)
                 {
-                    //s1 += (buf[index++] & 0xff); s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
-                    s1 += buf[index++]; s2 += s1;
+                    for (var trash = 0; trash < 16; trash++)
+                    {
+                        s1 += buf[index++];
+                        s2 += s1;
+                    }
                     k -= 16;
                 }
                 if (k != 0)
