@@ -10,6 +10,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ComHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\BlockType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\Deflate64Stream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\FileFormats.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\HuffmanTree.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\InflaterManaged.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\InflaterState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\InputBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\MatchState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deflate64\OutputWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EncryptionAlgorithm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Events.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions.cs" />

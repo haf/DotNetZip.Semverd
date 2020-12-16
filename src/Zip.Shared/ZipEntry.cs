@@ -2915,7 +2915,7 @@ namespace Ionic.Zip
     ///   <see
     ///   href="http://www.pkware.com/documents/casestudies/APPNOTE.TXT">PKWare's
     ///   ZIP Specification</see> describes a number of distinct
-    ///   cmopression methods that can be used within a zip
+    ///   compression methods that can be used within a zip
     ///   file. DotNetZip supports a subset of them.
     /// </remarks>
     public enum CompressionMethod
@@ -2932,6 +2932,12 @@ namespace Ionic.Zip
         ///   files. For COM environments, the value is 8.
         /// </summary>
         Deflate = 8,
+
+        /// <summary>
+        /// DEFLATE64 compression. (Decompress only).
+        /// For COM environments, the value is 9.
+        /// </summary>
+        Deflate64 = 9,
 
 #if BZIP
         /// <summary>
