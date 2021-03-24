@@ -368,6 +368,8 @@ namespace Ionic.Zip
                 else break;
                 if (success) break;
 
+                //Move back 3 bytes, to make sure incomplete signatures will be read as a whole
+                stream.Seek(-3, System.IO.SeekOrigin.Current);
             } while (true);
 
             if (!success)
