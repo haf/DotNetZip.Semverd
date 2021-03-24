@@ -338,7 +338,7 @@ namespace Ionic.Zip
         {
             long startingPosition = stream.Position;
 
-            int BATCH_SIZE = 65536; // 2048;
+            int BATCH_SIZE = 65536; //  8192;
             byte[] targetBytes = new byte[4];
             targetBytes[0] = (byte)(SignatureToFind >> 24);
             targetBytes[1] = (byte)((SignatureToFind & 0x00FF0000) >> 16);
