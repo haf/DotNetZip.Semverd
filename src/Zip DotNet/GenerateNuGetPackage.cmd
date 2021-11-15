@@ -1,0 +1,1 @@
+dotnet pack ".\Zip DotNet.csproj" -c Release -p:PackageVersion=%1 -p:AssemblyVersion=%1 /p:Version=%1 --output .nugets /p:IsCIBuild=%2

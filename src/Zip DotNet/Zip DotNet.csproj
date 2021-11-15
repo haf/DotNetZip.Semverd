@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net48;netstandard2.1</TargetFrameworks>
+    <RootNamespace>Ionic.Zip</RootNamespace>
+    <AssemblyName>DotNetZip</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsCIBuild>false</IsCIBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants>AESCRYPTO;BZIP</DefineConstants>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Ionic.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>embedded</DebugType>
+    <ContinuousIntegrationBuild>$(IsCIBuild)</ContinuousIntegrationBuild>
+    <PackageVersion>1.16.0</PackageVersion>
+    <Title>DotNetZip</Title>
+    <Authors>Henrik/Dino Chiesa</Authors>
+    <Description>A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to follow semver to avoid versioning conflicts. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.</Description>
+    <PackageReleaseNotes>Full version: 1.15.0.065e51.</PackageReleaseNotes>
+    <Copyright>Dino Chiesa</Copyright>
+    <PackageTags>DotNetZip</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\BZip2\BitWriter.cs" Link="BZip2\BitWriter.cs" />
+    <Compile Include="..\BZip2\BZip2Compressor.cs" Link="BZip2\BZip2Compressor.cs" />
+    <Compile Include="..\BZip2\BZip2InputStream.cs" Link="BZip2\BZip2InputStream.cs" />
+    <Compile Include="..\BZip2\BZip2OutputStream.cs" Link="BZip2\BZip2OutputStream.cs" />
+    <Compile Include="..\BZip2\ParallelBZip2OutputStream.cs" Link="BZip2\ParallelBZip2OutputStream.cs" />
+    <Compile Include="..\BZip2\Rand.cs" Link="BZip2\Rand.cs" />
+  </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
+      <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    </ItemGroup>
+
+    <Import Project="..\Zlib.Shared\Zlib.Shared.projitems" Label="Shared" />
+
+    <Import Project="..\Zip.Shared\Zip.Shared.projitems" Label="Shared" />
+
+</Project>
