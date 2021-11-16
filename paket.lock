@@ -1,26 +1,13 @@
 STORAGE: NONE
+CONTENT: NONE
 RESTRICTION: == netstandard2.0
 NUGET
-  remote: https://www.nuget.org/api/v2
-    Microsoft.NETCore.Platforms (5.0)
-    Microsoft.NETCore.Targets (5.0)
-    System.Runtime (4.3.1)
-      Microsoft.NETCore.Platforms (>= 1.1.1)
-      Microsoft.NETCore.Targets (>= 1.1.3)
-    System.Runtime.CompilerServices.Unsafe (5.0)
-    System.Security.AccessControl (5.0)
-      System.Security.Principal.Windows (>= 5.0)
-    System.Security.Permissions (5.0)
-      System.Security.AccessControl (>= 5.0)
-    System.Security.Principal.Windows (5.0)
-    System.Text.Encoding (4.3)
-      Microsoft.NETCore.Platforms (>= 1.1)
-      Microsoft.NETCore.Targets (>= 1.1)
-      System.Runtime (>= 4.3)
-    System.Text.Encoding.CodePages (5.0)
-      System.Runtime.CompilerServices.Unsafe (>= 5.0)
-    System.Text.Encoding.Extensions (4.3)
-      Microsoft.NETCore.Platforms (>= 1.1)
-      Microsoft.NETCore.Targets (>= 1.1)
-      System.Runtime (>= 4.3)
-      System.Text.Encoding (>= 4.3)
+  remote: https://api.nuget.org/v3/index.json
+    System.Runtime.CompilerServices.Unsafe (4.7.1)
+    System.Security.AccessControl (4.7)
+      System.Security.Principal.Windows (>= 4.7)
+    System.Security.Permissions (4.7)
+      System.Security.AccessControl (>= 4.7)
+    System.Security.Principal.Windows (4.7)
+    System.Text.Encoding.CodePages (4.7.1)
+      System.Runtime.CompilerServices.Unsafe (>= 4.7.1)
