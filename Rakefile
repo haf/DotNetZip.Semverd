@@ -81,6 +81,7 @@ class Albacore::NugetModel::Package
   def to_template
     template = self.orig_to_template
     if @metadata.id == 'DotNetZip'
+	  template = template.map { |s| s.sub '~>', '>=' }
       before = template.take_while { |l| l != 'dependencies' }
       after = template.drop_while { |l| l != 'dependencies' }.drop(1)
       template = [
