@@ -230,11 +230,11 @@ namespace Ionic.Zip
                     * that have a header set in Zip64, but doesn't have -1 value in
                     * appropriate fields of the record itself.
                     * 
-                    * Currently we always set 'Relative Header' and 'Disk Start' inside
-                    * the Extra block for Zip64, meaning that we also need to make sure
-                    * that their non-Zip64 counterparts would be -1 (0xFFFFFFFF
-                    * and 0xFFFF respectively), regardless of the fact if the value fits
-                    * into uint32/uint16 range or not.
+                    * Currently we always set 'Relative Header' inside the Extra block
+                    * for Zip64 and 'Disk Start' when necessary, meaning that we also
+                    * need to make sure that their non-Zip64 counterparts would be -1
+                    * (0xFFFFFFFF and 0xFFFF respectively), regardless of the fact if
+                    * the value fits into uint32/uint16 range or not.
                     */
                     bytes[i++] = 0xFF;
                     bytes[i++] = 0xFF;
@@ -384,7 +384,20 @@ namespace Ionic.Zip
             {
                 // add extra field for zip64 here
                 // workitem 7924
-                int sz = 4 + (forCentralDirectory ? 28 : 16);
+                int sz = 4 + (forCentralDirectory ? 24 : 16);
+                // for segmented ZIP, the disk number goes into the extra field
+                // and ends up as 0xFFFF in the central directory.
+                // this should match WriteCentralDirectoryEntry to avoid issues
+                // with tools and libraries that do not fully support Zip64
+                // (by not putting the disk number in the extra field when
+                // it can be avoided.)
+                bool segmented = (this._container.ZipFile != null) &&
+                    (this._container.ZipFile.MaxOutputSegmentSize64 != 0);
+                bool diskNumberInExtraField = segmented &&
+                    (_presumeZip64 || _diskNumber > 0xFFFF);
+                if (forCentralDirectory && diskNumberInExtraField)
+                    sz += 4;
+
                 block = new byte[sz];
                 int i = 0;
 
@@ -402,7 +415,7 @@ namespace Ionic.Zip
                 }
 
                 // DataSize
-                block[i++] = (byte)(sz - 4);  // decimal 28 or 16  (workitem 7924)
+                block[i++] = (byte)(sz - 4);  // decimal 24/28 or 16  (workitem 7924)
                 block[i++] = 0x00;
 
                 // The actual metadata - we may or may not have real values yet...
@@ -423,8 +436,11 @@ namespace Ionic.Zip
                     Array.Copy(BitConverter.GetBytes(_RelativeOffsetOfLocalHeader), 0, block, i, 8);
                     i += 8;
 
-                    // starting disk number
-                    Array.Copy(BitConverter.GetBytes(_diskNumber), 0, block, i, 4);
+                    if (diskNumberInExtraField)
+                    {
+                        // starting disk number
+                        Array.Copy(BitConverter.GetBytes(_diskNumber), 0, block, i, 4);
+                    }
                 }
 
                 listOfBlocks.Add(block);
