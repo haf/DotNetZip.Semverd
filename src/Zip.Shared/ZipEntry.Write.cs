@@ -447,7 +447,7 @@ namespace Ionic.Zip
                 block[i++] = 0x00;
 
                 // vendor number
-                block[i++] = 0x01;  // AE-1 - means "Verify CRC"
+                block[i++] = 0x02;  // AE-2 - means "Don't Verify CRC"
                 block[i++] = 0x00;
 
                 // vendor id "AE"
