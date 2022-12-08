@@ -2085,7 +2085,19 @@ namespace Ionic.Zip
                 _ioOperationCanceled = _container.ZipFile.OnZipErrorSaving(this, e);
         }
 
+#if AESCRYPTO
+        internal static WinZipAesCrypto CalculateAesCryptoKey(EncryptionAlgorithm encryption, string pwd)
+        {
+            int keystrength = GetKeyStrengthInBits(encryption);
+            return WinZipAesCrypto.Generate(pwd, keystrength);
+        }
 
+        internal void Write(Stream outstream, WinZipAesCrypto aesCrypto_forWrite)
+        {
+            _aesCrypto_forWrite = aesCrypto_forWrite;
+            Write(outstream);
+        }
+#endif
 
         internal void Write(Stream s)
         {
@@ -2396,7 +2408,10 @@ namespace Ionic.Zip
                 // verification" value for the entry.
 
                 int keystrength = GetKeyStrengthInBits(Encryption);
-                _aesCrypto_forWrite = WinZipAesCrypto.Generate(pwd, keystrength);
+                if (_aesCrypto_forWrite == null)
+                {
+                    _aesCrypto_forWrite = WinZipAesCrypto.Generate(pwd, keystrength);
+                }
                 outstream.Write(_aesCrypto_forWrite.Salt, 0, _aesCrypto_forWrite._Salt.Length);
                 outstream.Write(_aesCrypto_forWrite.GeneratedPV, 0, _aesCrypto_forWrite.GeneratedPV.Length);
                 _LengthOfHeader += _aesCrypto_forWrite._Salt.Length + _aesCrypto_forWrite.GeneratedPV.Length;
