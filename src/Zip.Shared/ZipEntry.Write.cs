@@ -27,6 +27,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using RE = System.Text.RegularExpressions;
 
@@ -2086,10 +2087,18 @@ namespace Ionic.Zip
         }
 
 #if AESCRYPTO
-        internal static WinZipAesCrypto CalculateAesCryptoKey(EncryptionAlgorithm encryption, string pwd)
-        {
-            int keystrength = GetKeyStrengthInBits(encryption);
-            return WinZipAesCrypto.Generate(pwd, keystrength);
+        internal WinZipAesCrypto CalculateAesCryptoKey(Dictionary<string,WinZipAesCrypto> preCalculatedKeys) {
+            WinZipAesCrypto aesCryptoKey;
+
+            bool alreadyCalculatedKey = preCalculatedKeys.TryGetValue(this.Password, out aesCryptoKey);
+
+            if(!alreadyCalculatedKey) {
+                int keystrength = GetKeyStrengthInBits(this.Encryption);
+                aesCryptoKey = WinZipAesCrypto.Generate(this.Password, keystrength);
+                preCalculatedKeys[this.Password] = aesCryptoKey;
+            }
+
+            return aesCryptoKey;
         }
 
         internal void Write(Stream outstream, WinZipAesCrypto aesCrypto_forWrite)

@@ -160,32 +160,28 @@ namespace Ionic.Zip
 
                 // write an entry in the zip for each file
                 int n = 0;
-				
 #if AESCRYPTO
-                // calculate shared encryption key
-                WinZipAesCrypto sharedEncryptionKey = null;
-                if (Encryption == EncryptionAlgorithm.WinZipAes128 ||
-                    Encryption == EncryptionAlgorithm.WinZipAes256)
-                {
-                    sharedEncryptionKey = ZipEntry.CalculateAesCryptoKey(Encryption, Password);
-                }
+                Dictionary<string, WinZipAesCrypto> sharedEncryptionKeys = new Dictionary<string, WinZipAesCrypto>();
 #endif
-				
+
                 // workitem 9831
                 ICollection<ZipEntry> c = (SortEntriesBeforeSaving) ? EntriesSorted : Entries;
                 foreach (ZipEntry e in c) // _entries.Values
                 {
                     OnSaveEntry(n, e, true);
-                    if (!(Encryption == EncryptionAlgorithm.WinZipAes128 ||
-                        Encryption == EncryptionAlgorithm.WinZipAes256))
+#if AESCRYPTO
+                    if (e.Encryption == EncryptionAlgorithm.WinZipAes128 ||
+                        e.Encryption == EncryptionAlgorithm.WinZipAes256) {
+
+                        WinZipAesCrypto sharedEncryptionKey = e.CalculateAesCryptoKey(sharedEncryptionKeys);
+                        e.Write(WriteStream, sharedEncryptionKey);
+                    }
+                    else
                     {
                         e.Write(WriteStream);
                     }
-#if AESCRYPTO
-                    else
-                    {
-                        e.Write(WriteStream, sharedEncryptionKey);
-                    }
+#else
+                    e.Write(WriteStream);
 #endif
 
                     if (_saveOperationCanceled)
