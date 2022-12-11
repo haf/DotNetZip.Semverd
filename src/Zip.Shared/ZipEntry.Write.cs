@@ -2088,6 +2088,8 @@ namespace Ionic.Zip
 
 #if AESCRYPTO
         internal WinZipAesCrypto CalculateAesCryptoKey(Dictionary<string,WinZipAesCrypto> preCalculatedKeys) {
+            if (this.Password == null) { return null; }
+
             WinZipAesCrypto aesCryptoKey;
 
             bool alreadyCalculatedKey = preCalculatedKeys.TryGetValue(this.Password, out aesCryptoKey);
