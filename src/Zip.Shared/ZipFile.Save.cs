@@ -161,7 +161,7 @@ namespace Ionic.Zip
                 // write an entry in the zip for each file
                 int n = 0;
 #if AESCRYPTO
-                Dictionary<string, WinZipAesCrypto> sharedEncryptionKeys = new Dictionary<string, WinZipAesCrypto>();
+                Dictionary<Tuple<EncryptionAlgorithm,string>, WinZipAesCrypto> sharedEncryptionKeys = new Dictionary<Tuple<EncryptionAlgorithm, string>, WinZipAesCrypto>();
 #endif
 
                 // workitem 9831

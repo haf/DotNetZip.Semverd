@@ -2087,17 +2087,18 @@ namespace Ionic.Zip
         }
 
 #if AESCRYPTO
-        internal WinZipAesCrypto CalculateAesCryptoKey(Dictionary<string,WinZipAesCrypto> preCalculatedKeys) {
+        internal WinZipAesCrypto CalculateAesCryptoKey(Dictionary<Tuple<EncryptionAlgorithm, string>, WinZipAesCrypto> preCalculatedKeys) {
             if (this.Password == null) { return null; }
 
             WinZipAesCrypto aesCryptoKey;
 
-            bool alreadyCalculatedKey = preCalculatedKeys.TryGetValue(this.Password, out aesCryptoKey);
+            Tuple<EncryptionAlgorithm, string> strengthAndPasswordDictKey = new Tuple<EncryptionAlgorithm, string>(this.Encryption, this.Password);
+            bool alreadyCalculatedKey = preCalculatedKeys.TryGetValue(strengthAndPasswordDictKey, out aesCryptoKey);
 
             if(!alreadyCalculatedKey) {
                 int keystrength = GetKeyStrengthInBits(this.Encryption);
                 aesCryptoKey = WinZipAesCrypto.Generate(this.Password, keystrength);
-                preCalculatedKeys[this.Password] = aesCryptoKey;
+                preCalculatedKeys[strengthAndPasswordDictKey] = aesCryptoKey;
             }
 
             return aesCryptoKey;
