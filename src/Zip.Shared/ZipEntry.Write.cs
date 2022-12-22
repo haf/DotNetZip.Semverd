@@ -2419,9 +2419,9 @@ namespace Ionic.Zip
                 // preceded by a variable-sized Salt and a 2-byte "password
                 // verification" value for the entry.
 
-                int keystrength = GetKeyStrengthInBits(Encryption);
                 if (_aesCrypto_forWrite == null)
                 {
+                    int keystrength = GetKeyStrengthInBits(Encryption);
                     _aesCrypto_forWrite = WinZipAesCrypto.Generate(pwd, keystrength);
                 }
                 outstream.Write(_aesCrypto_forWrite.Salt, 0, _aesCrypto_forWrite._Salt.Length);
@@ -2429,7 +2429,7 @@ namespace Ionic.Zip
                 _LengthOfHeader += _aesCrypto_forWrite._Salt.Length + _aesCrypto_forWrite.GeneratedPV.Length;
 
                 TraceWriteLine("WriteSecurityMetadata: AES e({0}) keybits({1}) _LOH({2})",
-                               FileName, keystrength, _LengthOfHeader);
+                               FileName, _aesCrypto_forWrite._KeyStrengthInBits, _LengthOfHeader);
 
             }
 #endif

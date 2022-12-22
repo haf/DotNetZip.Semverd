@@ -688,12 +688,12 @@ namespace Ionic.Zip.Tests.WinZipAes
         }
 
         [TestMethod]
-        public void WZA_CreateZip_MultipleEntriesDifferentEncrytion()
+        public void WZA_CreateZip_MultipleEntriesDifferentEncryption()
         {
             if (!WinZipIsPresent)
-                throw new Exception("no winzip! [WZA_CreateZip_MultipleEntriesDifferentEncrytion]");
+                throw new Exception("no winzip! [WZA_CreateZip_MultipleEntriesDifferentEncryption]");
 
-            string zipFileToCreate = "WZA_CreateZip_MultipleEntriesDifferentEncrytion.zip";
+            string zipFileToCreate = "WZA_CreateZip_MultipleEntriesDifferentEncryption.zip";
 
             string password = TestUtilities.GenerateRandomPassword();
 
