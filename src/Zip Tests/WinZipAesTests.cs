@@ -688,6 +688,151 @@ namespace Ionic.Zip.Tests.WinZipAes
         }
 
         [TestMethod]
+        public void WZA_CreateZip_MultipleEntriesDifferentEncrytion()
+        {
+            if (!WinZipIsPresent)
+                throw new Exception("no winzip! [WZA_CreateZip_MultipleEntriesDifferentEncrytion]");
+
+            string zipFileToCreate = "WZA_CreateZip_MultipleEntriesDifferentEncrytion.zip";
+
+            string password = TestUtilities.GenerateRandomPassword();
+
+            TestContext.WriteLine("=======================================");
+            TestContext.WriteLine("Creating file {0}", zipFileToCreate);
+            TestContext.WriteLine("  Password:   {0}", password);
+            int entries = _rnd.Next(21) + 5;
+
+            string filename = null;
+            var checksums = new Dictionary<string, string>();
+            using (ZipFile zip1 = new ZipFile())
+            {
+                zip1.Password = password;
+                zip1.CompressionLevel = Ionic.Zlib.CompressionLevel.None;
+
+                for (int i = 0; i < entries; i++)
+                {
+                    zip1.Encryption = i % 2 == 0 ? EncryptionAlgorithm.WinZipAes256 : EncryptionAlgorithm.WinZipAes128;
+                    if (_rnd.Next(2) == 1)
+                    {
+                        filename = Path.Combine(TopLevelDir, String.Format("Data{0}.bin", i));
+                        int filesize = _rnd.Next(144000) + 5000;
+                        TestUtilities.CreateAndFillFileBinary(filename, filesize);
+                    }
+                    else
+                    {
+                        filename = Path.Combine(TopLevelDir, String.Format("Data{0}.txt", i));
+                        int filesize = _rnd.Next(144000) + 5000;
+                        TestUtilities.CreateAndFillFileText(filename, filesize);
+                    }
+                    zip1.AddFile(filename, "");
+
+                    var chk = TestUtilities.ComputeChecksum(filename);
+                    checksums.Add(Path.GetFileName(filename), TestUtilities.CheckSumToString(chk));
+                }
+
+                zip1.Comment = String.Format("This archive uses Encryption({0} or {1}) password({1}) no compression.", EncryptionAlgorithm.WinZipAes256, EncryptionAlgorithm.WinZipAes128, password);
+                zip1.Save(zipFileToCreate);
+            }
+
+            BasicVerifyZip(zipFileToCreate, password);
+
+            // validate all the checksums
+            using (ZipFile zip2 = ZipFile.Read(zipFileToCreate))
+            {
+                foreach (ZipEntry e in zip2)
+                {
+                    if (!e.IsDirectory)
+                    {
+                        Assert.AreEqual<short>(0, (short)e.CompressionMethod);
+                        e.ExtractWithPassword("unpack", password);
+                        string PathToExtractedFile = Path.Combine("unpack", e.FileName);
+                        Assert.IsTrue(checksums.ContainsKey(e.FileName));
+
+                        // verify the checksum of the file is correct
+                        string expectedCheckString = checksums[e.FileName];
+                        string actualCheckString = TestUtilities.CheckSumToString(TestUtilities.ComputeChecksum(PathToExtractedFile));
+                        Assert.AreEqual<String>(expectedCheckString, actualCheckString, "Unexpected checksum on extracted filesystem file ({0}).", PathToExtractedFile);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void WZA_CreateZip_MultipleEntriesDifferentEncryptionAndPasswords()
+        {
+            if (!WinZipIsPresent)
+                throw new Exception("no winzip! [WZA_CreateZip_MultipleEntriesDifferentEncryptionAndPasswords]");
+
+            string zipFileToCreate = "WZA_CreateZip_MultipleEntriesDifferentEncryptionAndPasswords.zip";
+
+            string[] passwords =
+            {
+                TestUtilities.GenerateRandomPassword(),
+                TestUtilities.GenerateRandomPassword(),
+                TestUtilities.GenerateRandomPassword()
+            };
+
+            TestContext.WriteLine("=======================================");
+            TestContext.WriteLine("Creating file {0}", zipFileToCreate);
+            TestContext.WriteLine("  Passwords:   {0}", string.Join(", ", passwords));
+            int entries = _rnd.Next(21) + 5;
+
+            string filename = null;
+            var checksums = new Dictionary<string, string>();
+            using (ZipFile zip1 = new ZipFile())
+            {
+                zip1.CompressionLevel = Ionic.Zlib.CompressionLevel.None;
+
+                for (int i = 0; i < entries; i++)
+                {
+                    zip1.Encryption = i % 2 == 0 ? EncryptionAlgorithm.WinZipAes256 : EncryptionAlgorithm.WinZipAes128;
+                    zip1.Password = passwords[i % 3];
+                    if (_rnd.Next(2) == 1)
+                    {
+                        filename = Path.Combine(TopLevelDir, String.Format("Data{0}.bin", i));
+                        int filesize = _rnd.Next(144000) + 5000;
+                        TestUtilities.CreateAndFillFileBinary(filename, filesize);
+                    }
+                    else
+                    {
+                        filename = Path.Combine(TopLevelDir, String.Format("Data{0}.txt", i));
+                        int filesize = _rnd.Next(144000) + 5000;
+                        TestUtilities.CreateAndFillFileText(filename, filesize);
+                    }
+                    zip1.AddFile(filename, "");
+
+                    var chk = TestUtilities.ComputeChecksum(filename);
+                    checksums.Add(Path.GetFileName(filename), TestUtilities.CheckSumToString(chk));
+                }
+
+                zip1.Comment = String.Format("This archive uses Encryption({0} or {1}) password({1}) no compression.", EncryptionAlgorithm.WinZipAes256, EncryptionAlgorithm.WinZipAes128, string.Join(", ", passwords));
+                zip1.Save(zipFileToCreate);
+            }
+
+            // validate all the checksums
+            using (ZipFile zip2 = ZipFile.Read(zipFileToCreate))
+            {
+                int i = 0;
+                foreach (ZipEntry e in zip2)
+                {
+                    if (!e.IsDirectory)
+                    {
+                        Assert.AreEqual<short>(0, (short)e.CompressionMethod);
+                        e.ExtractWithPassword("unpack", passwords[i % 3]);
+                        string PathToExtractedFile = Path.Combine("unpack", e.FileName);
+                        Assert.IsTrue(checksums.ContainsKey(e.FileName));
+
+                        // verify the checksum of the file is correct
+                        string expectedCheckString = checksums[e.FileName];
+                        string actualCheckString = TestUtilities.CheckSumToString(TestUtilities.ComputeChecksum(PathToExtractedFile));
+                        Assert.AreEqual<String>(expectedCheckString, actualCheckString, "Unexpected checksum on extracted filesystem file ({0}).", PathToExtractedFile);
+                        i++;
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
         public void WZA_CreateZip_Spanned()
         {
             int filesize = 1024 * 1024;
