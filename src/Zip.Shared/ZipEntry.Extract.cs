@@ -1378,7 +1378,7 @@ namespace Ionic.Zip
             if (f.IndexOf(':') == 1)
                 f = f.Substring(2);
 
-            if (f.StartsWith("/"))
+            if (f.StartsWith("/", StringComparison.Ordinal))
                 f = f.Substring(1);
 
             f = SharedUtilities.SanitizePath(f);
@@ -1391,7 +1391,7 @@ namespace Ionic.Zip
             outFileName = outFileName.Replace('/', Path.DirectorySeparatorChar);
 
             // check if it is a directory
-            if (IsDirectory || FileName.EndsWith("/"))
+            if (IsDirectory || FileName.EndsWith("/", StringComparison.Ordinal))
             {
                 if (!Directory.Exists(outFileName))
                 {
@@ -1415,7 +1415,7 @@ namespace Ionic.Zip
         /// </summary>
         bool IsDoneWithOutputToStream()
         {
-            return IsDirectory || FileName.EndsWith("/");
+            return IsDirectory || FileName.EndsWith("/", StringComparison.Ordinal);
         }
 
         #endregion

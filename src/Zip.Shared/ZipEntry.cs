@@ -2504,7 +2504,7 @@ namespace Ionic.Zip
         {
             _IsDirectory = true;
             // workitem 6279
-            if (!_FileNameInArchive.EndsWith("/"))
+            if (!_FileNameInArchive.EndsWith("/", StringComparison.Ordinal))
                 _FileNameInArchive += "/";
         }
 

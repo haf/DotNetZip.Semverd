@@ -3160,7 +3160,7 @@ namespace Ionic.Zip
                         if (e.FileName.Replace("\\", "/") == fileName) return e;
 
                         // check for a difference only in trailing slash
-                        if (e.FileName.EndsWith("/"))
+                        if (e.FileName.EndsWith("/", StringComparison.Ordinal))
                         {
                             var fileNameNoSlash = e.FileName.Trim("/".ToCharArray());
                             if (fileNameNoSlash == fileName) return e;
@@ -3179,7 +3179,7 @@ namespace Ionic.Zip
                         if (String.Compare(e.FileName.Replace("\\", "/"), fileName, StringComparison.CurrentCultureIgnoreCase) == 0) return e;
 
                         // check for a difference only in trailing slash
-                        if (e.FileName.EndsWith("/"))
+                        if (e.FileName.EndsWith("/", StringComparison.Ordinal))
                         {
                             var fileNameNoSlash = e.FileName.Trim("/".ToCharArray());
 

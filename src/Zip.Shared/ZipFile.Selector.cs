@@ -638,7 +638,7 @@ namespace Ionic.Zip
 
         private string EnsureendInSlash(string s)
         {
-            if (s.EndsWith("\\")) return s;
+            if (s.EndsWith("\\", StringComparison.Ordinal)) return s;
             return s + "\\";
         }
 
@@ -659,7 +659,7 @@ namespace Ionic.Zip
             }
 
             // workitem 9176
-            while (directoryOnDisk.EndsWith("\\")) directoryOnDisk = directoryOnDisk.Substring(0, directoryOnDisk.Length - 1);
+            while (directoryOnDisk.EndsWith("\\", StringComparison.Ordinal)) directoryOnDisk = directoryOnDisk.Substring(0, directoryOnDisk.Length - 1);
             if (Verbose) StatusMessageTextWriter.WriteLine("adding selection '{0}' from dir '{1}'...",
                                                                selectionCriteria, directoryOnDisk);
             Ionic.FileSelector ff = new Ionic.FileSelector(selectionCriteria,
@@ -1444,7 +1444,7 @@ namespace Ionic
             // workitem 9174
             if (slashSwapped != null)
             {
-                while (slashSwapped.EndsWith("\\"))
+                while (slashSwapped.EndsWith("\\", StringComparison.Ordinal))
                     slashSwapped = slashSwapped.Substring(0, slashSwapped.Length - 1);
             }
             foreach (Ionic.Zip.ZipEntry e in zip)

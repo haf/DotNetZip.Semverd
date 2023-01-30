@@ -2461,7 +2461,7 @@ namespace Ionic.Zip
             WriteHeader(outstream, 0);
             StoreRelativeOffset();
 
-            if (!this.FileName.EndsWith("/"))
+            if (!this.FileName.EndsWith("/", StringComparison.Ordinal))
             {
                 // Not a directory; there is file data.
                 // Seek to the beginning of the entry data in the input stream.

@@ -1391,7 +1391,7 @@ namespace Ionic.Zip
             _currentEntry.AlternateEncoding = this.AlternateEncoding;
             _currentEntry.AlternateEncodingUsage = this.AlternateEncodingUsage;
 
-            if (entryName.EndsWith("/"))  _currentEntry.MarkAsDirectory();
+            if (entryName.EndsWith("/", StringComparison.Ordinal))  _currentEntry.MarkAsDirectory();
 
             _currentEntry.EmitTimesInWindowsFormatWhenSaving = ((_timestamp & ZipEntryTimestamp.Windows) != 0);
             _currentEntry.EmitTimesInUnixFormatWhenSaving = ((_timestamp & ZipEntryTimestamp.Unix) != 0);
