@@ -210,6 +210,29 @@ namespace Ionic.Zip.Tests.Streams
         }
 
 
+        // Read a file consisting of a 16 byte header and one embedded zip archive
+        [TestMethod]
+        public void ReadZip_WithOffset()
+        {
+            string filename = Path.Combine(CurrentDir, "zips\\offset.bin");
+            string header = null;
+            int entries = 0;
+
+            using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (BinaryReader br = new BinaryReader(fs))
+            {
+                header = Encoding.ASCII.GetString(br.ReadBytes(16));
+                using (ZipFile zip = ZipFile.Read(fs))
+                {
+                    entries = zip.Entries.Count;
+                }
+            }
+
+            Assert.AreEqual<string>("16-byte header\0\0", header, "Error reading header");
+            Assert.AreEqual<int>(1, entries, "Error reading embedded zip file");
+        }
+
+
         [TestMethod]
         public void ZOS_Create_WithComment_wi10339()
         {

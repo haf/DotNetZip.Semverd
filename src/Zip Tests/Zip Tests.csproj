@@ -165,6 +165,9 @@
     <Content Include="zips\relative-paths-in-subdir-outside.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="zips\offset.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="zips\winzip-sfx.exe">
