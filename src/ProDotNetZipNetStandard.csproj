@@ -7,7 +7,6 @@
 		<RootNamespace>Ionic.Zip</RootNamespace>
 		<OutputType>Library</OutputType>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<DebugType>embedded</DebugType>
 
 		<Authors>Original authors of DotNetZip and Rene Mihula (ProDotNetZip)</Authors>
 		<Description>ProDotNetZip is rip off the original DotNetZip code with limitation to NET standard subset and with fixed vulnerabilities.</Description>
@@ -25,6 +24,7 @@
 	<PropertyGroup>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+	  <DebugType>portable</DebugType>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -40,9 +40,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="LICENSE.txt" Pack="true" PackagePath=""/>
-	  <None Include="dotnetzip.png" Pack="true" PackagePath=""/>
-	  <None Include="README.md" Pack="true" PackagePath=""/>
+	  <None Include="LICENSE.txt" Pack="true" PackagePath="" />
+	  <None Include="dotnetzip.png" Pack="true" PackagePath="" />
+	  <None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 	<!--
