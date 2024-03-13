@@ -16,7 +16,6 @@
 		<PackageProjectUrl>https://github.com/mihula/ProDotNetZip</PackageProjectUrl>
 		<PackageTags>Zip, Compress, Zlib, Bzip2, archive, net standard, net6, net8</PackageTags>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<MinVerTagPrefix>v</MinVerTagPrefix>
 
 	</PropertyGroup>
 
@@ -34,15 +33,6 @@
 	<ItemGroup>
 		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-
-		<PackageReference Include="MinVer" Version="4.2.0">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
