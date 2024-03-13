@@ -1,0 +1,14 @@
+bin/
+obj/
+*.user
+_ReSharper*
+*.resharper
+*.suo
+build/
+/.paket/paket.exe
+/.paket/.store
+/.vs
+/src/.vs
+/src/UpgradeLog.htm
+/src/UpgradeLog2.htm
+/src/**/paket.template

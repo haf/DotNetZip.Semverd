@@ -1,0 +1,457 @@
+<?xml version='1.0' ?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
+  <?define guidComRegistration = "b7097d45-c2bf-4c18-b8de-2d438ecfe1c6" ?>
+  <?define productVersion     = "1.9.1.9000" ?>
+
+  <Fragment>
+    <DirectoryRef Id="APPLICATIONFOLDER">
+      <Component Id='C.ComRegistration' Guid="$(var.guidComRegistration)" >
+        <Class Id="{01AA2D6A-3B26-3461-83FE-9626BCFA5E42}" Context="InprocServer32" Description="Ionic.Zlib.Adler" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zlib.Adler" Description="Ionic.Zlib.Adler" />
+        </Class>
+        <Class Id="{BA5A8C3C-474A-3CC2-B48F-7313BEAC59D9}" Context="InprocServer32" Description="Ionic.Zip.ReadOptions" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.ReadOptions" Description="Ionic.Zip.ReadOptions" />
+        </Class>
+        <Class Id="{D259FF47-D4FD-3F62-AE19-62DC9B0E561A}" Context="InprocServer32" Description="Ionic.Zip.SelfExtractorSaveOptions" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.SelfExtractorSaveOptions" Description="Ionic.Zip.SelfExtractorSaveOptions" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D00004}" Context="InprocServer32" Description="Ionic.Zip.ZipEntry" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.ZipEntry" Description="Ionic.Zip.ZipEntry" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D00005}" Context="InprocServer32" Description="Ionic.Zip.ZipFile" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.ZipFile" Description="Ionic.Zip.ZipFile" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D00006}" Context="InprocServer32" Description="Ionic.Zip.ZipException" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.ZipException" Description="Ionic.Zip.ZipException" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D00007}" Context="InprocServer32" Description="Ionic.Zip.BadStateException" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.BadStateException" Description="Ionic.Zip.BadStateException" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D00008}" Context="InprocServer32" Description="Ionic.Zip.SfxGenerationException" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.SfxGenerationException" Description="Ionic.Zip.SfxGenerationException" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D00009}" Context="InprocServer32" Description="Ionic.Zip.BadCrcException" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.BadCrcException" Description="Ionic.Zip.BadCrcException" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D0000A}" Context="InprocServer32" Description="Ionic.Zip.BadReadException" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.BadReadException" Description="Ionic.Zip.BadReadException" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D0000B}" Context="InprocServer32" Description="Ionic.Zip.BadPasswordException" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.BadPasswordException" Description="Ionic.Zip.BadPasswordException" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D0000C}" Context="InprocServer32" Description="Ionic.Crc.CRC32" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Crc.CRC32" Description="Ionic.Crc.CRC32" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D0000D}" Context="InprocServer32" Description="Ionic.Zlib.ZlibCodec" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zlib.ZlibCodec" Description="Ionic.Zlib.ZlibCodec" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D0000E}" Context="InprocServer32" Description="Ionic.Zlib.ZlibException" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zlib.ZlibException" Description="Ionic.Zlib.ZlibException" />
+        </Class>
+        <Class Id="{EBC25CF6-9120-4283-B972-0E5520D0000F}" Context="InprocServer32" Description="Ionic.Zip.ComHelper" ThreadingModel="both" ForeignServer="mscoree.dll">
+          <ProgId Id="Ionic.Zip.ComHelper" Description="Ionic.Zip.ComHelper" />
+        </Class>
+
+        <ProgId Id="Record" />
+
+        <RegistryValue Root="HKCR" Key="CLSID\{01AA2D6A-3B26-3461-83FE-9626BCFA5E42}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+        <RegistryKey Root="HKCR" Key="CLSID\{01AA2D6A-3B26-3461-83FE-9626BCFA5E42}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zlib.Adler" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{01AA2D6A-3B26-3461-83FE-9626BCFA5E42}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zlib.Adler" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{BA5A8C3C-474A-3CC2-B48F-7313BEAC59D9}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+        <RegistryKey Root="HKCR" Key="CLSID\{BA5A8C3C-474A-3CC2-B48F-7313BEAC59D9}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ReadOptions" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{BA5A8C3C-474A-3CC2-B48F-7313BEAC59D9}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ReadOptions" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{D259FF47-D4FD-3F62-AE19-62DC9B0E561A}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{D259FF47-D4FD-3F62-AE19-62DC9B0E561A}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.SelfExtractorSaveOptions" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{D259FF47-D4FD-3F62-AE19-62DC9B0E561A}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.SelfExtractorSaveOptions" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00004}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00004}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipEntry" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00004}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipEntry" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00005}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00005}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipFile" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00005}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipFile" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00006}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00006}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00006}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00007}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00007}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.BadStateException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00007}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.BadStateException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00008}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00008}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.SfxGenerationException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00008}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.SfxGenerationException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00009}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00009}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.BadCrcException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D00009}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.BadCrcException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000A}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000A}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.BadReadException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000A}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.BadReadException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000B}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000B}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.BadPasswordException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000B}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.BadPasswordException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000C}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000C}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Crc.CRC32" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000C}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Crc.CRC32" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000D}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000D}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zlib.ZlibCodec" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000D}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zlib.ZlibCodec" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000E}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000E}\InprocServer32\1.9.1.6003">
+          <RegistryValue Name="Class" Value="Ionic.Zlib.ZlibException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000E}\InprocServer32">
+          <RegistryValue Name="Class" Value="Ionic.Zlib.ZlibException" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000F}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" />
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000F}\InprocServer32\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ComHelper" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="CLSID\{EBC25CF6-9120-4283-B972-0E5520D0000F}\InprocServer32" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ComHelper" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{1A69330A-20B8-32D6-9E60-60BBE410CC9E}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.Zip64Option" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{2632E654-F17C-39A0-8ED0-F371E1633663}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.SelfExtractorFlavor" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{2C6693FE-EC2D-3765-8F3E-F50A2F4BFFFB}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zlib.CompressionMode" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{2FD19BFF-2C0F-3490-8FE6-E6DC49300E8D}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipProgressEventType" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{3953BC7A-04AA-3282-9939-6497C4BBA84F}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zlib.CompressionStrategy" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{72D7AF66-0E2E-3754-B1E8-733F5D7D4A38}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zlib.CompressionLevel" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{733A8F12-1983-3795-AA37-FC53E58A3983}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipEntrySource" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{73A2D8B2-5A6B-30C2-8000-98848D446706}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipOption" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{78D8D4D7-ED1E-39D8-AC61-183BB0653566}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipEntryTimestamp" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{9033E12C-472E-351F-8AE1-602E324E79B4}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zlib.FlushType" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{9990B38E-3B1A-32E5-9776-B96D4F486100}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ExtractExistingFileAction" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+        <RegistryKey Root="HKCR" Key="Record\{DEDF7BF1-7B22-3103-A149-F4B99C65F292}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.EncryptionAlgorithm" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{E4C5F729-85AE-34B6-8110-86D91495D171}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.ZipErrorAction" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+
+
+        <RegistryKey Root="HKCR" Key="Record\{F4F88A86-53D6-353A-96B9-04D99F036362}\1.9.1.6003" >
+          <RegistryValue Name="Class" Value="Ionic.Zip.CompressionMethod" Type="string" />
+          <RegistryValue Name="Assembly" Value="Ionic.Zip, Version=$(var.productVersion), Culture=neutral, PublicKeyToken=edbe51ad942a3f5c" Type="string" />
+          <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+          <RegistryValue Name="CodeBase" Value="file:///[#Ionic.Zip.dll]" Type="string" />
+        </RegistryKey>
+
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
+

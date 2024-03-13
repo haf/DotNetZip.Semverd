@@ -1,0 +1,188 @@
+<html>
+<head>
+<title>GZip.exe and BZip2.exe</title>
+<style>
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+.code       {font-family: Consolas, Courier; font-size: 10pt }
+</style>
+
+
+</head>
+<!-- @SortOrder 1 -->
+<body>
+<h1>Compression Command-Line Tools</h1>
+
+<p>The Tools/Utilities downloads for DotNetZip includes a pair of
+  command-line tools that perform raw compression and decompression:
+  GZip.exe and BZip2.exe .  These tools can be used from the command
+  line to compress or decompress .gz and .bz2 files, respectively, from
+  within batch scripts, or CMD.exe windows.
+</p>
+
+<!-- ============================================================== -->
+
+<h2>GZip.exe</h2>
+
+<p>This tool can be used to compress a regular file into a .gz file, or
+  to decompress a .gz files into its original, uncompressed form. It
+  handles files in the .gz format created by other GZIP tools, such as
+  the gzip tool that is included with Linux and other operating systems,
+  and the .gz files it produces on Windows can be read by the gzip tool
+  on other platforms.
+</p>
+
+<p>Of interest, the GZip format handled by this tool is specified
+  in <A href='http://www.gzip.org/zlib/rfc-gzip.html'>IETF RFC
+  1952</a>.  While the GZIP format can handle multiple entries within a
+  single archive, in general that feature is rarely used. Instead, most
+  uses of GZip compress a single file to a single .gz file. </p>
+
+<!-- ============================================================== -->
+
+<h3>Usage</h3>
+
+<pre>
+  GZip.exe &lt;FileToProcess&gt; [arguments]
+
+ arguments:
+   -v         - verbose output.
+   -f         - force overwrite of any existing files.
+   -keep      - don&apos;t delete the original file after compressing or
+                decompressing it.
+</pre>
+
+
+<!-- ============================================================== -->
+
+<h2>BZip2.exe</h2>
+
+<p>This tool can be used to create .bz2 files, that conform to the BZIP2
+  format.  Bzip2 was created in 1996 as a compression method and format
+  that can be applied to single files. Unlike ZIP, it is not a
+  multi-entry archive format - you use bzip2 to compress a single file
+  into a single compressed image. By convention, for a given filename, a
+  bzip2 compressor creates a new file called filename.bz2 .
+
+<p>Using the BZip2.exe command line tool included with DotNetZip, you
+  can compress regular files into .bz2 files, and you can decompress
+  .bz2 files into the corresponding original file.   </p>
+
+<p>This tool such is compatible with other bzip2 tools, such as the one
+  that is included with Linux and other operating systems. The .bz2
+  files that this tool produces on Windows can be read by the bzip2 tool
+  on other platforms.</p>
+
+<p>Most Bzip2 utilities delete the original file after producing the
+  compressed version, and delete the compressed version after
+  decompressing. This utility follows that convention.  </p>
+
+<p>BZip2 is a compression format, similar to ZLIB, GZIP, or DEFLATE.
+  BZIP2 tends to compress <em>better</em> than these other algorithms,
+  but BZIP2 compressors tend to require more time to compress.
+</p>
+
+<!-- ============================================================== -->
+
+<h3>Usage</h3>
+<pre  numberLines="true" outlining="true" >
+
+BZip2.exe &lt;FileToProcess&gt; [arguments]
+
+  arguments:
+    -v         - verbose output.
+    -f         - force overwrite of any existing files.
+    -keep      - don&apos;t delete the original file after compressing
+                 or decompressing it.
+</pre>
+
+
+<!-- ============================================================== -->
+
+<h3>Command Examples</h3>
+
+<table border='1'>
+<tr>
+  <td style='color:white;Background:Navy;'><strong>Use this Command...</strong></td>
+  <td style='color:white;Background:Navy;'><strong>to do this...</strong></td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">gzip.exe  LargeFile.txt</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>
+    compress the LargeFile.txt to produce LargeFile.txt.gz .
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">gzip.exe  LargeFile.txt.gz </td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>
+    decompress the LargeFile.txt.gz to produce LargeFile.txt , and
+    delete LargeFile.txt.gz .
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">gzip.exe  LargeFile.txt.gz -keep </td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>
+    decompress the LargeFile.txt.gz to produce LargeFile.txt ; the original
+    LargeFile.txt.gz  will not be deleted.
+  </td>
+</tr>
+
+
+<tr>
+  <td colspan='2' class="code">bzip2.exe  LargeFile.txt</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>
+    compress the LargeFile.txt to produce LargeFile.txt.bz2 , and delete
+    the LargeFile.txt when finished.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">bzip2.exe  LargeFile.txt -keep</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>
+    compress the LargeFile.txt to produce LargeFile.txt.bz2 , and keep
+    the LargeFile.txt when finished.
+  </td>
+</tr>
+
+<tr>
+  <td colspan='2' class="code">bzip2.exe  LargeFile.txt.bz2 </td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>
+    decompress the LargeFile.txt.bz2 to produce LargeFile.txt , and
+    delete the original compressed file when finished.
+  </td>
+</tr>
+
+</table>
+
+
+
+
+</body>
+</html>

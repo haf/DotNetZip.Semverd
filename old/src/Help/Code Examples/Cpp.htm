@@ -1,0 +1,312 @@
+<html>
+<head>
+<title>C++/CLI</title>
+<style>
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+</style>
+</head>
+
+<!-- @SortOrder 80 -->
+
+<body>
+<h1>You can use DotNetZip from C++/CLI</h1>
+
+<p>
+  A program written in C++/CLI can take advantage of any managed
+  library. It&quot;s easy to use DotNetZip from a C++/CLI application.  This
+  page will show some examples.
+</p>
+
+<p>
+  Using C++/CLI, the key difference from VB and C#, is that there is
+  no <strong>using</strong> statement in C++.  C++ applications need to
+  surround the use of the ZipFile class with a try..catch.. and call the
+  ZipFile destructor, or call delete, in the finally clause.
+</p>
+
+<hr/>
+
+<h3>Create a zip file</h3>
+
+<p> This example just creates a simple zipfile. It uses the destructor.
+</p>
+
+<pre lang="C++" numberLines="true" outlining="true"
+  title="Create a Zip archive - destructor">
+
+using namespace System;
+using namespace Ionic::Zip;
+
+int main(array&lt;System::String ^&gt; ^args)
+{
+    Console::WriteLine(L"Hello World");
+
+    ZipFile ^ zip;
+    try
+    {
+        zip = gcnew ZipFile();
+        zip-&gt;AddEntry("Readme.txt", "This is the content for the Readme.txt entry.");
+        zip-&gtAddFile("CreateZipFile.cpp");
+        zip-&gt;Save("test.zip");
+    }
+    finally
+    {
+        zip-&gt;~ZipFile();
+    }
+
+    Console::WriteLine(L"Press &lt;ENTER&gt; to quit.");
+    Console::ReadLine();
+    return 0;
+}
+
+</pre>
+
+<p> This alternative uses the C++ deleee syntax:
+</p>
+
+
+<pre lang="C++" numberLines="true" outlining="true"
+  title="Create a Zip archive - delete">
+
+using namespace System;
+using namespace Ionic::Zip;
+
+int main(array&lt;System::String ^&gt; ^args)
+{
+    Console::WriteLine(L"Hello World");
+
+    ZipFile ^ zip;
+    try
+    {
+        zip = gcnew ZipFile();
+        zip-&gt;AddEntry("Readme.txt", "This is the content for the Readme.txt entry.");
+        zip-&gtAddFile("CreateZipFile.cpp");
+        zip-&gt;Save("test.zip");
+    }
+    finally
+    {
+        delete zip;
+    }
+
+    Console::WriteLine(L"Press &lt;ENTER&gt; to quit.");
+    Console::ReadLine();
+    return 0;
+}
+
+</pre>
+
+
+<h3>Building C++/CLI program that uses DotNetZip</h3>
+
+<p>Build a C++/CLI program that uses DotNetZip, just as you would build
+any C++/CLI program. </p>
+
+<p>The easiest way is to use Visual Studio, and create a C++/CLI
+project. Right click on the project and select <span style="font-family:
+Courier;">References...</span>.  Add a reference to the Ionic.Zip.dll
+assembly.  Click OK, then build your application.</p>
+
+<p>You can also build using command-line tools. To do this, you will
+need to compile using the c++ source using the cl.exe tool, specifying
+the /clr option, and specifying where to find the Ionic.Zip.dll
+assembly. A typical series of steps to build a simple C++/CLI program
+that uses DotNetZip from one source file, supposing the name of the
+source file is CreateZipFile.cpp, is: </p>
+
+<pre>
+  \vc9\bin\cl.exe /Od /FD /EHa /MDd  /Fo".\\"  -I\vc9\include /W3 /c /Zi /clr /TP
+      /FU "c:\Windows\Microsoft.NET\Framework\v2.0.50727\System.dll"
+      /FU Ionic.Zip.dll CreateZipFile.cpp
+
+  \vc9\bin\link.exe /OUT:CreateZipFile.exe  /DEBUG /ASSEMBLYDEBUG
+      /MANIFEST /MANIFESTFILE:"CreateZipFile.exe.intermediate.manifest"
+      /MANIFESTUAC:"level='asInvoker' uiAccess='false'"
+      /PDB:CreateZipFile.pdb /DYNAMICBASE /FIXED:No /NXCOMPAT /MACHINE:X86
+      /LIBPATH:\vc9\lib /LIBPATH:\winsdk\lib CreateZipFile.obj
+
+  c:\netsdk2.0\Bin\mt.exe /outputresource:"CreateZipFile.exe;#1"
+      /manifest CreateZipFile.exe.intermediate.manifest
+</pre>
+
+
+
+<h3>Create a zip file using AES encryption</h3>
+
+<p> This example creates a zipfile, using AES 128-bit
+encryption to encrypt the entries.
+</p>
+
+<pre lang="C++" numberLines="true" outlining="true"
+  title="Create an encrypted zip">
+
+#include "stdafx.h"
+
+using namespace System;
+using namespace Ionic::Zip;
+
+int main(array&lt;System::String ^&gt; ^args)
+{
+    Console::WriteLine(L"Hello World");
+
+    ZipFile ^ zip;
+    try
+    {
+        zip = gcnew ZipFile();
+        zip-&gt;Password = verySecret;
+        zip-&gt;Encryption = EncryptionAlgorithm::WinZipAes128;
+        zip-&gt;AddEntry("Readme.txt", "This is the content for the Readme.txt entry.");
+        zip-&gt;AddFile("Data.csv");
+        zip-&gt;Save("test.zip");
+    }
+    finally
+    {
+        zip-&gt;~ZipFile();
+    }
+
+    Console::WriteLine(L"Press &lt;ENTER&gt; to quit.");
+    Console::ReadLine();
+    return 0;
+}
+
+</pre>
+
+
+<h3>Use a SaveProgress event from C++</h3>
+
+<p> This example creates a zipfile, and uses a SaveProgress event.
+</p>
+
+<pre lang="C++" numberLines="true" outlining="true"
+  title="Create an encrypted zip">
+
+
+#include "stdafx.h"
+
+using namespace System;
+using namespace System::IO;
+using namespace Ionic::Zip;
+
+
+public ref class DnzHelloCppCli
+{
+
+private:
+    bool justHadByteUpdate;
+
+public:
+    DnzHelloCppCli()
+        {
+        }
+
+public:
+    void Run()
+        {
+            Console::WriteLine(L"Hello World");
+            Console::WriteLine("Using DotNetZip version {0}", ZipFile::LibraryVersion);
+            array&lt;String^&gt;^ filesToAdd = System::IO::Directory::GetFiles(".", "*.cpp");
+
+            ZipFile ^ zip;
+            try
+            {
+                zip = gcnew ZipFile();
+                zip-&gt;Password = "Harbinger";
+                zip-&gt;Encryption = EncryptionAlgorithm::WinZipAes128;
+                zip-&gt;SaveProgress += gcnew EventHandler&lt;SaveProgressEventArgs^&gt;(this, &DnzHelloCppCli::SaveProgress);
+                zip-&gt;AddEntry("Readme.txt", "This is the content for the Readme.txt entry.");
+                zip-&gt;AddFiles(filesToAdd, "files");
+                zip-&gt;Save("MyArchive.zip");
+            }
+            finally
+            {
+                zip-&gt;~ZipFile();
+            }
+
+            Console::WriteLine(L"Press &lt;ENTER&gt; to quit.");
+            Console::ReadLine();
+            return;
+        }
+
+public:
+    void SaveProgress(Object^ sender, SaveProgressEventArgs^ e)
+        {
+            switch (e-&gt;EventType)
+            {
+                case ZipProgressEventType::Saving_Started:
+                {
+                    Console::WriteLine("Saving: {0}", e-&gt;ArchiveName);
+                    break;
+                }
+                case ZipProgressEventType::Saving_BeforeWriteEntry:
+                {
+                    if (this-&gt;justHadByteUpdate)
+                    {
+                        Console::WriteLine();
+                    }
+                    Console::WriteLine("  Writing: {0} ({1}/{2})",
+                                       e-&gt;CurrentEntry-&gt;FileName,
+                                       (e-&gt;EntriesSaved + 1),
+                                       e-&gt;EntriesTotal);
+                    this-&gt;justHadByteUpdate = false;
+                    break;
+                }
+                case ZipProgressEventType::Saving_AfterWriteEntry:
+                {
+                    if (e-&gt;CurrentEntry-&gt;InputStreamWasJitProvided)
+                    {
+                        e-&gt;CurrentEntry-&gt;InputStream-&gt;Close();
+                        e-&gt;CurrentEntry-&gt;InputStream = nullptr;
+                    }
+                    break;
+                }
+                case ZipProgressEventType::Saving_Completed:
+                {
+                    this-&gt;justHadByteUpdate = false;
+                    Console::WriteLine();
+                    Console::WriteLine("Done: {0}", e-&gt;ArchiveName);
+                    break;
+                }
+                case ZipProgressEventType::Saving_EntryBytesRead:
+                {
+                    if (this-&gt;justHadByteUpdate)
+                    {
+                        Console::SetCursorPosition(0, Console::CursorTop);
+                    }
+                    Console::Write("     {0}/{1} ({2:N0}%)",
+                                   e-&gt;BytesTransferred,
+                                   e-&gt;TotalBytesToTransfer,
+                                   (((double) e-&gt;BytesTransferred) / (0.01 * e-&gt;TotalBytesToTransfer)));
+                    this-&gt;justHadByteUpdate = true;
+                    break;
+                }
+            }
+        }
+
+};
+
+
+int main(array&lt;System::String ^&gt; ^args)
+{
+    try
+    {
+        DnzHelloCppCli^ me = gcnew DnzHelloCppCli();
+        me-&gt;Run();
+    }
+    catch (Exception^ ex1)
+    {
+        Console::Error-&gt;WriteLine(String::Concat("exception: ", ex1));
+    }
+    return 0;
+}
+
+</pre>
+
+
+</body>
+</html>

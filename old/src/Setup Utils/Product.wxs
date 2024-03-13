@@ -1,0 +1,393 @@
+<?xml version='1.0'?>
+<Wix xmlns      = 'http://schemas.microsoft.com/wix/2006/wi'
+     xmlns:netfx= 'http://schemas.microsoft.com/wix/NetFxExtension'
+     xmlns:util = 'http://schemas.microsoft.com/wix/UtilExtension'
+     >
+
+  <!-- Keep the UpgradeCode constant for the lifetime of the product family, -->
+  <!-- if you want to support upgrades.  Change the productId (in MSI parlance, it's -->
+  <!-- the ProductCode) when changing minor versions.  -->
+  <!-- -->
+
+  <!-- http://stackoverflow.com/questions/1838009/platform/1860161#1860161 -->
+
+  <?define prodManufacturer   = "Dino Chiesa" ?>
+  <?define pkgDescription     = "DotNetZip Tools v1.9" ?>
+  <?define productId          = "fb6aad30-8bab-4caf-96c0-f92cb498238a" ?>
+  <?define productVersion     = "1.9.1.9000" ?>
+  <?define sysfolder          = "[SystemFolder]" ?>
+  <?define programFilesFolder = "ProgramFilesFolder" ?>
+  <?define appDescription     = "DotNetZip's ZIP tool" ?>
+  <?define appName            = "DotNetZip" ?>
+  <?define guidMain           = "d4b2a5bf-33f7-44a1-a20f-44e301802b43" ?>
+  <?define guidTxtFiles       = "d4b2a5bf-33f7-44a1-a20f-44e301802b44" ?>
+  <?define guidRegistry       = "d4b2a5bf-33f7-44a1-a20f-44e301802b45" ?>
+  <?define guidShortcuts      = "d4b2a5bf-33f7-44a1-a20f-44e301802b46" ?>
+  <?define guidFileAssoc      = "d4b2a5bf-33f7-44a1-a20f-44e301802b47" ?>
+
+  <Product Id           ='$(var.productId)'
+           Name         ="DotNetZip Tools"
+           Language     ='1033'
+           UpgradeCode  ='BEF05388-A74D-4383-BD87-61940DF83E20'
+           Version      ='$(var.productVersion)'
+           Manufacturer ='$(var.prodManufacturer)'>
+
+    <Package Id               ='*'
+             Description      ='$(var.pkgDescription)'
+             Comments         ='Produced: 15 July 2011'
+             Manufacturer     ='$(var.prodManufacturer)'
+             InstallerVersion ='200'
+             InstallScope     ="perMachine"
+             Compressed       ='yes' />
+
+    <!-- Must specify the Platform attribute here.
+         For an alternative, see the -arch flag on candle.exe .
+         http://www.joyofsetup.com/2010/05/14/working-hard-or-hardly-working/ -->
+
+    <!-- need a Media element to specify the source for installation.
+         EmbedCab='yes' implies that this cab will be stuffed into the
+         MSI file, which is what we want, usually.
+
+The Cabinet name can be anything you want. Not really important.
+
+    -->
+    <Media Id='1' Cabinet='product.cab' EmbedCab='yes' />
+
+    <Property Id="PRIORINSTALL">
+      <RegistrySearch Id   ='DotNetZipRegistry'
+                      Type ='raw'
+                      Root ='HKLM'
+                      Key  ='Software\[Manufacturer]\DotNetZip Tools 1.9'
+                      />
+    </Property>
+
+    <!-- Icon shown in Add/Remove Programs -->
+    <Icon Id="zippedFile.ico" SourceFile="..\Tools\WinFormsApp\zippedFile.ico" />
+    <Property Id="ARPPRODUCTICON" Value="zippedFile.ico" />
+    <Property Id="ARPHELPLINK" Value="http://dotnetzip.codeplex.com/" />
+
+    <!-- set the property that will affect the default checkstate of the optional checkbox on the exit dialog.
+         Using 1 sets that checkbox to "checked", by default. -->
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"/>
+
+    <!-- set the property that will be used for the "Associate zip files to DotNetZip" checkbox -->
+    <Property Id="WANT_ZIP_ASSOCIATIONS">1</Property>
+
+    <!-- http://wix.sourceforge.net/manual-wix3/check_for_dotnet.htm -->
+    <PropertyRef Id="NETFRAMEWORK35"/>
+    <PropertyRef Id="NETFRAMEWORK35_SP_LEVEL"/>
+
+    <!-- no install on Windows XP or Windows 2000 -->
+    <Condition Message="DotNetZip Tools cannot be installed on this computer. It is supported on Windows Server 2003, Windows Vista, or later.">
+      <![CDATA[Installed OR (VersionNT >= 502)]]>
+    </Condition>
+
+    <Condition Message="This application requires .NET Framework 3.5 SP1 or later. Install this pre-requisite, then run this installer again.">
+      <![CDATA[Installed OR (NETFRAMEWORK35 AND NETFRAMEWORK35_SP_LEVEL AND NOT (NETFRAMEWORK35_SP_LEVEL = "#0"))]]>
+    </Condition>
+
+    <!-- d/l link for .NET 3.5sp1::   http://go.microsoft.com/fwlink/?LinkId=76617   -->
+
+    <Condition Message="This application requires Windows Installer 3.1 or later. Install this pre-requisite, then run this installer again.">
+      <![CDATA[VersionMsi >= "3.1"]]>
+    </Condition>
+
+
+
+    <InstallUISequence>
+
+      <!--
+          <Custom Action="CA.EnumerateWebSites"           After="CostFinalize" Overridable="yes">NOT Installed</Custom>
+      -->
+
+    </InstallUISequence>
+
+
+    <InstallExecuteSequence>
+
+      <!-- run the "preserve zip associations" CA if installing and if the checkbox was checked. -->
+      <Custom Action="CA.PreserveZipAssociation"
+              Before="WriteRegistryValues"
+              Overridable="yes">(&amp;F.Complete=3) AND WANT_ZIP_ASSOCIATIONS</Custom>
+
+      <!-- run the "restore zip associations" CA twice; because of how things need to be stored in regy -->
+      <Custom Action="CA.RestoreZipAssociation"
+              Before="RemoveRegistryValues"
+              Overridable="yes">(&amp;F.Complete=2) AND (!F.Complete=3)</Custom>
+
+      <Custom Action="CA.RestoreZipAssociation2"
+              After="RemoveRegistryValues">(&amp;F.Complete=2) AND (!F.Complete=3)</Custom>
+
+      <!-- Unset the property WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT to
+           hide the optional checkbox, if the user is uninstalling. -->
+      <Custom Action="CA.HidePostInstallCheckboxToLaunchExe"
+              After="RemoveRegistryValues">(&amp;F.Complete=2) AND (!F.Complete=3)</Custom>
+
+    </InstallExecuteSequence>
+
+    <!-- http://wix.sourceforge.net/manual-wix3/create_an_uninstall_shortcut.htm -->
+
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+
+      <Directory Id='$(var.programFilesFolder)' Name='PFiles'>
+        <Directory Id='CompanyDir' Name='$(var.prodManufacturer)'>
+          <Directory Id='APPLICATIONFOLDER' Name='DotNetZip Tools 1.9'>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="D.FolderForShortcuts" Name="DotNetZip"/>
+        <!-- see below for full defn of this directory -->
+      </Directory>
+    </Directory>
+
+
+    <DirectoryRef Id="APPLICATIONFOLDER">
+      <Component Id='C.Main' Guid="$(var.guidMain)" >
+        <File Id      ='DotNetZip_WinFormsTool.exe'
+              Name    ='DotNetZip-WinFormsTool.exe'
+              DiskId  ='1'
+              KeyPath ='yes'
+              Source  ='..\Tools\WinFormsApp\bin\$(var.Configuration)\DotNetZip-WinFormsTool.exe'/>
+
+        <File Id      ='ZipIt.exe'
+              Name    ='ZipIt.exe'
+              DiskId  ='1'
+              Source  ='..\Tools\ZipIt\bin\$(var.Configuration)\ZipIt.exe'/>
+
+        <File Id      ='UnZip.exe'
+              Name    ='UnZip.exe'
+              DiskId  ='1'
+              Source  ='..\Tools\UnZip\bin\$(var.Configuration)\UnZip.exe'/>
+
+        <File Id      ='BZip2.exe'
+              Name    ='BZip2.exe'
+              DiskId  ='1'
+              Source  ='..\Tools\BZip2\bin\$(var.Configuration)\BZip2.exe'/>
+
+        <File Id      ='GZip.exe'
+              Name    ='GZip.exe'
+              DiskId  ='1'
+              Source  ='..\Tools\GZip\bin\$(var.Configuration)\GZip.exe'/>
+
+        <File Id      ='ConvertZipToSfx.exe'
+              Name    ='ConvertZipToSfx.exe'
+              DiskId  ='1'
+              Source  ='..\Tools\ConvertZipToSfx\bin\$(var.Configuration)\ConvertZipToSfx.exe'/>
+
+        <File Id      ='Ionic.Zip.dll'
+              Name    ='Ionic.Zip.dll'
+              DiskId  ='1'
+              Source  ='..\Tools\WinFormsApp\bin\$(var.Configuration)\Ionic.Zip.dll'/>
+
+        <?if $(var.Configuration) = Debug ?>
+        <File Id      ='DotNetZip_WinFormsTool.pdb'
+              Name    ='DotNetZip-WinFormsTool.pdb'
+              DiskId  ='1'
+              Source  ='..\Tools\WinFormsApp\bin\$(var.Configuration)\DotNetZip-WinFormsTool.pdb'/>
+
+        <File Id      ='ZipIt.pdb'
+              Name    ='ZipIt.pdb'
+              DiskId  ='1'
+              Source  ='..\Tools\ZipIt\bin\$(var.Configuration)\ZipIt.pdb'/>
+
+        <File Id      ='UnZip.pdb'
+              Name    ='UnZip.pdb'
+              DiskId  ='1'
+              Source  ='..\Tools\UnZip\bin\$(var.Configuration)\UnZip.pdb'/>
+
+        <File Id      ='BZip2.pdb'
+              Name    ='BZip2.pdb'
+              DiskId  ='1'
+              Source  ='..\Tools\BZip2\bin\$(var.Configuration)\BZip2.pdb'/>
+
+        <File Id      ='GZip.pdb'
+              Name    ='GZip.pdb'
+              DiskId  ='1'
+              Source  ='..\Tools\GZip\bin\$(var.Configuration)\GZip.pdb'/>
+
+        <File Id      ='ConvertZipToSfx.pdb'
+              Name    ='ConvertZipToSfx.pdb'
+              DiskId  ='1'
+              Source  ='..\Tools\ConvertZipToSfx\bin\$(var.Configuration)\ConvertZipToSfx.pdb'/>
+
+        <File Id      ='Ionic.Zip.pdb'
+              Name    ='Ionic.Zip.pdb'
+              DiskId  ='1'
+              Source  ='..\Tools\WinFormsApp\bin\$(var.Configuration)\Ionic.Zip.pdb'/>
+
+        <?endif ?>
+      </Component>
+
+
+      <Component Id='C.Textfiles' Guid="$(var.guidTxtFiles)" >
+        <File Id='License.Combined.rtf' Name='License.Combined.rtf'    DiskId='1' Source='..\License.Combined.rtf' />
+      </Component>
+
+      <Component Id='C.Registry' Guid="$(var.guidRegistry)" >
+
+        <!-- DNZ tree in registry -->
+        <RegistryKey Root='HKLM' Key='Software\[Manufacturer]\DotNetZip'>
+          <RegistryValue Type='string'                Value=''              KeyPath='yes' />
+          <RegistryValue Type='string' Name='Version' Value='1.9'/>
+          <RegistryValue Type="string" Name="Path" Value="[APPLICATIONFOLDER]"/>
+        </RegistryKey>
+
+      </Component>
+
+
+      <Component Id='C.FileAssociations' Guid="$(var.guidFileAssoc)" >
+        <Condition>WANT_ZIP_ASSOCIATIONS</Condition>
+        <!-- MyApp.Document ProgID -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\DotNetZip-WinFormsTool.Document"
+                       Name="FriendlyTypeName"
+                       Value="Zip file" Type="string" />
+
+        <!-- Including this causes the "Candle.exe" compile to fail.  I
+             have no idea why.  The error message is completely
+             unhelpful.  Also I am not clear on exactly what it is supposed
+             to do if it DID work.
+
+             Wix is an idiot.
+
+        <ProgId Id="DotNetZip-WinFormsTool.Document"
+                Description="Zip file" Icon="zippedFile.ico" Advertise="yes">
+          <Extension Id="zip">
+            <Verb Id="open" Command="Open with DotNetZip" Argument="&quot;%1&quot;" />
+            <MIME Advertise="yes" ContentType="application/zip" Default="yes" />
+          </Extension>
+        </ProgId>
+             -->
+
+        <!-- Optional: add an 'Edit with XYZ' to 'right click' even when not associated -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\SystemFileAssociations\.zip\shell\edit.DotNetZip-WinFormsTool.exe"
+                       Value="Open with DotNetZip" Type="string" />
+
+        <RegistryValue Root="HKLM"
+                       Key="SOFTWARE\Classes\SystemFileAssociations\.zip\shell\edit.DotNetZip-WinFormsTool.exe\command"
+                       Value="&quot;[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe&quot; &quot;%1&quot;"
+                       Type="string" />
+
+        <!-- Capabilities keys for Vista/7 "Set Program Access and Defaults" -->
+        <RegistryKey Root='HKLM' Key='Software\[Manufacturer]\DotNetZip\Capabilities'>
+          <RegistryValue Name="ApplicationDescription" Type='string' Value="$(var.appDescription)" />
+          <RegistryValue Name="ApplicationName" Type="string" Value="$(var.appName)" />
+          <RegistryValue Name="ApplicationIcon" Type="string" Value="[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe,0" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\DotNetZip\Capabilities\DefaultIcon"
+                       Value="[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe,0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\DotNetZip\Capabilities\FileAssociations"
+                       Name=".zip" Value="DotNetZip-WinFormsTool.Document" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\DotNetZip\Capabilities\MIMEAssociations"
+                       Name="application/zip" Value="DotNetZip-WinFormsTool.Document" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\DotNetZip\Capabilities\shell\Open\command"
+                       Value="&quot;[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\RegisteredApplications"
+                       Name="DotNetZip" Value="Software\[Manufacturer]\DotNetZip\Capabilities" Type="string" />
+
+        <!-- App Paths to support Start,Run -> "myapp" -->
+        <RegistryKey Root="HKLM"
+                     Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\DotNetZip-WinFormsTool.exe">
+          <RegistryValue Value="[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe" Type="string" />
+          <RegistryValue Name="Path"
+                         Value="[APPLICATIONFOLDER]" Type="string" />
+        </RegistryKey>
+
+        <!-- Extend to the "open with" list + Win7 jump menu pinning  -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\Applications\DotNetZip-WinFormsTool.exe\SupportedTypes"
+                       Name=".zip" Value="" Type="string" />
+
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\Applications\DotNetZip-WinFormsTool.exe\shell\open"
+                       Name="FriendlyAppName"
+                       Value="DotNetZip" Type="string" />
+
+        <!-- more "open with" stuff.
+
+             This is an attempt to get file associations (Win Explorer
+             context menus) to work manually.
+        -->
+
+        <RegistryValue Root  = "HKLM" Key="Software\Classes\DotNetZip.zip.1"
+                       Value = "Zip archive"
+                       Type  = "string" />
+
+        <RegistryValue Root  = "HKLM" Key="Software\Classes\DotNetZip.zip.1\DefaultIcon"
+                       Value = "[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe,0"
+                       Type  = "string" />
+
+        <RegistryValue Root  = "HKLM" Key="Software\Classes\DotNetZip.zip.1\shell\open"
+                       Value = "Open"
+                       Type  = "string" />
+
+        <RegistryValue Root  = "HKLM" Key="Software\Classes\DotNetZip.zip.1\shell\open\command"
+                       Value = "&quot;[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe&quot; &quot;%1&quot;"
+                       Type  = "string" />
+
+        <RegistryValue Root  = "HKLM" Key="SOFTWARE\Classes\.zip\OpenWithProgIds"
+                       Name  = "DotNetZip.zip.1"
+                       Value = ""
+                       Type  = "string" />
+
+        <RegistryValue Root  = "HKLM" Key="SOFTWARE\Classes\.zip"
+                       Value = "DotNetZip.zip.1"
+                       Type  = "string" />
+
+      </Component>
+
+    </DirectoryRef>
+
+
+    <DirectoryRef Id="D.FolderForShortcuts">
+      <Component Id="C.Shortcuts" Guid="$(var.guidShortcuts)" >
+
+        <!-- see http://robmensching.com/blog/posts/2007/4/27/How-to-create-an-uninstall-shortcut-and-pass-all-the -->
+        <!-- the shortcut to the GUI app -->
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="DotNetZip"
+                  Description="Create and Extract Zip files"
+                  Target="[APPLICATIONFOLDER]DotNetZip-WinFormsTool.exe"
+                  WorkingDirectory="APPLICATIONFOLDER"/>
+
+        <!-- the uninstall shortcut to the installer package -->
+        <Shortcut Id="UninstallProduct"
+                  Name="Uninstall DotNetZip"
+                  Description="Uninstalls DotNetZip Tools"
+                  Target="[System64Folder]msiexec.exe"
+                  Arguments="/x [ProductCode]"
+                  Directory="D.FolderForShortcuts"/>
+        <RemoveFolder Id="R.RemoveShortcutsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU"
+                       Key='Software\[Manufacturer]\DotNetZip'
+                       Name="installed" Type="integer" Value="1"
+                       KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+
+
+    <Feature Id='F.Complete'
+             Title='DotNetZip'
+             Description='The complete package: everything that can be installed.'
+             Level='1'
+             AllowAdvertise='no'
+             Display='expand'
+             ConfigurableDirectory='APPLICATIONFOLDER'>
+      <ComponentRef Id='C.Main' />
+      <ComponentRef Id='C.Textfiles' />
+      <ComponentRef Id='C.Shortcuts' />
+      <ComponentRef Id='C.Registry' />
+      <ComponentRef Id='C.FileAssociations' />
+    </Feature>
+
+    <UIRef Id="DnzInstallUI" />
+
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Run DotNetZip now" />
+
+    <!-- http://wix.sourceforge.net/manual-wix2/WixUI_dialog_library.htm -->
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER"/>
+
+  </Product>
+</Wix>
+
+

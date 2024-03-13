@@ -1,0 +1,449 @@
+<html>
+<head>
+<title>C#</title>
+<style>
+p,body,a,tr,td
+             { font-family: Verdana, Arial, Helvetica; font-size: 10pt }
+h1,h2,h3,h4,h5,h6
+             { font-family: Verdana, Arial, Helvetica; font-weight: normal; font-style: normal; }
+h1           { font-size: 20pt }
+h2           { font-size: 18pt; font-weight:bold; color: navy }
+h3           { font-size: 16pt; font-weight:bold; color: #483d8b }
+h4           { font-size: 14pt; font-weight:bold; color:#C71585; margin-bottom:2px; }
+</style>
+</head>
+
+<!-- @SortOrder 20 -->
+
+<body>
+<h1>DotNetZip - C# Examples</h1>
+
+<p>Here are a bunch of examples in C# that illustrate how to use the library.
+</p>
+
+<p>There are a few complete, working example applications shipped in the source code distribution. </p>
+
+<hr/>
+<p>Create a zip file, and add items to it.</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Add Items 1">
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.AddFile("ReadMe.txt");
+    zip.AddFile("Resume.doc");
+    zip.AddFile("Portrait.png");
+    zip.Save("Package.zip");
+  }
+</pre>
+
+
+<hr/>
+
+<p>Add items to a zip file, using Zip 2.0 encryption, and the same password for all items.</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Add Items 2">
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.Password= "123456!";
+    zip.AddFile("ReadMe.txt");
+    zip.AddFile("7440-N49th.png");
+    zip.AddFile("2005_Annual_Report.pdf");
+    zip.Save("Backup.zip");
+  }
+</pre>
+
+
+<hr/>
+
+<p>Add files to a zip file, using Zip 2.0 encryption, and different passwords for different files.</p>
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Add items 3">
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.AddFile("ReadMe.txt"); // no password for this one
+    zip.Password= "123456!";
+    zip.AddFile("7440-N49th.png");
+    zip.Password= "!Secret1";
+    zip.AddFile("2005_Annual_Report.pdf");
+
+    zip.Save("Backup.zip");
+  }
+</pre>
+
+
+<p>Create a zip archive, and add files to it, using WinZip-compatible AES 256-bit encryption for one of the files.</p>
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Add items 4">
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.AddFile("ReadMe.txt"); // no password for this one
+    zip.Password= "Cool.Hand.Luke!";
+    zip.Encryption= EncryptionAlgorithm.WinZipAes256;
+    zip.AddFile("Rawdata-2008-12-18.csv");
+    zip.Save("Backup-AES-Encrypted.zip");
+  }
+</pre>
+
+
+
+<hr/>
+
+<p>
+Create a zip, and add a file, telling the library to not use compression
+when adding in the file. This makes sense with previously-compressed
+files such as those in .mp3 format.  The Deflate algorithm can actually
+increase the size of a data stream that has already been compressed.
+The DotNetZip library intelligently turns off compression for those
+files that get bigger with compression, but the ForceNoCompression
+property allows you to do it explicitly.
+</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="No Compression">
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.ForceNoCompression = true;
+    zip.AddFile(@"MyMusic\Handel\Messiah-01.mp3");
+    zip.Save(ZipFileToCreate);
+  }
+</pre>
+
+
+
+<hr/>
+
+<p>Zip up an entire directory, recursively.  Use unicode to encode
+entries in the archive, for those files in that directory tree that have
+characters outside the ANSI range.  Finally, specify a comment on the
+zip archive when creating it. (Be careful using Unicode - it is not
+widely supported by other zip utilities)</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Zip a directory">
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.UseUnicode= true;  // utf-8
+    zip.AddDirectory(@"MyDocuments\ProjectX");
+    zip.Comment = "This zip was created at " + System.DateTime.Now.ToString("G") ;
+    zip.Save(ZipFileToCreate);
+  }
+</pre>
+
+
+
+<hr/>
+
+<p>Zip up an entire directory, recursively.  Use the "big5" encoding for
+those files in that directory tree that have
+chinese characters.
+</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Zip a directory 2">
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.Encoding = System.Text.Encoding.GetEncoding("big5"); // chinese
+    zip.AddDirectory(@"MyDocuments\ProjectX");
+    zip.Save(ZipFileToCreate);
+  }
+</pre>
+
+
+
+<hr/>
+
+<p>Zip up an file, using the ZIP64 extensions if necessary to support large files.
+</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Zip64">
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
+    zip.AddFile(@"RawData-HugeFile-13800.dat");
+    zip.Save(ZipFileToCreate);
+  }
+</pre>
+
+
+
+<hr/>
+
+<p>Zip up a set of files, each protected by the same password. Also,
+explicitly  override the last modified time for all of the files as they are stored
+in the zip archive.</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Set Last Modified time"
+  using (ZipFile zip = new ZipFile())
+  {
+    zip1.Password = Password;
+    System.DateTime Timestamp = new System.DateTime(2008,05,30,12,0,0);
+    String[] filenames = System.IO.Directory.GetFiles("ProjectDocuments");
+    foreach (String f in filenames)
+    {
+      ZipEntry e = zip.AddFile(f, "docs");
+      e.LastModified = Timestamp;
+    }
+    zip.Comment = "This zip was created at " + System.DateTime.Now.ToString("G") ;
+    zip.Save(ZipFileToCreate);
+  }
+</pre>
+
+<hr/>
+
+<p>Zip up a set of files and directories, and re-map them into a
+different directory hierarchy in the zip file.</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="remap directories">
+  using (ZipFile zip = new ZipFile())
+  {
+    // files in the filesystem like MyDocuments\ProjectX\File1.txt , will be stored in the zip archive as  backup\File1.txt
+    zip.AddDirectory(@"MyDocuments\ProjectX", "backup");
+    // files in the filesystem like MyMusic\Santana\OyeComoVa.mp3, will be stored in the zip archive as  tunes\Santana\OyeComoVa.mp3
+    zip.AddDirectory("MyMusic", "tunes");
+    // The Readme.txt file in the filesystem will be stored in the zip archive as documents\Readme.txt
+    zip.AddDirectory("Readme.txt", "documents");
+
+    zip.Comment = "This zip was created at " + System.DateTime.Now.ToString("G") ;
+    zip.Save(ZipFileToCreate);
+  }
+</pre>
+
+<hr/>
+
+<p>Add content obtained from a stream (MemoryStrean, FileStream, etc)
+into a zip archive. Also, add a comment to the entry that was added from
+the stream.</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Streams">
+  using (ZipFile zip = new ZipFile())
+  {
+    ZipEntry e= zip.AddEntry("Content-From-Stream.bin", StreamToRead);
+    e.Comment = "The content for entry in the zip file was obtained from a stream";
+    zip.AddFile("Readme.txt");
+    zip.Save(ZipToCreate);
+  }
+</pre>
+
+
+<hr/>
+
+<p>Open an existing zip file, remove an entry from it, and save the archive.  This was first supported in v1.5 of the library.</p>
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Remove an entry">
+  using (ZipFile zip = ZipFile.Read(ExistingZipFile))
+  {
+    // use the indexer to remove the file from the zip archive
+    zip["Readme.txt"] = null;
+    zip.Comment = "This archive has been modified from its original version. Some files have been removed.";
+    zip.Save();
+  }
+</pre>
+
+
+<hr/>
+
+<p>Open an existing zip file, rename an entry, then save it. This was first supported in v1.7 of the library.</p>
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Rename">
+ int renameCount = 0;
+ using (ZipFile zip2 = ZipFile.Read(ExistingZipFile))
+ {
+    foreach (ZipEntry e in zip2)
+    {
+      if (e.FileName.EndsWith(".txt"))
+      {
+         var newname = "renamed_files\\" + e.FileName;
+
+         e.FileName = newname;
+         e.Comment = "renamed";
+         renameCount++;
+      }
+    }
+    zip2.Comment = String.Format("This archive has been modified. {0} files have been renamed.", renameCount);
+    zip2.Save();
+ }
+</pre>
+
+
+<hr/>
+
+<p>Extract all files from a zip archive:</p>
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Extract 1">
+  using (ZipFile zip = ZipFile.Read(ExistingZipFile))
+  {
+    foreach (ZipEntry e in zip)
+    {
+      e.Extract(TargetDirectory);
+    }
+  }
+</pre>
+
+
+<hr/>
+
+<p>The default behavior of extraction is to NOT overwrite existing
+files. In this example, the app Extracts all files, and overwrites
+existing files in the filesystem:</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Extract 2">
+  using (ZipFile zip = ZipFile.Read(ExistingZipFile))
+  {
+    foreach (ZipEntry e in zip)
+    {
+      e.Extract(TargetDirectory, true);  // overwrite == true
+    }
+  }
+</pre>
+
+
+<hr/>
+<p>Extract an entry from the zip archive into a previously-opened stream:</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Extract 3">
+  using (ZipFile zip = ZipFile.Read(ExistingZipFile))
+  {
+    ZipEntry e = zip["MyReport.doc"];
+    e.Extract(OutputStream);
+  }
+</pre>
+
+<hr/>
+
+<p>Extract an Entry that was encrypted with a password, into the
+specified base directory:</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Extract 4">
+  using (ZipFile zip = ZipFile.Read(ExistingZipFile))
+  {
+    ZipEntry e = zip["TaxInformation-2008.xls"];
+    e.ExtractWithPassword(BaseDirectory, Password);
+  }
+</pre>
+
+<hr/>
+
+<p>List all the entries in a zip file: </p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="List 1">
+  using (ZipFile zip = ZipFile.Read(ExistingZipFile))
+  {
+    foreach (ZipEntry e in zip)
+    {
+      if (header)
+      {
+        System.Console.WriteLine("Zipfile: {0}", zip.Name);
+        if ((zip.Comment != null) && (zip.Comment != ""))
+          System.Console.WriteLine("Comment: {0}", zip.Comment);
+        System.Console.WriteLine("\n{1,-22} {2,8}  {3,5}   {4,8}  {5,3} {0}",
+                                 "Filename", "Modified", "Size", "Ratio", "Packed", "pw?");
+        System.Console.WriteLine(new System.String('-', 72));
+        header = false;
+      }
+      System.Console.WriteLine("{1,-22} {2,8} {3,5:F0}%   {4,8}  {5,3} {0}",
+                               e.FileName,
+                               e.LastModified.ToString("yyyy-MM-dd HH:mm:ss"),
+                               e.UncompressedSize,
+                               e.CompressionRatio,
+                               e.CompressedSize,
+                               (e.UsesEncryption) ? "Y" : "N");
+
+    }
+  }
+</pre>
+
+<hr/>
+
+<p>Read in zip archive content from a stream, and extract the content
+for one entry to another stream. In this example, the filename
+"NameOfEntryInArchive.doc", refers only to the name of the entry within
+the zip archive. A file by that name is not created in the
+filesystem. The I/O is done strictly with the given streams. </p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Stream 1">
+  using (ZipFile zip = ZipFile.Read(InputStream))
+  {
+    zip.Extract("NameOfEntryInArchive.doc", OutputStream);
+  }
+</pre>
+
+<hr/>
+
+<p>Create a zip dynamically within an ASP.NET postback method, then
+download that zipfile to the requesting browser through
+Response.OutputStream. This works in DotNetZip v1.5 and later.</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="ASP.NET 1">
+public void btnGo_Click (Object sender, EventArgs e)
+{
+  Response.Clear();
+  String ReadmeText= "This is a zip file dynamically generated at " + System.DateTime.Now.ToString("G");
+  string filename = System.IO.Path.GetFileName(ListOfFiles.SelectedItem.Text) + ".zip";
+  Response.ContentType = "application/zip";
+  Response.AddHeader("content-disposition", "filename=" + filename);
+
+  using (ZipFile zip = new ZipFile())
+  {
+    zip.AddFile(ListOfFiles.SelectedItem.Text, "files");
+    zip.AddStringAsFile(ReadmeText, "Readme.txt", "");
+    zip.Save(Response.OutputStream);
+  }
+
+  Response.End();
+}
+</pre>
+
+<hr/>
+<p>Create a zip with a single entry, obtaining the content for that entry
+from a string.   Attach a comment to that entry.  Specify the name of the zip file at the time of
+save. </p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Content from String">
+  string content = "......whatever....";
+  using (ZipFile zip = new ZipFile())
+  {
+    ZipEntry e = zip.AddEntry("README.txt", content);
+    e.Comment = "This entry in the zip archive was created from a string.";
+    zip.Save("archive-2008july12.zip");
+  }
+</pre>
+
+<hr/>
+
+<p>Open an existing zip archive and modify it: update one entry,
+remove another, and rename a third. Update the comment on the archive as well.</p>
+
+<pre lang="cs" numberLines="true" outlining="true"
+  title="Update a Zip">
+  using (ZipFile zip = ZipFile.Read("ExistingArchive.zip"))
+  {
+    ZipEntry e = zip["README.txt"];
+    e.RemoveEntry();
+
+    // for this entry, update the archive  with content from the filesystem
+    zip.UpdateItem("Portfolio.doc");
+
+    // update the filename of an entry
+    e = zip["Table1.jpg"];
+    e.FileName = "Figure1.jpg";
+
+    zip.Comment = "This zip archive was updated " + System.DateTime.ToString("G");
+    zip.Save();
+  }
+</pre>
+
+</body>
+</html>

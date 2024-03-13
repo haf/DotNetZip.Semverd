@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <!-- NET8 builder is adding by default +to versioncommit https://github.com/dotnet/sdk/issues/34568 -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+
+    <!-- AssemblyInfo.cs -->
+    <Authors>Origfinal Authors of IonicZip, DotNetZip and others</Authors>
+    <Product>ProDotNetZip</Product>
+    <Title>ProDotNetZip NET Standard</Title>
+    <AssemblyDescription>ProDotNetZip NET Standard (fork of DotNetZip / Ionic's Zip Library) a library for handling zip archives.</AssemblyDescription>
+    <AssemblyVersion>1.17.0</AssemblyVersion>
+    <Version>1.17.0</Version>
+    <FileVersion>1.17.0</FileVersion>
+    <InformationalVersion>1.17.0</InformationalVersion>
+
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+</Project>

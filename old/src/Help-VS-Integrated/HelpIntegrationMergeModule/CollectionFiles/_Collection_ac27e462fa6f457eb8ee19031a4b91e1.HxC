@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpCollection>
+<HelpCollection DTDVersion="1.0" FileVersion="1.0.0.0" LangId="1033" Title="Collection Definition" Id="TOC">
+    <TOCDef File="_TOC_ac27e462fa6f457eb8ee19031a4b91e1.HxT" />
+    <KeywordIndexDef File="_KIndex_ac27e462fa6f457eb8ee19031a4b91e1.HxK" />
+    <KeywordIndexDef File="_AIndex_ac27e462fa6f457eb8ee19031a4b91e1.HxK" />
+    <KeywordIndexDef File="_FIndex_ac27e462fa6f457eb8ee19031a4b91e1.HxK" />
+    <KeywordIndexDef File="_NUrlIndex_ac27e462fa6f457eb8ee19031a4b91e1.HxK" />
+    <ItemMoniker Name="!DefaultToc" ProgId="HxDs.HxHierarchy" InitData="" />
+    <ItemMoniker Name="!DefaultFullTextSearch" ProgId="HxDs.HxFullTextSearch" InitData="" />
+    <ItemMoniker Name="!DefaultAssociativeIndex" ProgId="HxDs.HxIndex" InitData="A" />
+    <ItemMoniker Name="!DefaultKeywordIndex" ProgId="HxDs.HxIndex" InitData="K" />
+    <ItemMoniker Name="!DefaultContextWindowIndex" ProgId="HxDs.HxIndex" InitData="F" />
+    <ItemMoniker Name="!DefaultNamedUrlIndex" ProgId="HxDs.HxIndex" InitData="NamedUrl" />
+    <ItemMoniker Name="!SampleInfo" ProgId="HxDs.HxSampleCollection" InitData="" />
+</HelpCollection>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>3.0</ProductVersion>
+    <ProjectGuid>{18b1cdb1-709d-46d4-a894-9fe0bf929686}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>DotNetZipUtils</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <Name>DotNetZipUtils Setup</Name>
+  </PropertyGroup>
+  <!--
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+-->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.wxs" />
+    <Compile Include="UI.wxs" />
+    <Compile Include="CustomActions.wxs" />
+  </ItemGroup>
+  <!-- http://wix.sourceforge.net/manual-wix3/authoring_first_msbuild_project.htm -->
+  <ItemGroup>
+    <EmbeddedResource Include="CustomText.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <Name>WixUIExtension</Name>
+      <HintPath>$(ProgramFileS)\Windows Installer XML v3.5\bin\WixUIExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <Name>WixUtilExtension</Name>
+      <HintPath>$(ProgramFileS)\Windows Installer XML v3.5\bin\WixUtilExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <Name>WixNetFxExtension</Name>
+      <HintPath>$(ProgramFileS)\Windows Installer XML v3.5\bin\WixNetFxExtension.dll</HintPath>
+    </WixExtension>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <!-- To modify your build process, add your task inside one of the
+       targets below and uncomment it.  Other similar extension points
+       exist, see Wix.targets.
+
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
+  <Target Name="AfterBuild">
+    <Message Text="Post Processing the MSI..." />
+    <Message Text="TargetFileName= $(TargetFileName)" />
+    <Exec Command="&quot;$(SystemRoot)\System32\cscript.exe&quot; PostProcessMsi.js &quot;$(OutputPath)en-us\$(TargetFileName)&quot; " />
+  </Target>
+  <ItemGroup>
+    <ProjectReference Include="..\Tools\ConvertZipToSfx\ConvertZipToSfx.csproj">
+      <Name>ConvertZipToSfx</Name>
+      <Project>{276b8174-a24e-4257-9969-42d692f8cac2}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\UnZip\UnZip.csproj">
+      <Name>UnZip</Name>
+      <Project>{a22c89e0-b5d4-4881-a61f-4b1fd82f2453}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\WinFormsApp\Win Forms App.csproj">
+      <Project>{6BCCF138-2EFB-464C-B872-E3079F0A4708}</Project>
+      <Name>Win Forms App</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\ZipIt\ZipIt.csproj">
+      <Name>ZipIt</Name>
+      <Project>{98008721-c4dd-4f34-b3ae-a3453e29bb65}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\BZip2\BZip2.csproj">
+      <Name>BZip2</Name>
+      <Project>{c2241050-f23c-420b-aa67-60e94b34c2b2}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\GZip\GZip.csproj">
+      <Name>GZip</Name>
+      <Project>{52542d59-25ec-4ee4-8af2-85de50c70ea6}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

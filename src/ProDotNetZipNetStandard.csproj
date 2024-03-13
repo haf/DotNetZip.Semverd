@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>ProDotNetZip</AssemblyName>
+		<Id>ProDotNetZip</Id>
+		<RootNamespace>Ionic.Zip</RootNamespace>
+		<OutputType>Library</OutputType>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DefineConstants>AESCRYPTO;BZIP</DefineConstants>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>Ionic.snk</AssemblyOriginatorKeyFile>
+		<DelaySign>false</DelaySign>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+	</ItemGroup>
+
+	<!--
+	<ItemGroup>
+		<InternalsVisibleTo Include="ProDotNetZipNetStandardTest" />
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>ProDotNetZipNetStandardTest</_Parameter1>
+		</AssemblyAttribute>	
+	</ItemGroup>
+	-->
+</Project>

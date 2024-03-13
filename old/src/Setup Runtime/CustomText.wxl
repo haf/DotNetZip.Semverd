@@ -1,0 +1,46 @@
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+
+  <!-- customize the text appearing in WixUI_en-us.wxl
+
+       for example:
+       http://www.tramontana.co.hu/wix/loc/wixui_en-us.wxl
+    -->
+
+  <String Id="WelcomeDlgTitle">{\WixUI_Font_Bigger}Welcome to the Setup Wizard for&#13;&#10;[ProductName] </String>
+  <String Id="PrepareDlgTitle">{\WixUI_Font_Bigger}Welcome to the Setup Wizard for&#13;&#10;[ProductName]</String>
+  <String Id="MaintenanceWelcomeDlgTitle">{\WixUI_Font_Bigger}Welcome to the Setup Wizard for&#13;&#10;[ProductName]</String>
+
+
+  <String Id="WelcomeDlgDescription">The Setup Wizard will install the [ProductName], the assemblies required for running applications that manipulate ZIP archive files, on your computer.&#13;&#10;The version to be installed is [ProductVersion].&#13;&#10;Click Next to continue or Cancel to exit the Setup Wizard.</String>
+
+  <String Id="UserExitTitle">{\WixUI_Font_Bigger}The Setup Wizard for DotNetZip was interrupted</String>
+
+  <String Id="ProgressDlgTitleInstalling">{\WixUI_Font_Title}You are now installing DotNetZip...</String>
+
+
+  <String Id="ExitDialogTitle">{\WixUI_Font_Bigger}You&#39;ve Completed the Setup Wizard for [ProductName]</String>
+
+
+  <String Id="VerifyReadyDlgInstallTitle">{\WixUI_Font_Title}Ready to install DotNetZip Tools 1.9</String>
+
+  <!-- The following text will be placed into the control table, using
+       Dialog=VerifyReadyDlg and Control=InstallText.  It will be
+       obscured at runtime by a new text control created by a custom
+       action.  -->
+  <String Id="VerifyReadyDlgInstallText">Are you ready to install the runtime?  Click Next to proceed.</String>
+
+  <String Id="LicenseAgreementDlgLicenseAcceptedCheckBox">Check here to accept the required licenses</String>
+
+  <String Id="CustomizeDlgTitle">{\WixUI_Font_Title}What would you like to Install?</String>
+
+  <String Id="InstallDirDlgTitle">{\WixUI_Font_Title}Install options</String>
+  <String Id="InstallDirDlgDescription">Specify the options you prefer, then click Next.</String>
+
+  <String Id="FatalErrorTitle">{\WixUI_Font_Bigger}Setup for [ProductName] ended prematurely</String>
+  <String Id="FatalErrorDescription1">The Setup Wizard for the DotNetZip runtime ended prematurely because of an error. Your system has not been modified. To install the DotNetZip runtime at a later time, run the Setup again.</String>
+
+
+</WixLocalization>
+
+
+

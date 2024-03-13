@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE IntegrationWizard[]>
+<IntegrationWizard>
+    <ProjectType>MergeModule</ProjectType>
+    <Target>VS_2008_VSIPCC</Target>
+    <Namespace>ionic.zip</Namespace>
+    <Description>DotNetZip Help</Description>
+    <ParentNamespaces>
+        <ParentNamespace>
+            <Name>MS.VSIPCC.v90</Name>
+            <HxT>FL_vsipcc_hxt_86880_86880_cn_ln.3643236F_FC70_11D3_A536_0090278A1BB8.48273237_1399_45CF_801C_338E1AB00E90</HxT>
+            <HxQ>
+            </HxQ>
+        </ParentNamespace>
+    </ParentNamespaces>
+    <SourceFiles>
+        <SourceFile>
+            <Name>DotNetZipLib-v1.9.HxS</Name>
+            <ComponentID>{63A1258F-C269-6085-81D2-4EDBD83C77D2}</ComponentID>
+        </SourceFile>
+        <SourceFile>
+            <Name>_Collection_ac27e462fa6f457eb8ee19031a4b91e1.HxC</Name>
+            <ComponentID>{9EC9766F-9C44-5D2D-2A54-BB16F98635E1}</ComponentID>
+        </SourceFile>
+        <SourceFile>
+            <Name>_TOC_ac27e462fa6f457eb8ee19031a4b91e1.HxT</Name>
+            <ComponentID>{28B9E55C-8BE0-9AA3-D46A-2BE89A6BDB3A}</ComponentID>
+        </SourceFile>
+        <SourceFile>
+            <Name>_KIndex_ac27e462fa6f457eb8ee19031a4b91e1.HxK</Name>
+            <ComponentID>{2E10F8C5-F6D8-1464-CB91-23430483D79F}</ComponentID>
+        </SourceFile>
+        <SourceFile>
+            <Name>_AIndex_ac27e462fa6f457eb8ee19031a4b91e1.HxK</Name>
+            <ComponentID>{89F6125B-F96D-4724-0625-C75215CD602B}</ComponentID>
+        </SourceFile>
+        <SourceFile>
+            <Name>_FIndex_ac27e462fa6f457eb8ee19031a4b91e1.HxK</Name>
+            <ComponentID>{204C3FBE-0129-328B-44AF-DE0F27A6730D}</ComponentID>
+        </SourceFile>
+        <SourceFile>
+            <Name>_NUrlIndex_ac27e462fa6f457eb8ee19031a4b91e1.HxK</Name>
+            <ComponentID>{45435507-EAFD-9D0C-8959-1904ED53DABA}</ComponentID>
+        </SourceFile>
+    </SourceFiles>
+    <Filters>
+    </Filters>
+</IntegrationWizard>
