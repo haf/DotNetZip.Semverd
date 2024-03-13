@@ -24,7 +24,6 @@
 	<PropertyGroup>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-	  <DebugType>portable</DebugType>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -40,9 +39,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="LICENSE.txt" Pack="true" PackagePath="" />
-	  <None Include="dotnetzip.png" Pack="true" PackagePath="" />
-	  <None Include="README.md" Pack="true" PackagePath="" />
+		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="LICENSE.txt" Pack="true" PackagePath="" />
+		<None Include="dotnetzip.png" Pack="true" PackagePath="" />
+		<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 	<!--
