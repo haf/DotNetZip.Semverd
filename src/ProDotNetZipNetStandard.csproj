@@ -7,6 +7,17 @@
 		<RootNamespace>Ionic.Zip</RootNamespace>
 		<OutputType>Library</OutputType>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+		<Authors>Original authors of DotNetZip and Rene Mihula (ProDotNetZip)</Authors>
+		<Description>ProDotNetZip is rip off the original DotNetZip code with limitation to NET standard subset and with fixed vulnerabilities.</Description>
+
+		<PackageIcon>dotnetzip.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageProjectUrl>https://github.com/mihula/ProDotNetZip</PackageProjectUrl>
+		<PackageTags>Zip, Compress, Zlib, Bzip2, archive, net standard, net6, net8</PackageTags>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<MinVerTagPrefix>v</MinVerTagPrefix>
+
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -23,6 +34,21 @@
 	<ItemGroup>
 		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+
+		<PackageReference Include="MinVer" Version="4.2.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="LICENSE.txt" Pack="true" PackagePath=""/>
+		<None Include="dotnetzip.png" Pack="true" PackagePath=""/>
+		<None Include="README.md" Pack="true" PackagePath=""/>
 	</ItemGroup>
 
 	<!--
