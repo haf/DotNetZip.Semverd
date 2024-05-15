@@ -1,7 +1,12 @@
+## Maintainers wanted – ping @haf to talk
+
+This repository was created before `System.IO.Compression` and the code is unmaintained
+at this point. Please transition to `System.IO.Compression`.
+
 Introducing the DotNetZip Library and Tools
 -------------------------------------------
 
-## Maintainers wanted – ping @haf to talk
+
 
 DotNetZip is the name of an open-source project that delivers a .NET
 library for handling ZIP files, and some associated tools.
