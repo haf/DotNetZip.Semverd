@@ -1,4 +1,4 @@
-## Maintainers wanted – ping @haf to talk
+## Repository archived
 
 This repository was created before `System.IO.Compression` and the code is unmaintained
 at this point. Please transition to `System.IO.Compression`.
