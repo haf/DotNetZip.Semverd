@@ -2605,6 +2605,31 @@ namespace Ionic.Zip.Tests
             Assert.IsTrue(File.Exists(@"extract\Temp\evil.txt"));
         }
 
+
+        [TestMethod]
+        public void ExtractAll_ZipWithRelativePathsOutside()
+        {
+            _ExtractAll_ZipFile("relative-paths-outside.zip");
+            Assert.IsTrue(File.Exists(@"extract\good.txt"));
+            Assert.IsTrue(File.Exists(@"extract\Temp\evil.txt"));
+        }
+
+        [TestMethod]
+        public void ExtractAll_ZipWithRelativePathsInSubdir()
+        {
+            _ExtractAll_ZipFile("relative-paths-in-subdir.zip");
+            Assert.IsTrue(File.Exists(@"extract\good.txt"));
+            Assert.IsTrue(File.Exists(@"extract\Temp\evil.txt"));
+        }
+
+        [TestMethod]
+        public void ExtractAll_ZipWithRelativePathsInSubdirOutside()
+        {
+            _ExtractAll_ZipFile("relative-paths-in-subdir-outside.zip");
+            Assert.IsTrue(File.Exists(@"extract\good.txt"));
+            Assert.IsTrue(File.Exists(@"extract\Temp\evil.txt"));
+        }
+
         private void _Extract_ZipFile(string fileName)
         {
             TestContext.WriteLine("Current Dir: {0}", CurrentDir);
@@ -2612,9 +2637,7 @@ namespace Ionic.Zip.Tests
             for (int i = 0; i < 3; i++)
                 sourceDir = Path.GetDirectoryName(sourceDir);
 
-            string fqFileName = Path.Combine(Path.Combine(sourceDir,
-                                                             "Zip Tests\\bin\\Debug\\zips"),
-                                                fileName);
+            string fqFileName = Path.Combine(Path.Combine(sourceDir, "Zip Tests\\bin\\Debug\\zips\\extract"), fileName);
 
             TestContext.WriteLine("Reading zip file: '{0}'", fqFileName);
             using (ZipFile zip = ZipFile.Read(fqFileName))
@@ -2637,8 +2660,21 @@ namespace Ionic.Zip.Tests
         }
 
 
+        private void _ExtractAll_ZipFile(string fileName)
+        {
+            TestContext.WriteLine("Current Dir: {0}", CurrentDir);
+            string sourceDir = CurrentDir;
+            for (int i = 0; i < 3; i++)
+                sourceDir = Path.GetDirectoryName(sourceDir);
 
+            string fqFileName = Path.Combine(Path.Combine(sourceDir, "Zip Tests\\bin\\Debug\\zips\\extractAll"), fileName);
+
+            TestContext.WriteLine("Reading zip file: '{0}'", fqFileName);
+            using (ZipFile zip = ZipFile.Read(fqFileName))
+            {
+                string extractDir = "extract";
+                zip.ExtractAll(extractDir);
+            }
+        }
     }
-
-
 }
