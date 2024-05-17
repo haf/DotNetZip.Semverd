@@ -581,7 +581,7 @@ namespace Ionic.Zip
                 // safety and start "in front" of that, when looking for the
                 // EndOfCentralDirectorySignature
                 long posn = s.Length - 64;
-                long maxSeekback = Math.Max(s.Length - 0x4000, 10);
+                long maxSeekback = Math.Max(s.Length - 0x8000, 10);
                 do
                 {
                     if (posn < 0) posn = 0;  // BOF
