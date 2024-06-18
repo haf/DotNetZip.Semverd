@@ -90,7 +90,18 @@ namespace Ionic.Zip
 
         public override long Seek(long offset, System.IO.SeekOrigin origin)
         {
-            return _innerStream.Seek(_originalPosition + offset, origin) - _originalPosition;
+            switch (origin)
+            {
+                case SeekOrigin.Begin:
+                    return _innerStream.Seek(_originalPosition + offset, origin) - _originalPosition;
+
+                case SeekOrigin.Current:
+                case SeekOrigin.End:
+                    return _innerStream.Seek(offset, origin) - _originalPosition;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(origin), origin, "Invalid seek origin");
+            }
         }
 
 
