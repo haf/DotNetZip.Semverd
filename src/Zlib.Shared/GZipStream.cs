@@ -189,7 +189,7 @@ namespace Ionic.Zlib
                 {
                     _FileName = _FileName.Replace("/", "\\");
                 }
-                if (_FileName.EndsWith("\\"))
+                if (_FileName.EndsWith("\\", StringComparison.Ordinal))
                     throw new Exception("Illegal filename");
                 if (_FileName.IndexOf("\\") != -1)
                 {

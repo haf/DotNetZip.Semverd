@@ -288,7 +288,7 @@ namespace Ionic.Zip
                 if (zde.AttributesIndicateDirectory)
                     zde.MarkAsDirectory();  // may append a slash to filename if nec.
                     // workitem 6898
-                else if (zde._FileNameInArchive.EndsWith("/")) zde.MarkAsDirectory();
+                else if (zde._FileNameInArchive.EndsWith("/", StringComparison.Ordinal)) zde.MarkAsDirectory();
 
                 zde._CompressedFileDataSize = zde._CompressedSize;
                 if ((zde._BitField & 0x01) == 0x01)

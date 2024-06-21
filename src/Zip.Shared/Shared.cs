@@ -92,7 +92,7 @@ namespace Ionic.Zip
         internal static string NormalizePath(string path)
         {
             // remove leading single dot slash
-            if (path.StartsWith(".\\")) path = path.Substring(2);
+            if (path.StartsWith(".\\", StringComparison.Ordinal)) path = path.Substring(2);
 
             // remove intervening dot-slash
             path = path.Replace("\\.\\", "\\");
@@ -109,7 +109,7 @@ namespace Ionic.Zip
 
         private static string SimplifyFwdSlashPath(string path)
         {
-            if (path.StartsWith("./")) path = path.Substring(2);
+            if (path.StartsWith("./", StringComparison.Ordinal)) path = path.Substring(2);
             path = path.Replace("/./", "/");
 
             // Replace foo/anything/../bar with foo/bar
@@ -138,7 +138,7 @@ namespace Ionic.Zip
             pathName = pathName.Replace('\\', '/');
 
             // trim all leading slashes
-            while (pathName.StartsWith("/")) pathName = pathName.Substring(1);
+            while (pathName.StartsWith("/", StringComparison.Ordinal)) pathName = pathName.Substring(1);
 
             return SimplifyFwdSlashPath(pathName);
         }

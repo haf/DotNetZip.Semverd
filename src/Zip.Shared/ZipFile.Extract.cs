@@ -273,9 +273,9 @@ namespace Ionic.Zip
                     foreach (ZipEntry e in _entries.Values)
                     {
                         // check if it is a directory
-                        if ((e.IsDirectory) || (e.FileName.EndsWith("/")))
+                        if ((e.IsDirectory) || (e.FileName.EndsWith("/", StringComparison.Ordinal)))
                         {
-                            string outputFile = (e.FileName.StartsWith("/"))
+                            string outputFile = (e.FileName.StartsWith("/", StringComparison.Ordinal))
                                 ? Path.Combine(path, e.FileName.Substring(1))
                                 : Path.Combine(path, e.FileName);
 

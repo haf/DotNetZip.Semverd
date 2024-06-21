@@ -341,10 +341,32 @@ namespace Ionic.Zip.Tests.Extended
             }
         }
 
+        [TestMethod]
+        public void ReadZip_DirectoryBitNotSetForFileWithEmojiName()
+        {
+            string zipFileToCreate = Path.Combine(TopLevelDir, "ReadZip_DirectoryBitNotSetForFileWithEmojiName.zip");
+            string entryName = "Files/\u26BE";
 
+            using (ZipFile zip1 = new ZipFile(Encoding.UTF8))
+            {
+                zip1.AddEntry(entryName, new byte[0]);
 
+                ZipEntry entry = zip1[entryName];
+                Assert.AreNotEqual(null, entry);
+                Assert.IsFalse(entry.IsDirectory,
+                               "The IsDirectory property was not set as expected.");
 
+                zip1.Save(zipFileToCreate);
+            }
 
+            using (ZipFile zip2 = ZipFile.Read(zipFileToCreate))
+            {
+                ZipEntry entry = zip2[entryName];
+                Assert.AreNotEqual(null, entry);
+                Assert.IsFalse(entry.IsDirectory,
+                               "The IsDirectory property was not set as expected.");
+            }
+        }
 
         [TestMethod]
         public void ReadZip_DirectoryBitSetForEmptyDirectories()
